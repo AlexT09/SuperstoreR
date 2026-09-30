@@ -111,8 +111,8 @@ df %>%
 Al aplicar el logaritmo, la distribución se vuelve más simétrica y manejable. La
 mayor concentración de observaciones se encuentra aproximadamente entre
 log(Sales) = 2.5 y 4, donde la densidad alcanza un máximo cercano a 0.22.
-Hacia la derecha aparece un segundo abultamiento, alrededor de 5, que corresponde a
-pedidos de mayor valor; más adelante se ve que coincide con Furniture y Technology.
+Hacia la derecha la densidad disminuye, con un pequeño abultamiento cerca de 5,
+mostrando una menor concentración de ventas altas.
 
 ## Barras: pedidos por categoría
 
@@ -160,12 +160,9 @@ df %>%
   theme_bw()
 ```
 
-En escala original las cajas quedan aplastadas por los valores atípicos, por eso
-el gráfico muestra sobre todo los extremos. Technology tiene los pedidos más grandes,
-con algunos que superan los $20000. Office Supplies tiene la caja más baja: la
-mayoría de sus pedidos son de poco valor, aunque unos pocos se acercan a $10000.
-Furniture tiene el rango más corto, pero su caja está a la altura de la de
-Technology, así que sus pedidos típicos no son de menor valor.
+Technology muestra el rango de ventas más alto, con algunos pedidos que superan
+los $20000. Office Supplies tiene la caja más baja, aunque algunos pedidos se acercan
+a $10000. Furniture es la categoría con el menor rango de ventas entre las tres.
 
 ## Boxplot: log(Sales) por categoría
 
@@ -242,8 +239,7 @@ df %>%
   theme_bw()
 ```
 La mayoría de los pedidos se concentra en descuentos bajos (0.0-0.2), y las celdas
-con montos de venta más altos aparecen dispersas en varios niveles de descuento. Con
-los descuentos más altos (0.6 a 0.8) los pedidos tienden a ser de menor valor.
+con montos de venta más altos aparecen dispersas en varios niveles de descuento.
 
 ## Correlación entre variables continuas
 
@@ -278,9 +274,8 @@ tendencia_mensual %>%
   theme_bw()
 ```
 
-Los puntos muestran un patrón que se repite cada año: las ventas son bajas a
-comienzos de año y suben hacia el final, con los meses más altos en septiembre,
-noviembre y diciembre. Es decir, las ventas tienen un comportamiento estacional.
+Los puntos muestran un patrón que se repite cada año: las ventas son más bajas a
+comienzos de año y suben hacia el final, lo que sugiere un comportamiento estacional.
 
 ```{r tendencia-loess, message=FALSE, warning=FALSE}
 tendencia_mensual %>%
@@ -313,8 +308,7 @@ tendencia_categoria %>%
 
 Las tres categorías crecen hacia el final del periodo, y Technology se mantiene casi
 siempre por encima de las otras dos. Esto es coherente con lo visto antes: Technology
-tiene menos pedidos pero de mayor valor. Su crecimiento viene sobre todo de vender más
-pedidos, más que de pedidos cada vez más caros.
+tiene menos pedidos pero de mayor valor.
 
 ```{r etiquetado-categoria}
 ultimo_mes <- tendencia_categoria %>% filter(anio_mes == max(anio_mes))
@@ -363,6 +357,4 @@ valores bajos, con pocos pedidos de alto valor. El análisis bivariado indica qu
 Technology y Furniture tienen pedidos individuales más grandes, mientras que
 Office Supplies domina en volumen pero con pedidos de menor valor. `Region` y
 `Segment` muestran diferencias más leves. El descuento no se relaciona linealmente
-con las ventas: en el gráfico de bins 2D los descuentos muy altos se asocian con
-pedidos de menor valor, pero la relación no es constante. En el tiempo, las ventas
-crecen desde 2016 y se concentran hacia el final de cada año.
+con las ventas, como se observa en el gráfico de bins 2D.

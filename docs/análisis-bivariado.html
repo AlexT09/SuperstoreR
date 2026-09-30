@@ -199,12 +199,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-5"><a href="análisis-bivariado.html#cb10-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Categoría&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Ventas&quot;</span>, <span class="at">title =</span> <span class="st">&quot;Distribución de ventas por categoría&quot;</span>) <span class="sc">+</span></span>
 <span id="cb10-6"><a href="análisis-bivariado.html#cb10-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="eda-superstore-book_files/figure-html/boxplot-category-1.png" alt="" width="672" /></p>
-<p>En escala original las cajas quedan aplastadas por los valores atípicos, por eso
-el gráfico muestra sobre todo los extremos. Technology tiene los pedidos más grandes,
-con algunos que superan los $20000. Office Supplies tiene la caja más baja: la
-mayoría de sus pedidos son de poco valor, aunque unos pocos se acercan a $10000.
-Furniture tiene el rango más corto, pero su caja está a la altura de la de
-Technology, así que sus pedidos típicos no son de menor valor.</p>
+<p>Technology muestra el rango de ventas más alto, con algunos pedidos que superan
+los $20000. Office Supplies tiene la caja más baja, aunque algunos pedidos se acercan
+a $10000. Furniture es la categoría con el menor rango de ventas entre las tres.</p>
 </div>
 <div id="boxplot-logsales-por-categoría" class="section level2 hasAnchor" number="5.2">
 <h2><span class="header-section-number">5.2</span> Boxplot: log(Sales) por categoría<a href="análisis-bivariado.html#boxplot-logsales-por-categor%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -275,8 +272,7 @@ ser la categoría de menor volumen de pedidos.</p>
 <span id="cb17-6"><a href="análisis-bivariado.html#cb17-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="eda-superstore-book_files/figure-html/bins2d-discount-sales-1.png" alt="" width="672" />
 La mayoría de los pedidos se concentra en descuentos bajos (0.0-0.2), y las celdas
-con montos de venta más altos aparecen dispersas en varios niveles de descuento. Con
-los descuentos más altos (0.6 a 0.8) los pedidos tienden a ser de menor valor.</p>
+con montos de venta más altos aparecen dispersas en varios niveles de descuento.</p>
 </div>
 <div id="correlación-entre-variables-continuas" class="section level2 hasAnchor" number="5.6">
 <h2><span class="header-section-number">5.6</span> Correlación entre variables continuas<a href="análisis-bivariado.html#correlaci%C3%B3n-entre-variables-continuas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -312,9 +308,8 @@ bins2D: la relación entre descuento y ventas no es lineal, por eso la correlaci
 <span id="cb21-9"><a href="análisis-bivariado.html#cb21-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Evolución mensual de ventas&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Mes&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Ventas&quot;</span>) <span class="sc">+</span></span>
 <span id="cb21-10"><a href="análisis-bivariado.html#cb21-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="eda-superstore-book_files/figure-html/tendencia-mensual-1.png" alt="" width="672" /></p>
-<p>Los puntos muestran un patrón que se repite cada año: las ventas son bajas a
-comienzos de año y suben hacia el final, con los meses más altos en septiembre,
-noviembre y diciembre. Es decir, las ventas tienen un comportamiento estacional.</p>
+<p>Los puntos muestran un patrón que se repite cada año: las ventas son más bajas a
+comienzos de año y suben hacia el final, lo que sugiere un comportamiento estacional.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="análisis-bivariado.html#cb22-1" tabindex="-1"></a>tendencia_mensual <span class="sc">%&gt;%</span></span>
 <span id="cb22-2"><a href="análisis-bivariado.html#cb22-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> anio_mes, <span class="at">y =</span> ventas)) <span class="sc">+</span></span>
 <span id="cb22-3"><a href="análisis-bivariado.html#cb22-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;steelblue&quot;</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
@@ -341,8 +336,7 @@ periodo, más que una tendencia lineal constante.</p>
 <p><img src="eda-superstore-book_files/figure-html/tendencia-categoria-1.png" alt="" width="672" /></p>
 <p>Las tres categorías crecen hacia el final del periodo, y Technology se mantiene casi
 siempre por encima de las otras dos. Esto es coherente con lo visto antes: Technology
-tiene menos pedidos pero de mayor valor. Su crecimiento viene sobre todo de vender más
-pedidos, más que de pedidos cada vez más caros.</p>
+tiene menos pedidos pero de mayor valor.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="análisis-bivariado.html#cb24-1" tabindex="-1"></a>ultimo_mes <span class="ot">&lt;-</span> tendencia_categoria <span class="sc">%&gt;%</span> <span class="fu">filter</span>(anio_mes <span class="sc">==</span> <span class="fu">max</span>(anio_mes))</span>
 <span id="cb24-2"><a href="análisis-bivariado.html#cb24-2" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="análisis-bivariado.html#cb24-3" tabindex="-1"></a>tendencia_categoria <span class="sc">%&gt;%</span></span>
