@@ -21,3 +21,7 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 options(bitmapType = "cairo")
 Sys.setlocale("LC_ALL", "es_ES.UTF-8")
 ```
+
+# Presentación {-}
+
+Análisis exploratorio del dataset Sample - Superstore para entender qué factores (categoría, región y segmento) explican el nivel de ventas.
