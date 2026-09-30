@@ -174,11 +174,18 @@ df %>%
   labs(x = "Categoría", y = "Log(Ventas)") +
   theme_bw()
 
-
+df %>%
+  group_by(Category) %>%
+  summarise(
+    mediana_log = median(log(Sales)),
+    RIC_log     = IQR(log(Sales))
+  ) %>%
+  mutate(across(where(is.numeric), ~ round(.x, 3))) %>%
+  as.data.frame()
 ```
 
 - Furniture (5.205) con la mediana mas alta junto con Technology (5.113). Office Supplies queda muy por debajo (3.311), casi 2 puntos log menos que las otras dos.
-- En el ancho de la caja (RIC), Technology (1.886) y Office Supplies (1.916) son muy parecidas, y Furniture es la que tiene la caja más ancha/dispersa (2.224).
+- En el ancho de la caja (RIC), Technology (1.886) y Office Supplies (1.916) son muy parecidas, y Furniture es la que tiene la caja más ancha/dispersa (2.225).
 
 ## Boxplot: Sales por región
 
