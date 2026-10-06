@@ -3,11 +3,6 @@
 Análisis exploratorio de datos (EDA) del dataset **Sample Superstore** para responder la
 pregunta de negocio: **¿qué factores (categoría, región, segmento) explican el nivel de ventas?**
 
-Es el mismo proyecto de la app Dash ([proyecto_superstorep](https://github.com/AlexT09/proyecto_superstorep))
-entregado como libro **bookdown** en R: cada pestaña de la app es un capítulo, con los mismos textos,
-las mismas gráficas (plotly, mismos colores) y el mismo dashboard. También existe la versión
-[Jupyter Book](https://github.com/AlexT09/superstore-jupyterbook).
-
 Libro publicado: **https://alext09.github.io/rbook/**
 
 ## Requisitos
