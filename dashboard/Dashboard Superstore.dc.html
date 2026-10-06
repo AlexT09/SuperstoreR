@@ -4,157 +4,155 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
+<script src="./dashboard_core.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
 <title>Dashboard de ventas · Sample Superstore</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&amp;family=Playfair+Display:wght@600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet">
 <script src="https://cdn.plot.ly/plotly-4.1.1.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{background:#020204;color:#fff;font-family:Poppins,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-a{color:#3fe3ff;text-decoration:none}
-a:hover{color:#a6f7ff}
+html,body{background:#020204;color:#fff;font-family:Poppins,system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
 select option{background:#0a111d;color:#fff}
 select:focus-visible,button:focus-visible{outline:2px solid #3fe3ff;outline-offset:2px}
+
+/* cabecera con filtros (formato superstore-dashboard-html) */
+[data-top]{background:linear-gradient(180deg,rgba(25,127,255,.07),rgba(25,127,255,.02)),#070a12;border-bottom:1px solid rgba(255,255,255,.08)}
+[data-top] > div{max-width:1440px;margin:0 auto;padding:22px 28px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px}
+[data-fg]{display:flex;flex-direction:column;gap:4px}
+[data-fg] span{font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:#8d9298;font-weight:500}
+[data-fg] select{appearance:none;-webkit-appearance:none;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:#0a111d;color:#fff;font:inherit;font-size:13px;min-width:130px;cursor:pointer}
+
+[data-wrap]{max-width:1440px;margin:0 auto;padding:20px 28px}
+
+/* KPIs (los escribe dashboard_core.js) */
+#kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin-bottom:20px}
+#kpis .kpi{position:relative;overflow:hidden;padding:18px 20px;border-radius:14px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.02)}
+#kpis .kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#3fe3ff}
+#kpis .l{font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:500;color:#8d9298}
+#kpis .v{font-weight:700;font-size:28px;margin:6px 0 4px;letter-spacing:-.5px;color:#3fe3ff;text-shadow:0 0 16px rgba(63,227,255,.35);font-variant-numeric:tabular-nums}
+#kpis .d{display:inline-block;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:600;color:#8d9298;background:rgba(255,255,255,.05)}
+#kpis .d.pos{color:#7ee8a6;background:rgba(126,232,166,.1)}
+#kpis .d.neg{color:#ff8a9b;background:rgba(255,107,129,.12)}
+#kpis .d:empty{display:none}
+
+/* secciones, cuadrícula de 12 columnas y tarjetas */
+[data-st]{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;font-weight:600;color:#8d9298;margin:6px 0 12px;display:flex;align-items:center;gap:10px}
+[data-st]::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.08)}
+[data-grid]{display:grid;grid-template-columns:repeat(12,1fr);gap:20px;margin-bottom:20px}
+[data-s="4"]{grid-column:span 4}[data-s="6"]{grid-column:span 6}[data-s="8"]{grid-column:span 8}[data-s="12"]{grid-column:span 12}
+[data-c]{min-width:0;padding:20px 22px 0;border-radius:14px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015);display:flex;flex-direction:column}
+[data-c] h3{font-size:15px;font-weight:600;color:#fff}
+[data-c] > p{font-size:12.5px;color:#8d9298;margin:2px 0 14px}
+
+/* insights (los escribe dashboard_core.js) */
+[data-ins]{flex:1;margin:18px -22px 0;padding:14px 22px 16px 19px;border-top:1px solid rgba(255,255,255,.07);border-left:3px solid #3fe3ff;border-radius:0 0 14px 14px;background:rgba(63,227,255,.04);font-size:13.5px;color:#c9ccd1}
+[data-ins] .tag{display:block;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;font-weight:700;color:#3fe3ff;margin-bottom:4px}
+[data-ins] p + p{margin-top:6px}
+[data-ins] b{color:#fff;font-weight:600}
+
+#calidad{font-size:12.5px;color:#a9aeb5;padding:10px 16px;margin-bottom:12px;border-radius:14px;border:1px solid rgba(255,255,255,.105);border-left:3px solid #6d8f99}
+#calidad b{color:#fff;font-weight:600}
+
+@media (max-width:1100px){#kpis{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:980px){[data-s="4"],[data-s="6"],[data-s="8"]{grid-column:span 12}}
+@media (max-width:600px){#kpis{grid-template-columns:repeat(2,1fr)}[data-top] > div,[data-wrap]{padding-left:16px;padding-right:16px}[data-fg]{flex:1 1 45%}[data-fg] select{min-width:0;width:100%}}
 </style>
 </helmet>
-<div style="min-height:100vh;background:linear-gradient(180deg,rgba(25,127,255,.05) 0,rgba(25,127,255,0) 420px),#020204;padding:28px clamp(14px,3vw,32px) 32px">
-  <div style="max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:16px">
+<div style="min-height:100vh;background:#020204">
+  <div data-top="1"><div>
+    <div>
+      <div style="font-size:11px;letter-spacing:1.6px;text-transform:uppercase;font-weight:600;color:#3fe3ff">EDA · Sample Superstore</div>
+      <h1 style="font-size:22px;font-weight:600;letter-spacing:-.2px;margin-top:4px">Superstore · Ventas</h1>
+      <p style="font-size:13px;color:#a9aeb5;margin-top:2px">{{ subtitulo }}</p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+      <label data-fg="1"><span>Categoría</span>
+        <select value="{{ fCat }}" onChange="{{ onCat }}"><sc-for list="{{ catOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select></label>
+      <label data-fg="1"><span>Región</span>
+        <select value="{{ fReg }}" onChange="{{ onReg }}"><sc-for list="{{ regOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select></label>
+      <label data-fg="1"><span>Segmento</span>
+        <select value="{{ fSeg }}" onChange="{{ onSeg }}"><sc-for list="{{ segOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select></label>
+      <label data-fg="1"><span>Año</span>
+        <select value="{{ fYear }}" onChange="{{ onYear }}"><sc-for list="{{ yearOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select></label>
+      <button type="button" onClick="{{ onReset }}" style="padding:8px 16px;border-radius:8px;border:none;cursor:pointer;color:#fff;font:inherit;font-size:13px;font-weight:600;background:linear-gradient(to top,#9ad9ec 1px,#61daef 4px,#14a8c6 6px,#047796 9px,#025066 12px,#073746 16px,#0d212e 20px,#0a111d 34px,#0a111d 100%);box-shadow:inset 1px 0 0 rgba(255,255,255,.09),inset -1px 0 0 rgba(255,255,255,.09),0 0 8px rgba(60,190,235,.10);transition:filter .2s" style-hover="filter:brightness(1.15)">Limpiar filtros</button>
+    </div>
+  </div></div>
 
-    <header style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;padding:4px 4px 8px">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <span style="font-size:10px;font-weight:600;letter-spacing:.22em;color:#3fe3ff">EDA · SAMPLE SUPERSTORE</span>
-        <h1 style="font-weight:900;font-size:clamp(26px,3.4vw,40px);line-height:1;text-transform:uppercase;letter-spacing:-.004em;text-shadow:0 0 34px rgba(130,180,255,.22)">Dashboard de ventas</h1>
-        <p style="font-size:14px;color:#a9aeb5;max-width:620px;text-wrap:pretty">¿Qué factores (categoría, región, segmento) explican el nivel de ventas (<b style="font-weight:600;color:#fff">Sales</b>)?</p>
-      </div>
-      <span style="height:34px;display:flex;align-items:center;padding:0 14px;border-radius:12px;border:1px solid rgba(255,255,255,.115);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.88)">Periodo: 03/01/2014 – 30/12/2017</span>
-    </header>
-
-    <section id="filtros" aria-label="Filtros" style="position:sticky;top:10px;z-index:5;display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 14px;padding:12px 14px 12px 18px;border-radius:22px;background:rgba(10,14,26,.72);border:1px solid rgba(255,255,255,.105);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%)">
-      <label style="display:flex;flex-direction:column;gap:5px;flex:1 1 150px;max-width:220px">
-        <span style="font-size:10px;font-weight:600;letter-spacing:.16em;color:#8d9298;padding-left:4px">CATEGORÍA</span>
-        <select value="{{ fCat }}" onChange="{{ onCat }}" style="appearance:none;-webkit-appearance:none;height:40px;padding:0 14px;border-radius:12px;background:#0a111d;border:1px solid rgba(255,255,255,.14);color:#fff;font:inherit;font-size:13.5px;cursor:pointer">
-          <sc-for list="{{ catOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
-        </select>
-      </label>
-      <label style="display:flex;flex-direction:column;gap:5px;flex:1 1 150px;max-width:220px">
-        <span style="font-size:10px;font-weight:600;letter-spacing:.16em;color:#8d9298;padding-left:4px">REGIÓN</span>
-        <select value="{{ fReg }}" onChange="{{ onReg }}" style="appearance:none;-webkit-appearance:none;height:40px;padding:0 14px;border-radius:12px;background:#0a111d;border:1px solid rgba(255,255,255,.14);color:#fff;font:inherit;font-size:13.5px;cursor:pointer">
-          <sc-for list="{{ regOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
-        </select>
-      </label>
-      <label style="display:flex;flex-direction:column;gap:5px;flex:1 1 150px;max-width:220px">
-        <span style="font-size:10px;font-weight:600;letter-spacing:.16em;color:#8d9298;padding-left:4px">SEGMENTO</span>
-        <select value="{{ fSeg }}" onChange="{{ onSeg }}" style="appearance:none;-webkit-appearance:none;height:40px;padding:0 14px;border-radius:12px;background:#0a111d;border:1px solid rgba(255,255,255,.14);color:#fff;font:inherit;font-size:13.5px;cursor:pointer">
-          <sc-for list="{{ segOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
-        </select>
-      </label>
-      <label style="display:flex;flex-direction:column;gap:5px;flex:1 1 150px;max-width:220px">
-        <span style="font-size:10px;font-weight:600;letter-spacing:.16em;color:#8d9298;padding-left:4px">AÑO</span>
-        <select value="{{ fYear }}" onChange="{{ onYear }}" style="appearance:none;-webkit-appearance:none;height:40px;padding:0 14px;border-radius:12px;background:#0a111d;border:1px solid rgba(255,255,255,.14);color:#fff;font:inherit;font-size:13.5px;cursor:pointer">
-          <sc-for list="{{ yearOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
-        </select>
-      </label>
-      <button type="button" onClick="{{ onReset }}" style="margin-left:auto;height:40px;padding:0 18px;border:none;border-radius:13px;cursor:pointer;color:#fff;font:inherit;font-size:13px;font-weight:500;background:linear-gradient(to top,#9ad9ec 1px,#61daef 4px,#14a8c6 6px,#047796 9px,#025066 12px,#073746 16px,#0d212e 20px,#0a111d 34px,#0a111d 100%);box-shadow:inset 1px 0 0 rgba(255,255,255,.09),inset -1px 0 0 rgba(255,255,255,.09),0 0 8px rgba(60,190,235,.10),0 2px 5px -3px rgba(90,220,255,.45);transition:filter .25s,transform .25s" style-hover="filter:brightness(1.15);transform:translateY(-1px)">Limpiar filtros</button>
-    </section>
-
+  <div data-wrap="1">
     <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
-      <p style="padding:14px 18px;border-radius:16px;border:1px solid rgba(238,92,98,.4);color:#ffb3b6;font-size:13.5px">{{ errorMsg }}</p>
+      <p style="padding:14px 18px;margin-bottom:20px;border-radius:14px;border:1px solid rgba(238,92,98,.4);color:#ffb3b6;font-size:13.5px">{{ errorMsg }}</p>
     </sc-if>
 
-    <section aria-label="Resumen de Sales" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px">
-      <div style="padding:18px 20px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015);display:flex;flex-direction:column;gap:8px">
-        <span style="font-size:10px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.7)">PEDIDOS</span>
-        <span style="font-weight:900;font-size:30px;line-height:1;letter-spacing:-.015em;color:#3fe3ff;text-shadow:0 0 16px rgba(63,227,255,.4);font-variant-numeric:tabular-nums">{{ kN }}</span>
-      </div>
-      <div style="padding:18px 20px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015);display:flex;flex-direction:column;gap:8px">
-        <span style="font-size:10px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.7)">MEDIA DE SALES</span>
-        <span style="font-weight:900;font-size:30px;line-height:1;letter-spacing:-.015em;color:#3fe3ff;text-shadow:0 0 16px rgba(63,227,255,.4);font-variant-numeric:tabular-nums">{{ kMean }}</span>
-      </div>
-      <div style="padding:18px 20px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015);display:flex;flex-direction:column;gap:8px">
-        <span style="font-size:10px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.7)">MEDIANA DE SALES</span>
-        <span style="font-weight:900;font-size:30px;line-height:1;letter-spacing:-.015em;color:#3fe3ff;text-shadow:0 0 16px rgba(63,227,255,.4);font-variant-numeric:tabular-nums">{{ kMedian }}</span>
-      </div>
-      <div style="padding:18px 20px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015);display:flex;flex-direction:column;gap:8px">
-        <span style="font-size:10px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.7)">MÁXIMO DE SALES</span>
-        <span style="font-weight:900;font-size:30px;line-height:1;letter-spacing:-.015em;color:#3fe3ff;text-shadow:0 0 16px rgba(63,227,255,.4);font-variant-numeric:tabular-nums">{{ kMax }}</span>
-      </div>
+    <section id="kpis" aria-label="Indicadores"></section>
+
+    <div data-st="1" id="sec-dist">Distribución de ventas</div>
+    <section data-grid="1">
+      <div data-c="1" data-s="8"><h3>Distribución de Sales</h3><p>Pedidos por valor de venta (hasta $1,000); punteadas: mediana y media</p>
+        <div id="fig-hist"></div><div data-ins="1" id="ins-fig-hist"></div></div>
+      <div data-c="1" data-s="4"><h3>Categorías: volumen vs. valor</h3><p>Participación en pedidos y en ventas</p>
+        <div id="fig-vv-cat"></div><div data-ins="1" id="ins-fig-vv-cat"></div></div>
+    </section>
+    <section data-grid="1">
+      <div data-c="1" data-s="6"><h3>Regiones: volumen vs. valor</h3><p>Participación en pedidos y en ventas</p>
+        <div id="fig-vv-reg"></div><div data-ins="1" id="ins-fig-vv-reg"></div></div>
+      <div data-c="1" data-s="6"><h3>Segmentos: volumen vs. valor</h3><p>Participación en pedidos y en ventas</p>
+        <div id="fig-vv-seg"></div><div data-ins="1" id="ins-fig-vv-seg"></div></div>
     </section>
 
-    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:16px">
-      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
-        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:12px">Hallazgos del EDA</h2>
-        <ul style="padding-left:18px;display:flex;flex-direction:column;gap:9px;font-size:13.5px;line-height:1.6;color:#c9ccd1">
-          <li>El análisis univariado muestra que <code style="font-family:inherit;font-weight:600;color:#3fe3ff">Sales</code> tiene una distribución muy sesgada hacia valores bajos, con pocos pedidos de alto valor.</li>
-          <li>El análisis bivariado indica que <code style="font-family:inherit;font-weight:600;color:#3fe3ff">Category</code> es el factor que más explica diferencias en el valor de venta — Technology y Furniture tienen pedidos individuales más grandes, mientras que Office Supplies domina en volumen pero con pedidos de menor valor.</li>
-          <li><code style="font-family:inherit;font-weight:600;color:#3fe3ff">Region</code> y <code style="font-family:inherit;font-weight:600;color:#3fe3ff">Segment</code> muestran diferencias más leves.</li>
-          <li>El descuento no se relaciona linealmente con las ventas, como se observa en el gráfico de bins 2D.</li>
-          <li>Los puntos muestran un patrón que se repite cada año: las ventas son más bajas a comienzos de año y suben hacia el final, lo que sugiere un comportamiento estacional.</li>
-          <li>Los pedidos se concentran en pocos estados: California (2001), New York (1128) y Texas (985) suman el 41.2% del total, y son los estados con más pedidos de West, East y Central.</li>
-        </ul>
-      </div>
-      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
-        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Distribución de Sales</h2>
-        <div id="fig-hist" style="min-height:300px"></div>
-      </div>
+    <div data-st="1" id="sec-fact">Ventas por categoría, región y segmento</div>
+    <section data-grid="1">
+      <div data-c="1" data-s="4"><h3>Sales por categoría</h3><p>Escala log; línea: mediana, punteada: media</p>
+        <div id="fig-box-cat"></div><div data-ins="1" id="ins-fig-box-cat"></div></div>
+      <div data-c="1" data-s="4"><h3>Sales por región</h3><p>Escala log; línea: mediana, punteada: media</p>
+        <div id="fig-box-reg"></div><div data-ins="1" id="ins-fig-box-reg"></div></div>
+      <div data-c="1" data-s="4"><h3>Sales por segmento</h3><p>Escala log; línea: mediana, punteada: media</p>
+        <div id="fig-box-seg"></div><div data-ins="1" id="ins-fig-box-seg"></div></div>
     </section>
 
-    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px">
-      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
-        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Pedidos por categoría</h2>
-        <div id="fig-n-cat" style="min-height:280px"></div>
-      </div>
-      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
-        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Pedidos por región</h2>
-        <div id="fig-n-reg" style="min-height:280px"></div>
-      </div>
-      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
-        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Pedidos por segmento</h2>
-        <div id="fig-n-seg" style="min-height:280px"></div>
-      </div>
+    <div data-st="1" id="sec-rel">Relación entre variables</div>
+    <section data-grid="1">
+      <div data-c="1" data-s="4"><h3>Pedidos por categoría y región</h3><p>Tamaño del círculo: número de pedidos</p>
+        <div id="fig-bubble"></div><div data-ins="1" id="ins-fig-bubble"></div></div>
+      <div data-c="1" data-s="4"><h3>Bins 2D: Discount vs. Sales</h3><p>Pedidos por descuento y valor de venta (hasta $1,500)</p>
+        <div id="fig-bins"></div><div data-ins="1" id="ins-fig-bins"></div></div>
+      <div data-c="1" data-s="4"><h3>Correlación entre variables continuas</h3><p>Coeficiente de Pearson</p>
+        <div id="fig-corr"></div><div data-ins="1" id="ins-fig-corr"></div></div>
     </section>
 
-    <section style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
-      <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Pedidos por estado</h2>
-      <div id="fig-map" style="min-height:380px"></div>
+    <div data-st="1" id="sec-trend">Geografía y tendencia</div>
+    <section data-grid="1">
+      <div data-c="1" data-s="12"><h3>Pedidos por estado</h3><p>Número de pedidos por estado</p>
+        <div id="fig-map"></div><div data-ins="1" id="ins-fig-map"></div></div>
+    </section>
+    <section data-grid="1">
+      <div data-c="1" data-s="6"><h3>Evolución mensual de ventas</h3><p>Ventas por mes</p>
+        <div id="fig-trend"></div><div data-ins="1" id="ins-fig-trend"></div></div>
+      <div data-c="1" data-s="6"><h3>Tendencia de ventas por categoría</h3><p>Ventas por mes de cada categoría</p>
+        <div id="fig-trend-cat"></div><div data-ins="1" id="ins-fig-trend-cat"></div></div>
     </section>
 
-    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px">
-      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
-        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Sales por categoría</h2>
-        <div id="fig-box-cat" style="min-height:280px"></div>
-      </div>
-      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
-        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Sales por región</h2>
-        <div id="fig-box-reg" style="min-height:280px"></div>
-      </div>
-      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
-        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Sales por segmento</h2>
-        <div id="fig-box-seg" style="min-height:280px"></div>
-      </div>
-    </section>
-
-    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:16px">
-      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
-        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Correlación entre variables numéricas</h2>
-        <div id="fig-corr" style="min-height:300px"></div>
-      </div>
-      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
-        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Ventas mensuales por categoría</h2>
-        <div id="fig-trend" style="min-height:300px"></div>
-      </div>
-    </section>
-
-    <footer style="font-size:12px;color:#8d9298;padding:6px 4px">Fuente: Sample Superstore. Proyecto: Alex Teran y David Estrada.</footer>
+    <div id="calidad"></div>
+    <footer style="font-size:12px;color:#8d9298;text-align:center;padding:10px 0 24px">Fuente: Sample – Superstore · Generado con Python + Plotly · Proyecto: Alex Teran y David Estrada</footer>
   </div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { f: { cat: '-1', reg: '-1', seg: '-1', year: 'all' }, k: null, lists: null, err: null };
+  state = { f: { cat: '-1', reg: '-1', seg: '-1', year: 'all' }, lists: null, subtitulo: '', err: null };
+
+  // Colores de las trazas sobre fondo oscuro (dashboard_core.js los aplica al llenar cada figura)
+  static PAL = {
+    main: '#3fe3ff', soft: '#1d6a82', neg: '#ff6b81', ink: '#ffffff', accent: '#f2c14e', bg: '#020204',
+    boxFill: 'rgba(63,227,255,0.08)',
+    cats: { 'Furniture': '#4f8cff', 'Office Supplies': '#3fe3ff', 'Technology': '#f2c14e' },
+    scale: [[0, '#0d212e'], [0.5, '#047796'], [1, '#3fe3ff']],
+    seq: [[0, '#020204'], [0.01, '#0d3a4a'], [0.15, '#047796'], [1, '#3fe3ff']],
+    heat: [[0, '#0a111d'], [1, '#3fe3ff']],
+  };
 
   componentDidMount() { this.load(); }
 
@@ -168,27 +166,30 @@ class Component extends DCLogic {
 
   async load() {
     try {
-      const html = await (await fetch('dashboard_data.html')).text();
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      this.FIGS = JSON.parse(doc.getElementById('figs').textContent);
-      this.D = JSON.parse(doc.getElementById('data').textContent);
-      this.YEAR = this.D.months.map(m => m.slice(0, 4));
-      this.setState({ lists: { cats: this.D.cats, regs: this.D.regs, segs: this.D.segs, years: [...new Set(this.YEAR)].sort() } });
+      const res = await fetch('dashboard_data.json');
+      if (!res.ok) throw new Error(`dashboard_data.json (${res.status})`);
+      const { figs, data } = await res.json();
+      this.FIGS = figs; this.D = data;
+      const years = [...new Set(data.months.map(m => m.slice(0, 4)))].sort();
+      this.setState({
+        lists: { cats: data.cats, regs: data.regs, segs: data.segs, years },
+        subtitulo: `${data.summary.periodo} · ${data.summary.pedidos} pedidos · Estados Unidos`,
+      });
       this.theme();
       await this.waitPlotly();
-      this.CONFIG = { displayModeBar: false, responsive: true };
-      Object.keys(this.FIGS).forEach(id => { if (document.getElementById(id)) Plotly.newPlot(id, this.FIGS[id].data, this.FIGS[id].layout, this.CONFIG); });
-      this.refresh(false);
+      this.dash = SuperstoreDashboard.create(this.FIGS, this.D, {
+        pal: Component.PAL, config: { displayModeBar: false, responsive: true }, doc: document,
+      });
+      this.refresh();
     } catch (e) {
       this.setState({ err: 'No se pudieron cargar los datos del dashboard: ' + e.message });
     }
   }
 
-  // Solo apariencia: colores y fuentes de la plantilla. Los datos de cada figura no cambian.
+  // Solo apariencia de los ejes y el fondo; los colores de las trazas vienen de PAL.
   theme() {
-    const T = { text: '#c9ccd1', muted: '#8d9298', grid: 'rgba(255,255,255,0.06)', line: 'rgba(255,255,255,0.14)', bar: '#3fe3ff' };
-    const CAT = { 'Furniture': '#0a86d8', 'Office Supplies': '#3fe3ff', 'Technology': '#a6f7ff' };
-    Object.entries(this.FIGS).forEach(([id, fig]) => {
+    const T = { text: '#c9ccd1', muted: '#8d9298', grid: 'rgba(255,255,255,0.06)', line: 'rgba(255,255,255,0.14)' };
+    Object.values(this.FIGS).forEach(fig => {
       const L = fig.layout;
       delete L.template;
       L.paper_bgcolor = 'rgba(0,0,0,0)'; L.plot_bgcolor = 'rgba(0,0,0,0)';
@@ -201,102 +202,34 @@ class Component extends DCLogic {
         if (a.title) a.title = Object.assign({}, a.title, { font: { color: T.muted, size: 11 } });
       });
       if (L.legend) L.legend.font = { color: T.text };
-      if (L.geo) Object.assign(L.geo, { bgcolor: 'rgba(0,0,0,0)', showlakes: false, showland: true, landcolor: '#0a111d', subunitcolor: 'rgba(255,255,255,0.14)' });
+      if (L.geo) Object.assign(L.geo, { bgcolor: 'rgba(0,0,0,0)', showland: true, landcolor: '#0a111d', subunitcolor: 'rgba(255,255,255,0.14)' });
       fig.data.forEach(t => {
-        if (t.type === 'histogram') t.marker = Object.assign({}, t.marker, { color: 'rgba(63,227,255,0.75)', line: { color: '#020204', width: 0.5 } });
-        if (t.type === 'bar') {
-          t.marker = Object.assign({}, t.marker, { color: id === 'fig-n-cat' ? t.x.map(c => CAT[c] || T.bar) : T.bar });
-          t.textfont = Object.assign({}, t.textfont, { color: T.text });
-        }
-        if (t.type === 'box') {
-          const c = id === 'fig-box-cat' ? (CAT[t.name] || T.bar) : T.bar;
-          t.marker = Object.assign({}, t.marker, { color: c });
-          t.line = Object.assign({}, t.line, { color: c });
-          t.fillcolor = 'rgba(63,227,255,0.08)';
-        }
-        if (t.type === 'choropleth') {
-          t.colorscale = [[0, '#0d212e'], [0.5, '#047796'], [1, '#3fe3ff']];
-          t.marker = Object.assign({}, t.marker, { line: { color: '#020204', width: 0.6 } });
-          t.colorbar = Object.assign({}, t.colorbar, { tickfont: { color: T.muted }, outlinewidth: 0,
-            title: Object.assign({}, t.colorbar && t.colorbar.title, { font: { size: 11, color: T.muted } }) });
-        }
-        if (t.type === 'heatmap') {
-          t.colorscale = [[0, '#0a2a4a'], [0.5, '#0a111d'], [1, '#3fe3ff']];
-          t.textfont = Object.assign({}, t.textfont, { color: '#fff' });
-        }
-        if (t.type === 'scatter') t.line = Object.assign({}, t.line, { color: CAT[t.name] || T.bar });
+        if (t.type === 'choropleth') t.marker = Object.assign({}, t.marker, { line: { color: '#020204', width: 0.6 } });
+        if (t.colorbar) t.colorbar = Object.assign({}, t.colorbar, { tickfont: { color: T.muted }, outlinewidth: 0,
+          title: Object.assign({}, t.colorbar.title, { font: { size: 11, color: T.muted } }) });
       });
     });
   }
 
-  filtered() {
-    const D = this.D, N = D.Sales.length, s = this.state.f, out = [];
-    const cat = +s.cat, reg = +s.reg, seg = +s.seg;
-    for (let i = 0; i < N; i++) {
-      if (cat >= 0 && D.c[i] !== cat) continue;
-      if (reg >= 0 && D.r[i] !== reg) continue;
-      if (seg >= 0 && D.s[i] !== seg) continue;
-      if (s.year !== 'all' && this.YEAR[D.m[i]] !== s.year) continue;
-      out.push(i);
-    }
-    return out;
+  refresh() {
+    if (!this.dash) return;
+    const f = this.state.f;
+    this.dash.update({ cat: +f.cat, reg: +f.reg, seg: +f.seg, year: f.year });
   }
 
-  refresh(charts) {
-    if (!this.D) return;
-    const D = this.D, FIGS = this.FIGS, rows = this.filtered(), year = this.state.f.year;
-    const v = rows.map(i => D.Sales[i]);
-    const median = arr => { const a = Float64Array.from(arr).sort(), h = a.length >> 1; return a.length % 2 ? a[h] : (a[h - 1] + a[h]) / 2; };
-    this.setState({ k: v.length ? [rows.length, v.reduce((a, b) => a + b, 0) / v.length, median(v), Math.max(...v)] : [0, null, null, null] });
-    if (!charts || !window.Plotly) return;
-    const fmtInt = x => x.toLocaleString('en-US');
-    const draw = id => Plotly.react(id, FIGS[id].data, FIGS[id].layout, this.CONFIG);
-    const pearson = (x, y) => {
-      const n = x.length, mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n;
-      let sxy = 0, sxx = 0, syy = 0;
-      for (let i = 0; i < n; i++) { const dx = x[i] - mx, dy = y[i] - my; sxy += dx * dy; sxx += dx * dx; syy += dy * dy; }
-      return sxx && syy ? sxy / Math.sqrt(sxx * syy) : null;
-    };
-    FIGS['fig-hist'].data[0].x = v.filter(x => x <= D.histMax); draw('fig-hist');
-    const count = (id, key, k) => {
-      const n = new Array(k).fill(0); for (const i of rows) n[key[i]]++;
-      const t = FIGS[id].data[0]; t.y = n;
-      t.text = n.map(x => rows.length ? `${fmtInt(x)} (${(x / rows.length * 100).toFixed(1)}%)` : '');
-      draw(id);
-    };
-    count('fig-n-cat', D.c, D.cats.length); count('fig-n-reg', D.r, D.regs.length); count('fig-n-seg', D.s, D.segs.length);
-    const n = new Array(D.nStates).fill(0); for (const i of rows) n[D.st[i]]++;
-    FIGS['fig-map'].data[0].z = n.map(x => x || null); draw('fig-map');
-    const box = (id, key, k) => {
-      const ys = Array.from({ length: k }, () => []); for (const i of rows) ys[key[i]].push(D.Sales[i]);
-      FIGS[id].data.forEach((t, j) => { t.y = ys[j]; }); draw(id);
-    };
-    box('fig-box-cat', D.c, D.cats.length); box('fig-box-reg', D.r, D.regs.length); box('fig-box-seg', D.s, D.segs.length);
-    const cols = D.numeric.map(name => rows.map(i => D[name][i]));
-    FIGS['fig-corr'].data[0].z = cols.map(a => cols.map(b => { const r = pearson(a, b); return r === null ? null : Math.round(r * 100) / 100; }));
-    draw('fig-corr');
-    const mIdx = D.months.map((_, j) => j).filter(j => year === 'all' || this.YEAR[j] === year);
-    const pos = new Map(mIdx.map((j, p) => [j, p]));
-    const sums = D.cats.map(() => new Array(mIdx.length).fill(0));
-    for (const i of rows) { const p = pos.get(D.m[i]); if (p !== undefined) sums[D.c[i]][p] += D.Sales[i]; }
-    FIGS['fig-trend'].data.forEach((t, c) => { t.x = mIdx.map(j => D.months[j]); t.y = sums[c].map(x => Math.round(x * 100) / 100); });
-    draw('fig-trend');
-  }
-
-  setF(key, val) { this.setState(s => ({ f: Object.assign({}, s.f, { [key]: val }) }), () => this.refresh(true)); }
+  setF(key, val) { this.setState(s => ({ f: Object.assign({}, s.f, { [key]: val }) }), () => this.refresh()); }
 
   renderVals() {
-    const { f, k, lists, err } = this.state;
-    const fmtUSD = x => x == null ? '–' : `$${x.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}`;
+    const { f, lists, err, subtitulo } = this.state;
     const opts = (all, arr) => [{ v: '-1', l: all }].concat((arr || []).map((l, j) => ({ v: String(j), l })));
     return {
-      kN: k ? k[0].toLocaleString('en-US') : '–', kMean: k ? fmtUSD(k[1]) : '–', kMedian: k ? fmtUSD(k[2]) : '–', kMax: k ? fmtUSD(k[3]) : '–',
+      subtitulo: subtitulo || '2014–2017 · Estados Unidos',
       fCat: f.cat, fReg: f.reg, fSeg: f.seg, fYear: f.year,
       catOpts: opts('Todas', lists && lists.cats), regOpts: opts('Todas', lists && lists.regs), segOpts: opts('Todos', lists && lists.segs),
       yearOpts: [{ v: 'all', l: 'Todos' }].concat(((lists && lists.years) || []).map(y => ({ v: y, l: y }))),
       onCat: e => this.setF('cat', e.target.value), onReg: e => this.setF('reg', e.target.value),
       onSeg: e => this.setF('seg', e.target.value), onYear: e => this.setF('year', e.target.value),
-      onReset: () => this.setState({ f: { cat: '-1', reg: '-1', seg: '-1', year: 'all' } }, () => this.refresh(true)),
+      onReset: () => this.setState({ f: { cat: '-1', reg: '-1', seg: '-1', year: 'all' } }, () => this.refresh()),
       hasError: !!err, errorMsg: err || ''
     };
   }

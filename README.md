@@ -61,10 +61,10 @@ detrás de "Mostrar código" (`code-folding.html`).
 
 ## Dashboard
 
-`dashboard/` es una copia de `3DWebDashboard/` del proyecto Dash, y `dashboard/dashboard_data.html`
-(igual que `dashboard/dashboard_2d.html`) es el `assets/dashboard.html` que genera
-`dashboard/build_dashboard.py`. Si cambian los datos, regenéralo en el proyecto Dash y copia el
-archivo a esas dos rutas.
+`dashboard/` es una copia de `3DWebDashboard/` del proyecto Dash (incluye `dashboard_core.js` y
+`dashboard_data.json`), y `dashboard/dashboard_2d.html` es el `assets/dashboard.html` que genera
+`dashboard/build_dashboard.py`. Si cambian los datos, regenéralos en el proyecto Dash y copia esos
+archivos aquí.
 
 ## Estructura
 

@@ -111,7 +111,7 @@ a:hover{color:inherit}
     <!-- headline -->
     <div data-intro="380" data-dy="15" style="position:absolute;left:586px;top:163px;transform:translateX(-50%);white-space:nowrap;line-height:1;font-weight:900;font-size:48px;letter-spacing:-.004em;word-spacing:.12em;text-transform:uppercase;color:#fff;text-shadow:0 0 34px rgba(130,180,255,.22);z-index:300">Análisis de ventas</div>
     <div data-intro="470" data-dy="15" style="position:absolute;left:586px;top:217px;transform:translateX(-50%);white-space:nowrap;line-height:1;font-weight:900;font-size:48px;letter-spacing:-.004em;text-transform:uppercase;color:#fff;text-shadow:0 0 34px rgba(130,180,255,.22);z-index:300">Superstore</div>
-    <div data-intro="690" data-dy="10" style="position:absolute;left:586px;top:289px;transform:translateX(-50%);white-space:nowrap;line-height:1;font-size:13.2px;color:#a9aeb5;z-index:300"><b style="font-weight:600;color:#fff">9,994 pedidos / 4 años de datos</b> explorados por</div>
+    <div data-intro="690" data-dy="10" style="position:absolute;left:586px;top:289px;transform:translateX(-50%);white-space:nowrap;line-height:1;font-size:13.2px;color:#a9aeb5;z-index:300"><b style="font-weight:600;color:#fff">{{ headline }}</b> explorados por</div>
     <div data-intro="745" data-dy="10" style="position:absolute;left:586px;top:305px;transform:translateX(-50%);white-space:nowrap;line-height:1;font-size:13.2px;color:#a9aeb5;z-index:300">categoría, región, segmento y tendencia mensual.</div>
 
     <a href="#" onClick="{{ openTop }}" data-intro="830" data-dy="13" style="position:absolute;left:521px;top:349px;width:131px;height:54.5px;border-radius:13px;font-size:16px;font-weight:500;letter-spacing:-.01em;z-index:300;display:grid;place-items:center;color:#fff;overflow:hidden;background:linear-gradient(to top,#9ad9ec 1px,#89dff0 2px,#79e0f1 3px,#61daef 4px,#3ec8e4 5px,#14a8c6 6px,#0596b3 7px,#038aa8 8px,#047796 9px,#006180 10px,#025066 12px,#0a4f5e 13px,#04465a 14px,#073746 16px,#0a2a37 18px,#0d212e 20px,#0f1824 24px,#0a121e 30px,#0a111d 34px,#0a111d 100%);box-shadow:inset 0 3px 3px -2px rgba(180,228,255,.10),inset 1px 0 0 rgba(255,255,255,.09),inset -1px 0 0 rgba(255,255,255,.09),1px 0 0 rgba(152,218,234,.17),-1px 0 0 rgba(152,218,234,.17),0 0 8px rgba(60,190,235,.10),0 2px 5px -3px rgba(90,220,255,.45);transition:transform .25s,filter .25s" style-hover="transform:translateY(-1px);filter:brightness(1.12)" style-after="content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;background:linear-gradient(90deg,rgba(200,245,255,.70),rgba(200,245,255,0) 13px),linear-gradient(270deg,rgba(200,245,255,.70),rgba(200,245,255,0) 13px);-webkit-mask:linear-gradient(to top,#000 0,#000 6px,rgba(0,0,0,.40) 12px,rgba(0,0,0,.15) 18px,rgba(0,0,0,.09) 24px,rgba(0,0,0,.02) 30px,rgba(0,0,0,.02) 100%);mask:linear-gradient(to top,#000 0,#000 6px,rgba(0,0,0,.40) 12px,rgba(0,0,0,.15) 18px,rgba(0,0,0,.09) 24px,rgba(0,0,0,.02) 30px,rgba(0,0,0,.02) 100%)"><span style="position:relative;z-index:2;display:block;line-height:1;text-shadow:0 1px 2px rgba(0,20,30,.5)">Ver gráficos</span></a>
@@ -136,29 +136,35 @@ a:hover{color:inherit}
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { open: false, mounted: false };
+  state = { open: false, mounted: false, ring: null, summary: null };
   canvasRef = React.createRef(); ringRef = React.createRef(); browserRef = React.createRef();
   frameRef = React.createRef(); stA = React.createRef(); stB = React.createRef();
   target = null;
 
+  // Diseño de cada tarjeta del anillo. n/d son valores de respaldo: al cargar se reemplazan con
+  // data.ring de dashboard_data.json (dashboard/build_dashboard.py), así siguen a los datos.
   static SHOTS = [
-    { v: 'paper', k: 'CATEGORÍA', t: 'Technology', n: '$836,154', d: '1,847 PEDIDOS', pos: '72% 50%' },
+    { v: 'paper', k: 'CATEGORÍA', t: 'Technology', n: '$836,154', d: '1,847 pedidos', pos: '72% 50%' },
     { v: 'photo', k: 'CATEGORÍA', t: 'Furniture', n: '$742,000', d: '2,121 pedidos', pos: '12% 60%' },
     { v: 'blue', k: 'CATEGORÍA', t: 'Office Supplies', n: '$719,047', d: '6,026 pedidos', pos: '50% 40%' },
     { v: 'photo', k: 'KPI · SALES', t: 'Pedidos', n: '9,994', d: 'registros totales', pos: '50% 55%' },
     { v: 'photo', k: 'REGIÓN', t: 'West', n: '$725,458', d: '3,203 pedidos', pos: '88% 50%' },
-    { v: 'paper', k: 'REGIÓN', t: 'East', n: '$678,781', d: '2,848 PEDIDOS', pos: '28% 50%' },
+    { v: 'paper', k: 'REGIÓN', t: 'East', n: '$678,781', d: '2,848 pedidos', pos: '28% 50%' },
     { v: 'blue', k: 'KPI · SALES', t: 'Media', n: '$229.9', d: 'por pedido', pos: '62% 70%' },
     { v: 'photo', k: 'REGIÓN', t: 'Central', n: '$501,240', d: '2,323 pedidos', pos: '45% 75%' },
     { v: 'blue', k: 'REGIÓN', t: 'South', n: '$391,722', d: '1,620 pedidos', pos: '0% 50%' },
-    { v: 'paper', k: 'KPI · SALES', t: 'Mediana', n: '$54.5', d: 'POR PEDIDO', pos: '100% 40%' },
+    { v: 'paper', k: 'KPI · SALES', t: 'Mediana', n: '$54.5', d: 'por pedido', pos: '100% 40%' },
     { v: 'photo', k: 'SEGMENTO', t: 'Consumer', n: '$1,161,401', d: '5,191 pedidos', pos: '60% 30%' },
-    { v: 'paper', k: 'SEGMENTO', t: 'Corporate', n: '$706,146', d: '3,020 PEDIDOS', pos: '95% 65%' },
+    { v: 'paper', k: 'SEGMENTO', t: 'Corporate', n: '$706,146', d: '3,020 pedidos', pos: '95% 65%' },
     { v: 'blue', k: 'SEGMENTO', t: 'Home Office', n: '$429,653', d: '1,783 pedidos', pos: '38% 85%' },
     { v: 'photo', k: 'KPI · SALES', t: 'Máximo', n: '$22,638.5', d: 'pedido más alto', pos: '20% 30%' },
   ];
 
   componentDidMount() {
+    fetch('dashboard_data.json').then(r => (r.ok ? r.json() : null))
+      .then(j => { if (j) this.setState({ ring: j.data.ring, summary: j.data.summary }); })
+      .catch(() => {});  // sin datos se quedan los valores de respaldo
+
     const star = (n, blur, a0, a1) => Array.from({ length: n }, () =>
       `${(Math.random() * 100).toFixed(2)}vw ${(Math.random() * 100).toFixed(2)}vh ${blur}px 0 rgba(255,255,255,${(a0 + Math.random() * (a1 - a0)).toFixed(2)})`).join(',');
     this.stA.current.style.boxShadow = star(150, 0, .05, .30);
@@ -175,11 +181,12 @@ class Component extends DCLogic {
     addEventListener('resize', this.resize); this.resize();
 
     // Ring: R=891 with the camera at the centre (perspective=891) so cards are tangent and face it; 37 cards, cull at 42°
-    const cards = [...this.ringRef.current.querySelectorAll('[data-card]')];
-    const R = 891, step = 360 / cards.length;
+    // Las tarjetas se buscan en cada cuadro: al llegar los datos (setState) el anillo se vuelve a
+    // renderizar y los nodos pueden ser otros.
+    const R = 891, step = 360 / 37;
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let phase = -2, last = performance.now();
-    const place = () => cards.forEach((el, i) => {
+    const place = () => this.ringRef.current.querySelectorAll('[data-card]').forEach((el, i) => {
       const a = ((i * step + phase) % 360 + 540) % 360 - 180;
       if (Math.abs(a) > 42) { el.style.visibility = 'hidden'; return; }
       el.style.visibility = 'visible';
@@ -228,7 +235,8 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const S = Component.SHOTS;
+    const { ring, summary } = this.state;
+    const S = Component.SHOTS.map(d => (ring && ring[d.t] ? { ...d, n: ring[d.t][0], d: ring[d.t][1] } : d));
     const cards = Array.from({ length: 37 }, (_, i) => {
       const d = S[i % S.length];
       return { ...d, isPhoto: d.v === 'photo', isPaper: d.v === 'paper', isBlue: d.v === 'blue' };
@@ -237,11 +245,12 @@ class Component extends DCLogic {
     const o = this.state.open;
     return {
       cards,
+      headline: `${summary ? summary.pedidos : '9,994'} pedidos / ${summary ? summary.anios : 4} años de datos`,
       links: [
         { label: 'Resumen', go: go(null) },
-        { label: 'Mapa', go: go('fig-map') },
-        { label: 'Correlación', go: go('fig-corr') },
-        { label: 'Tendencia', go: go('fig-trend') },
+        { label: 'Factores', go: go('sec-fact') },
+        { label: 'Relaciones', go: go('sec-rel') },
+        { label: 'Tendencia', go: go('sec-trend') },
       ],
       openTop: go(null),
       close: e => { e.preventDefault(); e.stopPropagation(); this.setState({ open: false }); },
