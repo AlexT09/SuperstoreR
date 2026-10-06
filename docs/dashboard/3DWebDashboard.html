@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Superstore — Dashboard 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&amp;family=Playfair+Display:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#020204}
+body{font-family:Poppins,system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+a:hover{color:inherit}
+</style>
+</helmet>
+<div style="position:fixed;inset:0;overflow:hidden;background:#020204">
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(25,127,255,0) 38%, rgba(25,127,255,.042) 54%, rgba(25,127,255,.052) 68%, rgba(25,127,255,.030) 100%), #020204"></div>
+  <div ref="{{ stA }}" style="position:absolute;left:0;top:0;width:1px;height:1px;border-radius:50%;background:transparent"></div>
+  <div ref="{{ stB }}" style="position:absolute;left:0;top:0;width:1px;height:1px;border-radius:50%;background:transparent"></div>
+
+  <div ref="{{ canvasRef }}" style="position:absolute;left:50%;top:0;width:1172px;height:657px;transform:translateX(-50%) scale(1);transform-origin:50% 0">
+
+    <!-- 3D ring -->
+    <div data-intro="700" data-dy="18" style="position:absolute;left:0;top:0;width:1172px;height:657px;z-index:5;perspective:891px;perspective-origin:586px 918px;transform-style:preserve-3d;pointer-events:none">
+      <div ref="{{ ringRef }}" style="position:absolute;inset:0;transform-style:preserve-3d">
+        <sc-for list="{{ cards }}" as="c" hint-placeholder-count="0">
+          <div data-card="1" style="position:absolute;left:586px;top:616px;width:130px;height:300px;margin:-150px 0 0 -65px;border-radius:12px;overflow:hidden;background:#0d1117;box-shadow:0 24px 46px rgba(0,0,0,.6),0 3px 8px rgba(0,0,0,.5);backface-visibility:hidden;will-change:transform;visibility:hidden">
+            <sc-if value="{{ c.isPhoto }}">
+              <img alt="" src="assets/supermercado.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ c.pos }}">
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,8,16,0) 34%,rgba(4,8,16,.6) 52%,rgba(4,8,16,.94) 72%)"></div>
+              <div style="position:absolute;left:0;right:0;top:146px;padding:0 10px;font-size:4.6px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.8)">{{ c.k }}</div>
+              <div style="position:absolute;left:0;right:0;top:156px;padding:0 10px;font-family:'Playfair Display',serif;font-size:15px;line-height:1.02;color:#fff;white-space:nowrap">{{ c.t }}</div>
+              <div style="position:absolute;left:0;right:0;top:178px;padding:0 10px;font-weight:900;font-size:19px;letter-spacing:-.015em;line-height:1;color:#3fe3ff;text-shadow:0 0 16px rgba(63,227,255,.5);white-space:nowrap;transform:scaleX(.875);transform-origin:left center">{{ c.n }}</div>
+              <div style="position:absolute;left:0;right:0;top:202px;padding:0 10px;font-size:4.6px;letter-spacing:.08em;color:rgba(255,255,255,.85)">{{ c.d }}</div>
+            </sc-if>
+            <sc-if value="{{ c.isPaper }}">
+              <div style="position:absolute;inset:0;background:#efedea"></div>
+              <div style="position:absolute;left:0;right:0;top:116px;bottom:0;overflow:hidden"><img alt="" src="assets/supermercado.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ c.pos }}"></div>
+              <div style="position:absolute;left:0;right:0;top:20px;padding:0 10px;text-align:right;font-size:3.6px;letter-spacing:.15em;color:#8d9298">{{ c.k }}</div>
+              <div style="position:absolute;left:0;right:0;top:34px;padding:0 10px;font-weight:900;text-transform:uppercase;font-size:13px;line-height:.96;letter-spacing:-.015em;color:#16171b;white-space:nowrap;transform:scaleX(.875);transform-origin:left center">{{ c.t }}</div>
+              <div style="position:absolute;left:0;right:0;top:50px;padding:0 10px;font-weight:900;font-size:17px;line-height:.96;letter-spacing:-.015em;color:#e5202f;white-space:nowrap;transform:scaleX(.875);transform-origin:left center">{{ c.n }}</div>
+              <div style="position:absolute;left:0;right:0;top:80px;padding:0 10px;font-size:5.2px;font-weight:700;color:#16171b;display:flex;align-items:center;gap:4px"><b style="display:inline-block;width:4.5px;height:4.5px;background:#e5202f;transform:rotate(45deg)"></b>{{ c.d }}</div>
+            </sc-if>
+            <sc-if value="{{ c.isBlue }}">
+              <div style="position:absolute;inset:0;background:linear-gradient(180deg,#0a2a4a,#0d3a63 50%,#08192b)"></div>
+              <div style="position:absolute;left:0;right:0;top:120px;bottom:0;overflow:hidden"><img alt="" src="assets/supermercado.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:{{ c.pos }};opacity:.85"><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,42,74,.98),rgba(10,42,74,0) 40%)"></div></div>
+              <div style="position:absolute;left:10px;top:16px;font-size:4.4px;letter-spacing:.2em;color:rgba(255,255,255,.75)">{{ c.k }}</div>
+              <div style="position:absolute;right:10px;top:16px;font-size:5.2px;font-weight:600;color:#fff;opacity:.92">✳ Superstore</div>
+              <div style="position:absolute;left:0;right:0;top:42px;padding:0 10px;font-family:'Playfair Display',serif;font-size:16px;line-height:1.02;color:#fff;white-space:nowrap">{{ c.t }}</div>
+              <div style="position:absolute;left:0;right:0;top:66px;padding:0 10px;font-weight:900;font-size:19px;line-height:1;letter-spacing:-.015em;color:#3fe3ff;white-space:nowrap;transform:scaleX(.875);transform-origin:left center">{{ c.n }}</div>
+              <div style="position:absolute;left:0;right:0;top:92px;padding:0 10px;font-size:4.6px;letter-spacing:.08em;color:rgba(255,255,255,.82)">{{ c.d }}</div>
+            </sc-if>
+            <div style="position:absolute;inset:0;border-radius:12px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15),inset 0 16px 30px rgba(255,255,255,.05)"></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- browser mock with the real dashboard -->
+    <div ref="{{ browserRef }}" data-intro="900" data-dy="26" onClick="{{ openTop }}" style="position:absolute;left:165px;top:558px;width:842px;height:99px;border-radius:28px 28px 0 0;overflow:hidden;z-index:100;box-shadow:0 -14px 44px rgba(0,0,0,.55);cursor:pointer;background:rgba(20,20,26,.82)">
+      <div style="position:absolute;left:0;top:0;width:100%;height:42px;background:linear-gradient(180deg,rgba(20,24,48,.48),rgba(15,19,38,.58));backdrop-filter:blur(6px) saturate(112%)">
+        <div style="position:absolute;left:27px;top:16px;display:flex;gap:2.6px"><i style="width:7.6px;height:7.6px;border-radius:50%;background:#ee5c62"></i><i style="width:7.6px;height:7.6px;border-radius:50%;background:#f6b719"></i><i style="width:7.6px;height:7.6px;border-radius:50%;background:#12c02f"></i></div>
+        <div style="position:absolute;left:246px;top:7px;width:336px;height:26px;border-radius:5px;background:rgba(9,13,26,.93);box-shadow:inset 0 0 0 1px rgba(255,255,255,.045);display:flex;align-items:center;justify-content:center;gap:6px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" style="width:9px;height:9px;opacity:.72"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.8-3.8"></path></svg>
+          <span style="font-size:9.5px;color:rgba(255,255,255,.72)">Dashboard de ventas · Sample Superstore</span>
+        </div>
+        <div style="position:absolute;right:27px;top:13px;font-size:8.5px;font-weight:500;color:rgba(255,255,255,.72);letter-spacing:.04em">Click para abrir ↗</div>
+      </div>
+      <div style="position:absolute;left:7px;right:6px;top:42px;bottom:0;background:#020204;overflow:hidden;border-radius:10px 10px 0 0">
+        <iframe src="Dashboard Superstore.dc.html" title="Dashboard (vista previa)" tabindex="-1" style="position:absolute;left:0;top:0;width:1400px;height:1500px;border:0;transform:scale(.5921);transform-origin:0 0;pointer-events:none"></iframe>
+      </div>
+    </div>
+
+    <!-- nav -->
+    <div data-intro="60" data-dy="-9" style="position:absolute;left:247px;top:3px;width:678px;height:64px;border-radius:32px;z-index:400;background:rgba(255,255,255,.008);border:1px solid rgba(255,255,255,.105);backdrop-filter:blur(16px) saturate(140%);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)">
+      <svg viewBox="0 0 48 48" fill="none" style="position:absolute;left:21px;top:19px;width:24px;height:24px;filter:drop-shadow(0 0 6px rgba(60,224,255,.75))">
+        <defs>
+          <linearGradient id="sw" x1="8" y1="8" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#8ef4ff"></stop><stop offset=".5" stop-color="#35d8ff"></stop><stop offset="1" stop-color="#0a86d8"></stop></linearGradient>
+          <linearGradient id="sw2" x1="40" y1="10" x2="10" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#a6f7ff"></stop><stop offset="1" stop-color="#0f9ae0" stop-opacity=".25"></stop></linearGradient>
+        </defs>
+        <g transform="rotate(-32 24 24)"><ellipse cx="24" cy="24" rx="18.5" ry="9.6" stroke="url(#sw2)" stroke-width="3.1" stroke-linecap="round" stroke-dasharray="58 30" stroke-dashoffset="14"></ellipse><circle cx="41.4" cy="20.6" r="3.1" fill="#bff6ff"></circle></g>
+        <circle cx="24" cy="24" r="6.6" fill="url(#sw)"></circle><circle cx="24" cy="24" r="2.6" fill="#fff"></circle>
+      </svg>
+      <div style="position:absolute;left:52px;top:0;white-space:nowrap">
+        <div style="position:absolute;left:2px;top:19px;font-size:4.6px;font-weight:600;letter-spacing:.14em;color:#fff;opacity:.92;line-height:1">SAMPLE</div>
+        <div style="position:absolute;left:0;top:25px;font-weight:900;font-size:17px;line-height:1;letter-spacing:-.01em;color:#fff;transform:scaleX(.9);transform-origin:0 50%">SUPERSTORE</div>
+      </div>
+      <div style="position:absolute;left:196px;top:0;height:62px;display:flex;align-items:center;gap:24px">
+        <sc-for list="{{ links }}" as="l" hint-placeholder-count="4">
+          <a href="#" onClick="{{ l.go }}" style="font-size:12.5px;font-weight:400;color:rgba(255,255,255,.92);white-space:nowrap;transition:opacity .25s" style-hover="opacity:.65">{{ l.label }}</a>
+        </sc-for>
+      </div>
+      <a href="#" onClick="{{ openTop }}" style="position:absolute;left:530.7px;top:10.5px;width:125.5px;height:39.5px;border-radius:14px;font-size:12.5px;font-weight:500;letter-spacing:-.005em;display:grid;place-items:center;color:#fff;overflow:hidden;background:linear-gradient(to top,#9ad9ec 1px,#89dff0 2px,#79e0f1 3px,#61daef 4px,#3ec8e4 5px,#14a8c6 6px,#0596b3 7px,#038aa8 8px,#047796 9px,#006180 10px,#025066 12px,#0a4f5e 13px,#04465a 14px,#073746 16px,#0a2a37 18px,#0d212e 20px,#0f1824 24px,#0a121e 30px,#0a111d 34px,#0a111d 100%);box-shadow:inset 0 3px 3px -2px rgba(180,228,255,.10),inset 1px 0 0 rgba(255,255,255,.09),inset -1px 0 0 rgba(255,255,255,.09),0 1px 0 rgba(152,218,234,.38),1px 0 0 rgba(152,218,234,.17),-1px 0 0 rgba(152,218,234,.17),0 0 8px rgba(60,190,235,.10),0 2px 5px -3px rgba(90,220,255,.45);transition:transform .25s,box-shadow .25s,filter .25s" style-hover="transform:translateY(-1px);filter:brightness(1.12)" style-before="content:'';position:absolute;left:22%;right:38%;top:0.8px;height:1.9px;z-index:1;filter:blur(.55px);background:linear-gradient(90deg,rgba(120,225,255,0) 0%,rgba(120,225,255,.58) 34%,rgba(160,240,255,.74) 50%,rgba(120,225,255,.58) 66%,rgba(120,225,255,0) 100%)" style-after="content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;background:linear-gradient(90deg,rgba(200,245,255,.70),rgba(200,245,255,0) 13px),linear-gradient(270deg,rgba(200,245,255,.70),rgba(200,245,255,0) 13px);-webkit-mask:linear-gradient(to top,#000 0,#000 6px,rgba(0,0,0,.40) 12px,rgba(0,0,0,.15) 18px,rgba(0,0,0,.09) 24px,rgba(0,0,0,.02) 30px,rgba(0,0,0,.02) 100%);mask:linear-gradient(to top,#000 0,#000 6px,rgba(0,0,0,.40) 12px,rgba(0,0,0,.15) 18px,rgba(0,0,0,.09) 24px,rgba(0,0,0,.02) 30px,rgba(0,0,0,.02) 100%)"><span style="position:relative;z-index:2;display:block;line-height:1;text-shadow:0 1px 2px rgba(0,20,30,.5)">Abrir dashboard</span></a>
+    </div>
+
+    <!-- badge -->
+    <div data-intro="270" data-dy="11" style="position:absolute;left:462px;top:95px;width:250px;height:39px;border-radius:12px;z-index:300;border:1px solid rgba(255,255,255,.115);background:linear-gradient(to top,rgba(190,225,255,.175) 0px,rgba(190,225,255,.128) 2px,rgba(190,225,255,.075) 4px,rgba(190,225,255,.026) 6px,rgba(255,255,255,.012) 9px,rgba(255,255,255,.012) 100%);backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.035)">
+      <i style="position:absolute;left:4px;top:4px;width:29px;height:29px;border-radius:8px;display:grid;place-items:center;background:linear-gradient(to top,#46afc8 0px,#35abc7 2px,#0b859d 4px,#026c84 6px,#004e66 8px,#053f58 10px,#012c3d 12px,#031a2a 14px,#061125 16px,#090f25 19px,#090c1c 23px,#060d16 29px);box-shadow:inset 1px 0 0 rgba(150,220,250,.40),inset -1px 0 0 rgba(150,220,250,.52),0 0 6px rgba(60,190,230,.20),0 3px 8px -5px rgba(90,220,255,.6)">
+        <svg viewBox="5 1 14 22" preserveAspectRatio="none" style="width:14px;height:16px;position:relative;top:-1px"><path d="M13.9 1.6 5.5 13.6a.7.7 0 0 0 .6 1.1h4.2l-1 7.7a.7.7 0 0 0 1.25.55l8.3-12.1a.7.7 0 0 0-.6-1.1h-4.2l1-7.7a.7.7 0 0 0-1.25-.55Z" fill="rgba(16,112,152,.72)" stroke="rgba(190,236,255,.6)" stroke-width="1.6" stroke-linejoin="round"></path></svg>
+      </i>
+      <b style="position:absolute;left:45px;top:0;height:39px;display:flex;align-items:center;font-size:12px;font-weight:400;color:rgba(255,255,255,.94);white-space:nowrap;padding-top:1.5px">EDA · Sample Superstore 2014–2017</b>
+    </div>
+
+    <!-- headline -->
+    <div data-intro="380" data-dy="15" style="position:absolute;left:586px;top:163px;transform:translateX(-50%);white-space:nowrap;line-height:1;font-weight:900;font-size:48px;letter-spacing:-.004em;word-spacing:.12em;text-transform:uppercase;color:#fff;text-shadow:0 0 34px rgba(130,180,255,.22);z-index:300">Análisis de ventas</div>
+    <div data-intro="470" data-dy="15" style="position:absolute;left:586px;top:217px;transform:translateX(-50%);white-space:nowrap;line-height:1;font-weight:900;font-size:48px;letter-spacing:-.004em;text-transform:uppercase;color:#fff;text-shadow:0 0 34px rgba(130,180,255,.22);z-index:300">Superstore</div>
+    <div data-intro="690" data-dy="10" style="position:absolute;left:586px;top:289px;transform:translateX(-50%);white-space:nowrap;line-height:1;font-size:13.2px;color:#a9aeb5;z-index:300"><b style="font-weight:600;color:#fff">9,994 pedidos / 4 años de datos</b> explorados por</div>
+    <div data-intro="745" data-dy="10" style="position:absolute;left:586px;top:305px;transform:translateX(-50%);white-space:nowrap;line-height:1;font-size:13.2px;color:#a9aeb5;z-index:300">categoría, región, segmento y tendencia mensual.</div>
+
+    <a href="#" onClick="{{ openTop }}" data-intro="830" data-dy="13" style="position:absolute;left:521px;top:349px;width:131px;height:54.5px;border-radius:13px;font-size:16px;font-weight:500;letter-spacing:-.01em;z-index:300;display:grid;place-items:center;color:#fff;overflow:hidden;background:linear-gradient(to top,#9ad9ec 1px,#89dff0 2px,#79e0f1 3px,#61daef 4px,#3ec8e4 5px,#14a8c6 6px,#0596b3 7px,#038aa8 8px,#047796 9px,#006180 10px,#025066 12px,#0a4f5e 13px,#04465a 14px,#073746 16px,#0a2a37 18px,#0d212e 20px,#0f1824 24px,#0a121e 30px,#0a111d 34px,#0a111d 100%);box-shadow:inset 0 3px 3px -2px rgba(180,228,255,.10),inset 1px 0 0 rgba(255,255,255,.09),inset -1px 0 0 rgba(255,255,255,.09),1px 0 0 rgba(152,218,234,.17),-1px 0 0 rgba(152,218,234,.17),0 0 8px rgba(60,190,235,.10),0 2px 5px -3px rgba(90,220,255,.45);transition:transform .25s,filter .25s" style-hover="transform:translateY(-1px);filter:brightness(1.12)" style-after="content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;background:linear-gradient(90deg,rgba(200,245,255,.70),rgba(200,245,255,0) 13px),linear-gradient(270deg,rgba(200,245,255,.70),rgba(200,245,255,0) 13px);-webkit-mask:linear-gradient(to top,#000 0,#000 6px,rgba(0,0,0,.40) 12px,rgba(0,0,0,.15) 18px,rgba(0,0,0,.09) 24px,rgba(0,0,0,.02) 30px,rgba(0,0,0,.02) 100%);mask:linear-gradient(to top,#000 0,#000 6px,rgba(0,0,0,.40) 12px,rgba(0,0,0,.15) 18px,rgba(0,0,0,.09) 24px,rgba(0,0,0,.02) 30px,rgba(0,0,0,.02) 100%)"><span style="position:relative;z-index:2;display:block;line-height:1;text-shadow:0 1px 2px rgba(0,20,30,.5)">Ver gráficos</span></a>
+  </div>
+
+  <!-- full dashboard overlay -->
+  <div style="position:absolute;inset:0;z-index:900;background:rgba(2,2,4,.72);backdrop-filter:blur(6px);transition:opacity .35s;opacity:{{ ovOpacity }};pointer-events:{{ ovEvents }}" onClick="{{ close }}">
+    <div onClick="{{ stop }}" style="position:absolute;left:24px;right:24px;top:20px;bottom:0;border-radius:24px 24px 0 0;overflow:hidden;background:rgba(20,20,26,.92);box-shadow:0 -14px 44px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.08);transition:transform .45s cubic-bezier(.16,1,.3,1);transform:{{ ovTransform }}">
+      <div style="position:absolute;left:0;top:0;right:0;height:46px;background:linear-gradient(180deg,rgba(20,24,48,.6),rgba(15,19,38,.7))">
+        <div style="position:absolute;left:24px;top:19px;display:flex;gap:4px"><i onClick="{{ close }}" style="width:9px;height:9px;border-radius:50%;background:#ee5c62;cursor:pointer"></i><i style="width:9px;height:9px;border-radius:50%;background:#f6b719"></i><i style="width:9px;height:9px;border-radius:50%;background:#12c02f"></i></div>
+        <div style="position:absolute;left:50%;top:9px;transform:translateX(-50%);width:min(420px,50%);height:28px;border-radius:6px;background:rgba(9,13,26,.93);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,.72)">Dashboard de ventas · Sample Superstore</div>
+        <a href="#" onClick="{{ close }}" style="position:absolute;right:18px;top:9px;height:28px;padding:0 14px;border-radius:9px;display:flex;align-items:center;font-size:12px;font-weight:500;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.12)" style-hover="background:rgba(255,255,255,.06)">Cerrar ✕</a>
+      </div>
+      <div style="position:absolute;left:8px;right:8px;top:46px;bottom:0;background:#020204;border-radius:12px 12px 0 0;overflow:hidden">
+        <sc-if value="{{ mounted }}" hint-placeholder-val="{{ false }}">
+          <iframe ref="{{ frameRef }}" onLoad="{{ onFrameLoad }}" src="Dashboard Superstore.dc.html" title="Dashboard de ventas" style="width:100%;height:100%;border:0;display:block"></iframe>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { open: false, mounted: false };
+  canvasRef = React.createRef(); ringRef = React.createRef(); browserRef = React.createRef();
+  frameRef = React.createRef(); stA = React.createRef(); stB = React.createRef();
+  target = null;
+
+  static SHOTS = [
+    { v: 'paper', k: 'CATEGORÍA', t: 'Technology', n: '$836,154', d: '1,847 PEDIDOS', pos: '72% 50%' },
+    { v: 'photo', k: 'CATEGORÍA', t: 'Furniture', n: '$742,000', d: '2,121 pedidos', pos: '12% 60%' },
+    { v: 'blue', k: 'CATEGORÍA', t: 'Office Supplies', n: '$719,047', d: '6,026 pedidos', pos: '50% 40%' },
+    { v: 'photo', k: 'KPI · SALES', t: 'Pedidos', n: '9,994', d: 'registros totales', pos: '50% 55%' },
+    { v: 'photo', k: 'REGIÓN', t: 'West', n: '$725,458', d: '3,203 pedidos', pos: '88% 50%' },
+    { v: 'paper', k: 'REGIÓN', t: 'East', n: '$678,781', d: '2,848 PEDIDOS', pos: '28% 50%' },
+    { v: 'blue', k: 'KPI · SALES', t: 'Media', n: '$229.9', d: 'por pedido', pos: '62% 70%' },
+    { v: 'photo', k: 'REGIÓN', t: 'Central', n: '$501,240', d: '2,323 pedidos', pos: '45% 75%' },
+    { v: 'blue', k: 'REGIÓN', t: 'South', n: '$391,722', d: '1,620 pedidos', pos: '0% 50%' },
+    { v: 'paper', k: 'KPI · SALES', t: 'Mediana', n: '$54.5', d: 'POR PEDIDO', pos: '100% 40%' },
+    { v: 'photo', k: 'SEGMENTO', t: 'Consumer', n: '$1,161,401', d: '5,191 pedidos', pos: '60% 30%' },
+    { v: 'paper', k: 'SEGMENTO', t: 'Corporate', n: '$706,146', d: '3,020 PEDIDOS', pos: '95% 65%' },
+    { v: 'blue', k: 'SEGMENTO', t: 'Home Office', n: '$429,653', d: '1,783 pedidos', pos: '38% 85%' },
+    { v: 'photo', k: 'KPI · SALES', t: 'Máximo', n: '$22,638.5', d: 'pedido más alto', pos: '20% 30%' },
+  ];
+
+  componentDidMount() {
+    const star = (n, blur, a0, a1) => Array.from({ length: n }, () =>
+      `${(Math.random() * 100).toFixed(2)}vw ${(Math.random() * 100).toFixed(2)}vh ${blur}px 0 rgba(255,255,255,${(a0 + Math.random() * (a1 - a0)).toFixed(2)})`).join(',');
+    this.stA.current.style.boxShadow = star(150, 0, .05, .30);
+    this.stB.current.style.boxShadow = star(18, 1.2, .35, .70);
+
+    this.resize = () => {
+      const vw = innerWidth, vh = innerHeight;
+      // k = min(vw/W, vh/560): fill the width; the mock bleeds off the bottom instead of letterboxing
+      const k = Math.min(vw / 1172, vh / 560);
+      this.canvasRef.current.style.transform = `translateX(-50%) scale(${k})`;
+      const fill = Math.max(0, vh / k - 657);
+      this.browserRef.current.style.height = (99 + fill) + 'px';
+    };
+    addEventListener('resize', this.resize); this.resize();
+
+    // Ring: R=891 with the camera at the centre (perspective=891) so cards are tangent and face it; 37 cards, cull at 42°
+    const cards = [...this.ringRef.current.querySelectorAll('[data-card]')];
+    const R = 891, step = 360 / cards.length;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let phase = -2, last = performance.now();
+    const place = () => cards.forEach((el, i) => {
+      const a = ((i * step + phase) % 360 + 540) % 360 - 180;
+      if (Math.abs(a) > 42) { el.style.visibility = 'hidden'; return; }
+      el.style.visibility = 'visible';
+      const r = a * Math.PI / 180, c = Math.cos(r);
+      el.style.transform = `translate3d(${R * Math.sin(r)}px,0,${R * (1 - c)}px) rotateY(${-a}deg)`;
+      el.style.filter = `brightness(${0.84 + 0.5 * (1 / c - 1)})`;
+    });
+    const tick = t => {
+      const dt = Math.min((t - last) / 1000, .1); last = t;
+      if (!reduce) phase -= 1.9 * dt;
+      place(); this.raf = requestAnimationFrame(tick);
+    };
+    this.onVis = () => { last = performance.now(); };
+    document.addEventListener('visibilitychange', this.onVis);
+    this.raf = requestAnimationFrame(tick);
+
+    // Entrance: individual translate/opacity so it composes with the transforms already in use
+    if (!reduce && Element.prototype.animate) {
+      const EXPO = 'cubic-bezier(.16,1,.3,1)';
+      this.canvasRef.current.querySelectorAll('[data-intro]').forEach(el => {
+        el.animate([{ opacity: 0, translate: `0 ${el.dataset.dy}px` }, { opacity: 1, translate: '0 0' }],
+          { duration: 800, delay: +el.dataset.intro, easing: EXPO, fill: 'backwards' });
+      });
+    }
+  }
+  componentWillUnmount() {
+    cancelAnimationFrame(this.raf);
+    removeEventListener('resize', this.resize);
+    document.removeEventListener('visibilitychange', this.onVis);
+  }
+
+  open(target) {
+    this.target = target;
+    this.setState({ open: true, mounted: true }, () => this.scrollFrame());
+  }
+  scrollFrame() {
+    const f = this.frameRef.current;
+    if (!f || !f.contentWindow || !f.contentDocument || f.contentDocument.readyState !== 'complete') return;
+    const w = f.contentWindow;
+    if (!this.target) { w.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    const el = f.contentDocument.getElementById(this.target);
+    if (!el && (this.tries = (this.tries || 0) + 1) < 30) { setTimeout(() => this.scrollFrame(), 150); return; }
+    this.tries = 0;
+    const box = el && (el.closest('.card, section') || el);
+    if (box) w.scrollTo({ top: box.getBoundingClientRect().top + w.scrollY - 90, behavior: 'smooth' });
+  }
+
+  renderVals() {
+    const S = Component.SHOTS;
+    const cards = Array.from({ length: 37 }, (_, i) => {
+      const d = S[i % S.length];
+      return { ...d, isPhoto: d.v === 'photo', isPaper: d.v === 'paper', isBlue: d.v === 'blue' };
+    });
+    const go = t => e => { e.preventDefault(); e.stopPropagation(); this.open(t); };
+    const o = this.state.open;
+    return {
+      cards,
+      links: [
+        { label: 'Resumen', go: go(null) },
+        { label: 'Mapa', go: go('fig-map') },
+        { label: 'Correlación', go: go('fig-corr') },
+        { label: 'Tendencia', go: go('fig-trend') },
+      ],
+      openTop: go(null),
+      close: e => { e.preventDefault(); e.stopPropagation(); this.setState({ open: false }); },
+      stop: e => e.stopPropagation(),
+      onFrameLoad: () => this.scrollFrame(),
+      mounted: this.state.mounted,
+      ovOpacity: o ? 1 : 0,
+      ovEvents: o ? 'auto' : 'none',
+      ovTransform: o ? 'translateY(0)' : 'translateY(40px)',
+      canvasRef: this.canvasRef, ringRef: this.ringRef, browserRef: this.browserRef,
+      frameRef: this.frameRef, stA: this.stA, stB: this.stB,
+    };
+  }
+}
+</script>
+</body>
+</html>

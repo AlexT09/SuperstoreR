@@ -1,27 +1,32 @@
---- 
-title: "EDA Superstore: factores que explican el nivel de ventas"
+---
+title: "Proyecto Sample Superstore"
+subtitle: "Factores que explican el nivel de ventas · Análisis exploratorio de datos (EDA)"
 author: "Alex Teran y David Estrada"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
-bibliography: [book.bib]
-biblio-style: apalike
-link-citations: yes
-description: "Análisis exploratorio de datos (EDA) del dataset Sample - Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas."
+lang: es
+description: "Análisis exploratorio de datos (EDA) del dataset Sample Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas."
 ---
 
-```{r setup-global, include=FALSE, message=FALSE, warning=FALSE}
-# Evita que los mensajes de carga de paquetes (tidyverse) y los avisos de
-# geom_smooth() salgan en el libro renderizado.
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
-
-# Fix para el problema de codificación: sin esto, tildes y "ñ" en títulos/ejes
-# de ggplot2 (y en los nombres de archivo .html generados por bookdown) salen
-# como "Categor<U+00ED>a" en vez de "Categoría".
-options(bitmapType = "cairo")
-Sys.setlocale("LC_ALL", "es_ES.UTF-8")
+```{r setup-global, include=FALSE}
+# Sin mensajes de carga de paquetes ni avisos en el libro; las figuras ocupan todo el ancho
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, out.width = "100%")
 ```
 
-# Presentación {-}
+# Introducción {-#introduccion}
 
-Análisis exploratorio del dataset Sample - Superstore para entender qué factores (categoría, región y segmento) explican el nivel de ventas.
+*Análisis exploratorio de datos del dataset Sample Superstore*
+
+## El problema
+
+Sample Superstore es un conjunto de datos de muestra de una gran cadena minorista —una simulación
+con fines analíticos— sobre el que se realiza un análisis exploratorio de datos (EDA) para ofrecer
+información que ayude a la empresa a aumentar sus beneficios y, al mismo tiempo, minimizar sus
+pérdidas.
+
+## Pregunta problema
+
+**¿Qué factores (categoría, región, segmento) explican el nivel de ventas (`Sales`)?**
+
+Recorre las pestañas para conocer el contexto, los objetivos, la metodología y el EDA.

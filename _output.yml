@@ -1,17 +1,15 @@
 bookdown::gitbook:
   css: style.css
+  number_sections: false
+  includes:
+    after_body: code-folding.html
   config:
     toc:
       before: |
-        <li><a href="./">EDA Superstore</a></li>
+        <li><a href="./">Proyecto Sample Superstore</a></li>
       after: |
-        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-    edit: https://github.com/USERNAME/REPO/edit/BRANCH/%s
-    download: ["pdf", "epub"]
-bookdown::pdf_book:
-  includes:
-    in_header: preamble.tex
-  latex_engine: xelatex
-  citation_package: natbib
-  keep_tex: yes
-bookdown::epub_book: default
+        <li><a href="https://github.com/AlexT09/rbook" target="blank">Repositorio en GitHub</a></li>
+    edit: null
+    download: null
+    sharing: null
+    info: false

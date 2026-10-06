@@ -1,14 +1,17 @@
-p.caption {
-  color: #777;
-  margin-top: 10px;
-}
-p code {
-  white-space: inherit;
-}
-pre {
-  word-break: normal;
-  word-wrap: normal;
-}
-pre code {
-  white-space: inherit;
-}
+p.caption { color: #777; margin-top: 10px; }
+p code { white-space: inherit; }
+pre { word-break: normal; word-wrap: normal; }
+pre code { white-space: inherit; }
+
+/* Subtítulo de cada capítulo */
+.subtitulo { color: #6b6f85; font-style: italic; margin-top: -0.6em; }
+
+/* Bloques de código plegables */
+details.code-fold { margin: 0.6em 0 1em; border-left: 3px solid #2E6F95; background: #f7f9fb; }
+details.code-fold > summary { cursor: pointer; padding: 6px 12px; font-weight: 600; color: #1F5570; }
+details.code-fold[open] > summary { border-bottom: 1px solid #e3e8ee; }
+details.code-fold div.sourceCode { margin: 0; }
+
+/* Tabla de resumen y de operacionalización */
+.book .book-body .page-wrapper .page-inner section.normal table td,
+.book .book-body .page-wrapper .page-inner section.normal table th { padding: 6px 12px; }

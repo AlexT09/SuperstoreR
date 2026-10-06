@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Dashboard de ventas · Sample Superstore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;900&amp;family=Playfair+Display:wght@600&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-4.1.1.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#020204;color:#fff;font-family:Poppins,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#3fe3ff;text-decoration:none}
+a:hover{color:#a6f7ff}
+select option{background:#0a111d;color:#fff}
+select:focus-visible,button:focus-visible{outline:2px solid #3fe3ff;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height:100vh;background:linear-gradient(180deg,rgba(25,127,255,.05) 0,rgba(25,127,255,0) 420px),#020204;padding:28px clamp(14px,3vw,32px) 32px">
+  <div style="max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:16px">
+
+    <header style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px;padding:4px 4px 8px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.22em;color:#3fe3ff">EDA · SAMPLE SUPERSTORE</span>
+        <h1 style="font-weight:900;font-size:clamp(26px,3.4vw,40px);line-height:1;text-transform:uppercase;letter-spacing:-.004em;text-shadow:0 0 34px rgba(130,180,255,.22)">Dashboard de ventas</h1>
+        <p style="font-size:14px;color:#a9aeb5;max-width:620px;text-wrap:pretty">¿Qué factores (categoría, región, segmento) explican el nivel de ventas (<b style="font-weight:600;color:#fff">Sales</b>)?</p>
+      </div>
+      <span style="height:34px;display:flex;align-items:center;padding:0 14px;border-radius:12px;border:1px solid rgba(255,255,255,.115);background:rgba(255,255,255,.02);font-size:12px;color:rgba(255,255,255,.88)">Periodo: 03/01/2014 – 30/12/2017</span>
+    </header>
+
+    <section id="filtros" aria-label="Filtros" style="position:sticky;top:10px;z-index:5;display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 14px;padding:12px 14px 12px 18px;border-radius:22px;background:rgba(10,14,26,.72);border:1px solid rgba(255,255,255,.105);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%)">
+      <label style="display:flex;flex-direction:column;gap:5px;flex:1 1 150px;max-width:220px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.16em;color:#8d9298;padding-left:4px">CATEGORÍA</span>
+        <select value="{{ fCat }}" onChange="{{ onCat }}" style="appearance:none;-webkit-appearance:none;height:40px;padding:0 14px;border-radius:12px;background:#0a111d;border:1px solid rgba(255,255,255,.14);color:#fff;font:inherit;font-size:13.5px;cursor:pointer">
+          <sc-for list="{{ catOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
+        </select>
+      </label>
+      <label style="display:flex;flex-direction:column;gap:5px;flex:1 1 150px;max-width:220px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.16em;color:#8d9298;padding-left:4px">REGIÓN</span>
+        <select value="{{ fReg }}" onChange="{{ onReg }}" style="appearance:none;-webkit-appearance:none;height:40px;padding:0 14px;border-radius:12px;background:#0a111d;border:1px solid rgba(255,255,255,.14);color:#fff;font:inherit;font-size:13.5px;cursor:pointer">
+          <sc-for list="{{ regOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
+        </select>
+      </label>
+      <label style="display:flex;flex-direction:column;gap:5px;flex:1 1 150px;max-width:220px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.16em;color:#8d9298;padding-left:4px">SEGMENTO</span>
+        <select value="{{ fSeg }}" onChange="{{ onSeg }}" style="appearance:none;-webkit-appearance:none;height:40px;padding:0 14px;border-radius:12px;background:#0a111d;border:1px solid rgba(255,255,255,.14);color:#fff;font:inherit;font-size:13.5px;cursor:pointer">
+          <sc-for list="{{ segOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
+        </select>
+      </label>
+      <label style="display:flex;flex-direction:column;gap:5px;flex:1 1 150px;max-width:220px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.16em;color:#8d9298;padding-left:4px">AÑO</span>
+        <select value="{{ fYear }}" onChange="{{ onYear }}" style="appearance:none;-webkit-appearance:none;height:40px;padding:0 14px;border-radius:12px;background:#0a111d;border:1px solid rgba(255,255,255,.14);color:#fff;font:inherit;font-size:13.5px;cursor:pointer">
+          <sc-for list="{{ yearOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o.v }}">{{ o.l }}</option></sc-for>
+        </select>
+      </label>
+      <button type="button" onClick="{{ onReset }}" style="margin-left:auto;height:40px;padding:0 18px;border:none;border-radius:13px;cursor:pointer;color:#fff;font:inherit;font-size:13px;font-weight:500;background:linear-gradient(to top,#9ad9ec 1px,#61daef 4px,#14a8c6 6px,#047796 9px,#025066 12px,#073746 16px,#0d212e 20px,#0a111d 34px,#0a111d 100%);box-shadow:inset 1px 0 0 rgba(255,255,255,.09),inset -1px 0 0 rgba(255,255,255,.09),0 0 8px rgba(60,190,235,.10),0 2px 5px -3px rgba(90,220,255,.45);transition:filter .25s,transform .25s" style-hover="filter:brightness(1.15);transform:translateY(-1px)">Limpiar filtros</button>
+    </section>
+
+    <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+      <p style="padding:14px 18px;border-radius:16px;border:1px solid rgba(238,92,98,.4);color:#ffb3b6;font-size:13.5px">{{ errorMsg }}</p>
+    </sc-if>
+
+    <section aria-label="Resumen de Sales" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px">
+      <div style="padding:18px 20px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015);display:flex;flex-direction:column;gap:8px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.7)">PEDIDOS</span>
+        <span style="font-weight:900;font-size:30px;line-height:1;letter-spacing:-.015em;color:#3fe3ff;text-shadow:0 0 16px rgba(63,227,255,.4);font-variant-numeric:tabular-nums">{{ kN }}</span>
+      </div>
+      <div style="padding:18px 20px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015);display:flex;flex-direction:column;gap:8px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.7)">MEDIA DE SALES</span>
+        <span style="font-weight:900;font-size:30px;line-height:1;letter-spacing:-.015em;color:#3fe3ff;text-shadow:0 0 16px rgba(63,227,255,.4);font-variant-numeric:tabular-nums">{{ kMean }}</span>
+      </div>
+      <div style="padding:18px 20px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015);display:flex;flex-direction:column;gap:8px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.7)">MEDIANA DE SALES</span>
+        <span style="font-weight:900;font-size:30px;line-height:1;letter-spacing:-.015em;color:#3fe3ff;text-shadow:0 0 16px rgba(63,227,255,.4);font-variant-numeric:tabular-nums">{{ kMedian }}</span>
+      </div>
+      <div style="padding:18px 20px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015);display:flex;flex-direction:column;gap:8px">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.22em;color:rgba(255,255,255,.7)">MÁXIMO DE SALES</span>
+        <span style="font-weight:900;font-size:30px;line-height:1;letter-spacing:-.015em;color:#3fe3ff;text-shadow:0 0 16px rgba(63,227,255,.4);font-variant-numeric:tabular-nums">{{ kMax }}</span>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:16px">
+      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
+        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:12px">Hallazgos del EDA</h2>
+        <ul style="padding-left:18px;display:flex;flex-direction:column;gap:9px;font-size:13.5px;line-height:1.6;color:#c9ccd1">
+          <li>El análisis univariado muestra que <code style="font-family:inherit;font-weight:600;color:#3fe3ff">Sales</code> tiene una distribución muy sesgada hacia valores bajos, con pocos pedidos de alto valor.</li>
+          <li>El análisis bivariado indica que <code style="font-family:inherit;font-weight:600;color:#3fe3ff">Category</code> es el factor que más explica diferencias en el valor de venta — Technology y Furniture tienen pedidos individuales más grandes, mientras que Office Supplies domina en volumen pero con pedidos de menor valor.</li>
+          <li><code style="font-family:inherit;font-weight:600;color:#3fe3ff">Region</code> y <code style="font-family:inherit;font-weight:600;color:#3fe3ff">Segment</code> muestran diferencias más leves.</li>
+          <li>El descuento no se relaciona linealmente con las ventas, como se observa en el gráfico de bins 2D.</li>
+          <li>Los puntos muestran un patrón que se repite cada año: las ventas son más bajas a comienzos de año y suben hacia el final, lo que sugiere un comportamiento estacional.</li>
+          <li>Los pedidos se concentran en pocos estados: California (2001), New York (1128) y Texas (985) suman el 41.2% del total, y son los estados con más pedidos de West, East y Central.</li>
+        </ul>
+      </div>
+      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
+        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Distribución de Sales</h2>
+        <div id="fig-hist" style="min-height:300px"></div>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px">
+      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
+        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Pedidos por categoría</h2>
+        <div id="fig-n-cat" style="min-height:280px"></div>
+      </div>
+      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
+        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Pedidos por región</h2>
+        <div id="fig-n-reg" style="min-height:280px"></div>
+      </div>
+      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
+        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Pedidos por segmento</h2>
+        <div id="fig-n-seg" style="min-height:280px"></div>
+      </div>
+    </section>
+
+    <section style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
+      <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Pedidos por estado</h2>
+      <div id="fig-map" style="min-height:380px"></div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px">
+      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
+        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Sales por categoría</h2>
+        <div id="fig-box-cat" style="min-height:280px"></div>
+      </div>
+      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
+        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Sales por región</h2>
+        <div id="fig-box-reg" style="min-height:280px"></div>
+      </div>
+      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
+        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Sales por segmento</h2>
+        <div id="fig-box-seg" style="min-height:280px"></div>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:16px">
+      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
+        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Correlación entre variables numéricas</h2>
+        <div id="fig-corr" style="min-height:300px"></div>
+      </div>
+      <div style="min-width:0;padding:20px 22px;border-radius:20px;border:1px solid rgba(255,255,255,.105);background:rgba(255,255,255,.015)">
+        <h2 style="font-family:'Playfair Display',serif;font-weight:600;font-size:20px;margin-bottom:6px">Ventas mensuales por categoría</h2>
+        <div id="fig-trend" style="min-height:300px"></div>
+      </div>
+    </section>
+
+    <footer style="font-size:12px;color:#8d9298;padding:6px 4px">Fuente: Sample Superstore. Proyecto: Alex Teran y David Estrada.</footer>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { f: { cat: '-1', reg: '-1', seg: '-1', year: 'all' }, k: null, lists: null, err: null };
+
+  componentDidMount() { this.load(); }
+
+  async waitPlotly() {
+    const t0 = Date.now();
+    while (!window.Plotly) {
+      if (Date.now() - t0 > 20000) throw new Error('No se pudo cargar plotly.js');
+      await new Promise(r => setTimeout(r, 100));
+    }
+  }
+
+  async load() {
+    try {
+      const html = await (await fetch('dashboard_data.html')).text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      this.FIGS = JSON.parse(doc.getElementById('figs').textContent);
+      this.D = JSON.parse(doc.getElementById('data').textContent);
+      this.YEAR = this.D.months.map(m => m.slice(0, 4));
+      this.setState({ lists: { cats: this.D.cats, regs: this.D.regs, segs: this.D.segs, years: [...new Set(this.YEAR)].sort() } });
+      this.theme();
+      await this.waitPlotly();
+      this.CONFIG = { displayModeBar: false, responsive: true };
+      Object.keys(this.FIGS).forEach(id => { if (document.getElementById(id)) Plotly.newPlot(id, this.FIGS[id].data, this.FIGS[id].layout, this.CONFIG); });
+      this.refresh(false);
+    } catch (e) {
+      this.setState({ err: 'No se pudieron cargar los datos del dashboard: ' + e.message });
+    }
+  }
+
+  // Solo apariencia: colores y fuentes de la plantilla. Los datos de cada figura no cambian.
+  theme() {
+    const T = { text: '#c9ccd1', muted: '#8d9298', grid: 'rgba(255,255,255,0.06)', line: 'rgba(255,255,255,0.14)', bar: '#3fe3ff' };
+    const CAT = { 'Furniture': '#0a86d8', 'Office Supplies': '#3fe3ff', 'Technology': '#a6f7ff' };
+    Object.entries(this.FIGS).forEach(([id, fig]) => {
+      const L = fig.layout;
+      delete L.template;
+      L.paper_bgcolor = 'rgba(0,0,0,0)'; L.plot_bgcolor = 'rgba(0,0,0,0)';
+      L.font = { family: 'Poppins, system-ui, sans-serif', color: T.text, size: 11.5 };
+      L.hoverlabel = { bgcolor: '#0a111d', bordercolor: 'rgba(63,227,255,0.5)', font: { color: '#fff', size: 12, family: 'Poppins, sans-serif' } };
+      Object.keys(L).filter(k => /^[xy]axis/.test(k)).forEach(k => {
+        const a = L[k];
+        a.gridcolor = T.grid; a.linecolor = T.line; a.zerolinecolor = T.line;
+        a.tickfont = Object.assign({}, a.tickfont, { color: T.muted });
+        if (a.title) a.title = Object.assign({}, a.title, { font: { color: T.muted, size: 11 } });
+      });
+      if (L.legend) L.legend.font = { color: T.text };
+      if (L.geo) Object.assign(L.geo, { bgcolor: 'rgba(0,0,0,0)', showlakes: false, showland: true, landcolor: '#0a111d', subunitcolor: 'rgba(255,255,255,0.14)' });
+      fig.data.forEach(t => {
+        if (t.type === 'histogram') t.marker = Object.assign({}, t.marker, { color: 'rgba(63,227,255,0.75)', line: { color: '#020204', width: 0.5 } });
+        if (t.type === 'bar') {
+          t.marker = Object.assign({}, t.marker, { color: id === 'fig-n-cat' ? t.x.map(c => CAT[c] || T.bar) : T.bar });
+          t.textfont = Object.assign({}, t.textfont, { color: T.text });
+        }
+        if (t.type === 'box') {
+          const c = id === 'fig-box-cat' ? (CAT[t.name] || T.bar) : T.bar;
+          t.marker = Object.assign({}, t.marker, { color: c });
+          t.line = Object.assign({}, t.line, { color: c });
+          t.fillcolor = 'rgba(63,227,255,0.08)';
+        }
+        if (t.type === 'choropleth') {
+          t.colorscale = [[0, '#0d212e'], [0.5, '#047796'], [1, '#3fe3ff']];
+          t.marker = Object.assign({}, t.marker, { line: { color: '#020204', width: 0.6 } });
+          t.colorbar = Object.assign({}, t.colorbar, { tickfont: { color: T.muted }, outlinewidth: 0,
+            title: Object.assign({}, t.colorbar && t.colorbar.title, { font: { size: 11, color: T.muted } }) });
+        }
+        if (t.type === 'heatmap') {
+          t.colorscale = [[0, '#0a2a4a'], [0.5, '#0a111d'], [1, '#3fe3ff']];
+          t.textfont = Object.assign({}, t.textfont, { color: '#fff' });
+        }
+        if (t.type === 'scatter') t.line = Object.assign({}, t.line, { color: CAT[t.name] || T.bar });
+      });
+    });
+  }
+
+  filtered() {
+    const D = this.D, N = D.Sales.length, s = this.state.f, out = [];
+    const cat = +s.cat, reg = +s.reg, seg = +s.seg;
+    for (let i = 0; i < N; i++) {
+      if (cat >= 0 && D.c[i] !== cat) continue;
+      if (reg >= 0 && D.r[i] !== reg) continue;
+      if (seg >= 0 && D.s[i] !== seg) continue;
+      if (s.year !== 'all' && this.YEAR[D.m[i]] !== s.year) continue;
+      out.push(i);
+    }
+    return out;
+  }
+
+  refresh(charts) {
+    if (!this.D) return;
+    const D = this.D, FIGS = this.FIGS, rows = this.filtered(), year = this.state.f.year;
+    const v = rows.map(i => D.Sales[i]);
+    const median = arr => { const a = Float64Array.from(arr).sort(), h = a.length >> 1; return a.length % 2 ? a[h] : (a[h - 1] + a[h]) / 2; };
+    this.setState({ k: v.length ? [rows.length, v.reduce((a, b) => a + b, 0) / v.length, median(v), Math.max(...v)] : [0, null, null, null] });
+    if (!charts || !window.Plotly) return;
+    const fmtInt = x => x.toLocaleString('en-US');
+    const draw = id => Plotly.react(id, FIGS[id].data, FIGS[id].layout, this.CONFIG);
+    const pearson = (x, y) => {
+      const n = x.length, mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n;
+      let sxy = 0, sxx = 0, syy = 0;
+      for (let i = 0; i < n; i++) { const dx = x[i] - mx, dy = y[i] - my; sxy += dx * dy; sxx += dx * dx; syy += dy * dy; }
+      return sxx && syy ? sxy / Math.sqrt(sxx * syy) : null;
+    };
+    FIGS['fig-hist'].data[0].x = v.filter(x => x <= D.histMax); draw('fig-hist');
+    const count = (id, key, k) => {
+      const n = new Array(k).fill(0); for (const i of rows) n[key[i]]++;
+      const t = FIGS[id].data[0]; t.y = n;
+      t.text = n.map(x => rows.length ? `${fmtInt(x)} (${(x / rows.length * 100).toFixed(1)}%)` : '');
+      draw(id);
+    };
+    count('fig-n-cat', D.c, D.cats.length); count('fig-n-reg', D.r, D.regs.length); count('fig-n-seg', D.s, D.segs.length);
+    const n = new Array(D.nStates).fill(0); for (const i of rows) n[D.st[i]]++;
+    FIGS['fig-map'].data[0].z = n.map(x => x || null); draw('fig-map');
+    const box = (id, key, k) => {
+      const ys = Array.from({ length: k }, () => []); for (const i of rows) ys[key[i]].push(D.Sales[i]);
+      FIGS[id].data.forEach((t, j) => { t.y = ys[j]; }); draw(id);
+    };
+    box('fig-box-cat', D.c, D.cats.length); box('fig-box-reg', D.r, D.regs.length); box('fig-box-seg', D.s, D.segs.length);
+    const cols = D.numeric.map(name => rows.map(i => D[name][i]));
+    FIGS['fig-corr'].data[0].z = cols.map(a => cols.map(b => { const r = pearson(a, b); return r === null ? null : Math.round(r * 100) / 100; }));
+    draw('fig-corr');
+    const mIdx = D.months.map((_, j) => j).filter(j => year === 'all' || this.YEAR[j] === year);
+    const pos = new Map(mIdx.map((j, p) => [j, p]));
+    const sums = D.cats.map(() => new Array(mIdx.length).fill(0));
+    for (const i of rows) { const p = pos.get(D.m[i]); if (p !== undefined) sums[D.c[i]][p] += D.Sales[i]; }
+    FIGS['fig-trend'].data.forEach((t, c) => { t.x = mIdx.map(j => D.months[j]); t.y = sums[c].map(x => Math.round(x * 100) / 100); });
+    draw('fig-trend');
+  }
+
+  setF(key, val) { this.setState(s => ({ f: Object.assign({}, s.f, { [key]: val }) }), () => this.refresh(true)); }
+
+  renderVals() {
+    const { f, k, lists, err } = this.state;
+    const fmtUSD = x => x == null ? '–' : `$${x.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}`;
+    const opts = (all, arr) => [{ v: '-1', l: all }].concat((arr || []).map((l, j) => ({ v: String(j), l })));
+    return {
+      kN: k ? k[0].toLocaleString('en-US') : '–', kMean: k ? fmtUSD(k[1]) : '–', kMedian: k ? fmtUSD(k[2]) : '–', kMax: k ? fmtUSD(k[3]) : '–',
+      fCat: f.cat, fReg: f.reg, fSeg: f.seg, fYear: f.year,
+      catOpts: opts('Todas', lists && lists.cats), regOpts: opts('Todas', lists && lists.regs), segOpts: opts('Todos', lists && lists.segs),
+      yearOpts: [{ v: 'all', l: 'Todos' }].concat(((lists && lists.years) || []).map(y => ({ v: y, l: y }))),
+      onCat: e => this.setF('cat', e.target.value), onReg: e => this.setF('reg', e.target.value),
+      onSeg: e => this.setF('seg', e.target.value), onYear: e => this.setF('year', e.target.value),
+      onReset: () => this.setState({ f: { cat: '-1', reg: '-1', seg: '-1', year: 'all' } }, () => this.refresh(true)),
+      hasError: !!err, errorMsg: err || ''
+    };
+  }
+}
+</script>
+</body>
+</html>

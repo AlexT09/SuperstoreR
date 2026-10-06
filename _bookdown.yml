@@ -1,6 +1,18 @@
-delete_merged_file: true
-book_filename: "eda-superstore-book"
+book_filename: "proyecto-superstore"
 output_dir: "docs"
+delete_merged_file: true
+new_session: false
+rmd_files:
+  - index.Rmd
+  - 01-contexto.Rmd
+  - 02-problema.Rmd
+  - 03-objetivos.Rmd
+  - 04-marco-teorico.Rmd
+  - 05-metodologia.Rmd
+  - 06-eda.Rmd
+  - 07-dashboard.Rmd
+  - 08-limitaciones.Rmd
+  - 09-conclusiones.Rmd
 language:
   ui:
-    chapter_name: "Chapter "
+    chapter_name: ""

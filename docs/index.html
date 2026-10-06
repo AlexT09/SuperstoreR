@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html lang="es" xml:lang="es">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>EDA Superstore: factores que explican el nivel de ventas</title>
-  <meta name="description" content="Análisis exploratorio de datos (EDA) del dataset Sample - Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas." />
+  <title>Proyecto Sample Superstore</title>
+  <meta name="description" content="Análisis exploratorio de datos (EDA) del dataset Sample Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas." />
   <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="EDA Superstore: factores que explican el nivel de ventas" />
+  <meta property="og:title" content="Proyecto Sample Superstore" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:description" content="Análisis exploratorio de datos (EDA) del dataset Sample - Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas." />
+  <meta property="og:description" content="Análisis exploratorio de datos (EDA) del dataset Sample Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="EDA Superstore: factores que explican el nivel de ventas" />
+  <meta name="twitter:title" content="Proyecto Sample Superstore" />
   
-  <meta name="twitter:description" content="Análisis exploratorio de datos (EDA) del dataset Sample - Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas." />
+  <meta name="twitter:description" content="Análisis exploratorio de datos (EDA) del dataset Sample Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas." />
   
 
 <meta name="author" content="Alex Teran y David Estrada" />
@@ -30,7 +30,7 @@
   
   
 
-<link rel="next" href="pregunta-problema.html"/>
+<link rel="next" href="contexto.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,6 +51,13 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.12.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -137,39 +144,87 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">EDA Superstore</a></li>
+<li><a href="./">Proyecto Sample Superstore</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Presentación</a></li>
-<li class="chapter" data-level="1" data-path="pregunta-problema.html"><a href="pregunta-problema.html"><i class="fa fa-check"></i><b>1</b> Pregunta problema</a></li>
-<li class="chapter" data-level="2" data-path="objetivo-general.html"><a href="objetivo-general.html"><i class="fa fa-check"></i><b>2</b> Objetivo general</a></li>
-<li class="chapter" data-level="3" data-path="etl.html"><a href="etl.html"><i class="fa fa-check"></i><b>3</b> ETL</a>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introducción</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="etl.html"><a href="etl.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i><b>3.1</b> Objetivos específicos</a></li>
-<li class="chapter" data-level="3.2" data-path="etl.html"><a href="etl.html#variables-disponibles-y-su-tipo"><i class="fa fa-check"></i><b>3.2</b> Variables disponibles y su tipo</a></li>
-<li class="chapter" data-level="3.3" data-path="etl.html"><a href="etl.html#preguntas-amplias"><i class="fa fa-check"></i><b>3.3</b> Preguntas amplias</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#el-problema"><i class="fa fa-check"></i>El problema</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#pregunta-problema"><i class="fa fa-check"></i>Pregunta problema</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="análisis-univariado.html"><a href="análisis-univariado.html"><i class="fa fa-check"></i><b>4</b> Análisis univariado</a>
+<li class="chapter" data-level="" data-path="contexto.html"><a href="contexto.html"><i class="fa fa-check"></i>Contexto</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="análisis-univariado.html"><a href="análisis-univariado.html#resumen-estad%C3%ADstico-de-sales"><i class="fa fa-check"></i><b>4.1</b> Resumen estadístico de Sales</a></li>
-<li class="chapter" data-level="4.2" data-path="análisis-univariado.html"><a href="análisis-univariado.html#histograma-de-sales"><i class="fa fa-check"></i><b>4.2</b> Histograma de Sales</a></li>
-<li class="chapter" data-level="4.3" data-path="análisis-univariado.html"><a href="análisis-univariado.html#densidad-de-logsales"><i class="fa fa-check"></i><b>4.3</b> Densidad de log(Sales)</a></li>
-<li class="chapter" data-level="4.4" data-path="análisis-univariado.html"><a href="análisis-univariado.html#barras-pedidos-por-categor%C3%ADa"><i class="fa fa-check"></i><b>4.4</b> Barras: pedidos por categoría</a></li>
-<li class="chapter" data-level="4.5" data-path="análisis-univariado.html"><a href="análisis-univariado.html#barras-pedidos-por-regi%C3%B3n"><i class="fa fa-check"></i><b>4.5</b> Barras: pedidos por región</a></li>
+<li class="chapter" data-level="" data-path="contexto.html"><a href="contexto.html#motivaci%C3%B3n"><i class="fa fa-check"></i>Motivación</a></li>
+<li class="chapter" data-level="" data-path="contexto.html"><a href="contexto.html#impacto-empresarial"><i class="fa fa-check"></i>Impacto empresarial</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="análisis-bivariado.html"><a href="análisis-bivariado.html"><i class="fa fa-check"></i><b>5</b> Análisis bivariado</a>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html"><i class="fa fa-check"></i>Planteamiento del problema</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="análisis-bivariado.html"><a href="análisis-bivariado.html#boxplot-sales-por-categor%C3%ADa"><i class="fa fa-check"></i><b>5.1</b> Boxplot: Sales por categoría</a></li>
-<li class="chapter" data-level="5.2" data-path="análisis-bivariado.html"><a href="análisis-bivariado.html#boxplot-logsales-por-categor%C3%ADa"><i class="fa fa-check"></i><b>5.2</b> Boxplot: log(Sales) por categoría</a></li>
-<li class="chapter" data-level="5.3" data-path="análisis-bivariado.html"><a href="análisis-bivariado.html#boxplot-sales-por-regi%C3%B3n"><i class="fa fa-check"></i><b>5.3</b> Boxplot: Sales por región</a></li>
-<li class="chapter" data-level="5.4" data-path="análisis-bivariado.html"><a href="análisis-bivariado.html#boxplot-sales-por-segmento"><i class="fa fa-check"></i><b>5.4</b> Boxplot: Sales por segmento</a></li>
-<li class="chapter" data-level="5.5" data-path="análisis-bivariado.html"><a href="análisis-bivariado.html#bins-2d-discount-vs.-sales"><i class="fa fa-check"></i><b>5.5</b> Bins 2D: Discount vs. Sales</a></li>
-<li class="chapter" data-level="5.6" data-path="análisis-bivariado.html"><a href="análisis-bivariado.html#correlaci%C3%B3n-entre-variables-continuas"><i class="fa fa-check"></i><b>5.6</b> Correlación entre variables continuas</a></li>
-<li class="chapter" data-level="5.7" data-path="análisis-bivariado.html"><a href="análisis-bivariado.html#ventas-en-el-tiempo"><i class="fa fa-check"></i><b>5.7</b> Ventas en el tiempo</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#pregunta-problema-1"><i class="fa fa-check"></i>Pregunta problema</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#por-qu%C3%A9-categor%C3%ADa-regi%C3%B3n-y-segmento"><i class="fa fa-check"></i>Por qué categoría, región y segmento</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="conclusión.html"><a href="conclusión.html"><i class="fa fa-check"></i><b>6</b> Conclusión</a></li>
+<li class="chapter" data-level="" data-path="objetivos.html"><a href="objetivos.html"><i class="fa fa-check"></i>Objetivos</a>
+<ul>
+<li class="chapter" data-level="" data-path="objetivos.html"><a href="objetivos.html#objetivo-general"><i class="fa fa-check"></i>Objetivo general</a></li>
+<li class="chapter" data-level="" data-path="objetivos.html"><a href="objetivos.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i>Objetivos específicos</a></li>
+<li class="chapter" data-level="" data-path="objetivos.html"><a href="objetivos.html#variables-disponibles-y-su-tipo"><i class="fa fa-check"></i>Variables disponibles y su tipo</a></li>
+<li class="chapter" data-level="" data-path="objetivos.html"><a href="objetivos.html#preguntas-amplias"><i class="fa fa-check"></i>Preguntas amplias</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html"><i class="fa fa-check"></i>Marco teórico</a>
+<ul>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#an%C3%A1lisis-exploratorio-eda"><i class="fa fa-check"></i>Análisis exploratorio (EDA)</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#operacionalizaci%C3%B3n-de-variables"><i class="fa fa-check"></i>Operacionalización de variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#tabla-de-operacionalizaci%C3%B3n"><i class="fa fa-check"></i>Tabla de operacionalización</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html"><i class="fa fa-check"></i>Metodología</a>
+<ul>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#etl"><i class="fa fa-check"></i>ETL</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html"><i class="fa fa-check"></i>EDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado"><i class="fa fa-check"></i>1 · Análisis univariado</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#resumen-estad%C3%ADstico-de-sales"><i class="fa fa-check"></i>Resumen estadístico de Sales</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#histograma-de-sales"><i class="fa fa-check"></i>Histograma de Sales</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#densidad-de-logsales"><i class="fa fa-check"></i>Densidad de log(Sales)</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-pedidos-por-categor%C3%ADa"><i class="fa fa-check"></i>Barras: pedidos por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-pedidos-por-regi%C3%B3n"><i class="fa fa-check"></i>Barras: pedidos por región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#mapa-pedidos-por-estado"><i class="fa fa-check"></i>Mapa: pedidos por estado</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado"><i class="fa fa-check"></i>2 · Análisis bivariado</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#boxplot-sales-por-categor%C3%ADa"><i class="fa fa-check"></i>Boxplot: Sales por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#boxplot-logsales-por-categor%C3%ADa"><i class="fa fa-check"></i>Boxplot: log(Sales) por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#boxplot-sales-por-regi%C3%B3n"><i class="fa fa-check"></i>Boxplot: Sales por región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#boxplot-sales-por-segmento"><i class="fa fa-check"></i>Boxplot: Sales por segmento</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#pedidos-por-categor%C3%ADa-y-regi%C3%B3n"><i class="fa fa-check"></i>Pedidos por categoría y región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#bins-2d-discount-vs.-sales"><i class="fa fa-check"></i>Bins 2D: Discount vs. Sales</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#correlaci%C3%B3n-entre-variables-continuas"><i class="fa fa-check"></i>Correlación entre variables continuas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#ventas-en-el-tiempo"><i class="fa fa-check"></i>3 · Ventas en el tiempo</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#evoluci%C3%B3n-mensual-de-ventas"><i class="fa fa-check"></i>Evolución mensual de ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-en-el-tiempo-loess"><i class="fa fa-check"></i>Tendencia de ventas en el tiempo (loess)</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-por-categor%C3%ADa"><i class="fa fa-check"></i>Tendencia de ventas por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-por-regi%C3%B3n-facetas"><i class="fa fa-check"></i>Tendencia de ventas por región (facetas)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="dashboard.html"><a href="dashboard.html"><i class="fa fa-check"></i>Dashboard</a>
+<ul>
+<li class="chapter" data-level="" data-path="dashboard.html"><a href="dashboard.html#dashboard-3d-de-ventas-sample-superstore"><i class="fa fa-check"></i>Dashboard 3D de ventas · Sample Superstore</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="limitaciones.html"><a href="limitaciones.html"><i class="fa fa-check"></i>Limitaciones</a>
+<ul>
+<li class="chapter" data-level="" data-path="limitaciones.html"><a href="limitaciones.html#datos"><i class="fa fa-check"></i>Datos</a></li>
+<li class="chapter" data-level="" data-path="limitaciones.html"><a href="limitaciones.html#interpretaci%C3%B3n"><i class="fa fa-check"></i>Interpretación</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i>Conclusiones</a>
+<ul>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#conclusi%C3%B3n"><i class="fa fa-check"></i>Conclusión</a></li>
+</ul></li>
 <li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+<li><a href="https://github.com/AlexT09/rbook" target="blank">Repositorio en GitHub</a></li>
 
 </ul>
 
@@ -180,7 +235,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">EDA Superstore: factores que explican el nivel de ventas</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Proyecto Sample Superstore</a>
           </h1>
         </div>
 
@@ -189,21 +244,45 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">EDA Superstore: factores que explican el nivel de ventas</h1>
+<h1 class="title">Proyecto Sample Superstore</h1>
+<h2 class="subtitle"><em>Factores que explican el nivel de ventas · Análisis exploratorio de datos (EDA)</em></h2>
 <p class="author"><em>Alex Teran y David Estrada</em></p>
 </div>
-<div id="presentación" class="section level1 unnumbered hasAnchor">
-<h1>Presentación<a href="index.html#presentaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Análisis exploratorio del dataset Sample - Superstore para entender qué factores (categoría, región y segmento) explican el nivel de ventas.</p>
+<div id="introduccion" class="section level1 unnumbered hasAnchor">
+<h1>Introducción<a href="index.html#introduccion" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><em>Análisis exploratorio de datos del dataset Sample Superstore</em></p>
+<div id="el-problema" class="section level2 hasAnchor">
+<h2>El problema<a href="index.html#el-problema" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Sample Superstore es un conjunto de datos de muestra de una gran cadena minorista —una simulación
+con fines analíticos— sobre el que se realiza un análisis exploratorio de datos (EDA) para ofrecer
+información que ayude a la empresa a aumentar sus beneficios y, al mismo tiempo, minimizar sus
+pérdidas.</p>
+</div>
+<div id="pregunta-problema" class="section level2 hasAnchor">
+<h2>Pregunta problema<a href="index.html#pregunta-problema" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><strong>¿Qué factores (categoría, región, segmento) explican el nivel de ventas (<code>Sales</code>)?</strong></p>
+<p>Recorre las pestañas para conocer el contexto, los objetivos, la metodología y el EDA.</p>
 
 </div>
+</div>
+<script>
+// Oculta el código de cada gráfica detrás de "Mostrar código" (el ETL queda visible: clase .nofold)
+document.querySelectorAll("div.sourceCode").forEach(function (div) {
+  if (div.querySelector("pre.nofold") || div.closest("details")) return;
+  var details = document.createElement("details");
+  details.className = "code-fold";
+  details.innerHTML = "<summary>Mostrar código</summary>";
+  div.parentNode.insertBefore(details, div);
+  details.appendChild(div);
+});
+</script>
             </section>
 
           </div>
         </div>
       </div>
 
-<a href="pregunta-problema.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="contexto.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -217,26 +296,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-  "sharing": {
-    "github": false,
-    "facebook": true,
-    "twitter": true,
-    "linkedin": false,
-    "weibo": false,
-    "instapaper": false,
-    "vk": false,
-    "whatsapp": false,
-    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-  },
+  "sharing": null,
   "fontsettings": {
     "theme": "white",
     "family": "sans",
     "size": 2
   },
-  "edit": {
-    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/index.Rmd",
-    "text": "Edit"
-  },
+  "edit": null,
   "history": {
     "link": null,
     "text": null
@@ -245,14 +311,15 @@ gitbook.start({
     "link": null,
     "text": null
   },
-  "download": ["eda-superstore-book.pdf", "eda-superstore-book.epub"],
+  "download": null,
   "search": {
     "engine": "fuse",
     "options": null
   },
   "toc": {
     "collapse": "subsection"
-  }
+  },
+  "info": false
 });
 });
 </script>

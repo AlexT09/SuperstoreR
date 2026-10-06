@@ -1,0 +1,13 @@
+# Conclusiones {-#conclusiones}
+
+*Lo que aprendimos del análisis*
+
+## Conclusión
+
+El análisis univariado muestra que `Sales` tiene una distribución muy sesgada hacia valores bajos,
+con pocos pedidos de alto valor. El análisis bivariado indica que `Category` es el factor que más
+explica diferencias en el valor de venta — Technology y Furniture tienen pedidos individuales más
+grandes, mientras que Office Supplies domina en volumen pero con pedidos de menor valor.
+
+`Region` y `Segment` muestran diferencias más leves. El descuento no se relaciona linealmente con las
+ventas, como se observa en el gráfico de bins 2D.
