@@ -47,7 +47,7 @@ capítulos y gráficas, pero el panel de ventas no carga sus datos (usa `fetch`)
 | Marco teórico | `04-marco-teorico.Rmd` | Marco teórico |
 | Metodología (ETL) | `05-metodologia.Rmd` | Metodología |
 | EDA | `06-eda.Rmd` | EDA |
-| Dashboard (panel de ventas y app Shiny) | `07-dashboard.Rmd` | Presentación |
+| Dashboard (panel de ventas y app Shiny) | `07-dashboard.Rmd` | — |
 | Limitaciones | `08-limitaciones.Rmd` | Limitaciones |
 | Conclusiones | `09-conclusiones.Rmd` | Conclusiones |
 
@@ -63,11 +63,11 @@ detrás de "Mostrar código" (`code-folding.html`).
 
 ## Dashboard
 
-`dashboard/` es una copia de `panel/` del proyecto Dash
-([proyecto_superstorep2](https://github.com/AlexT09/proyecto_superstorep2)): `panel_ventas.html`
-contiene el proyecto completo (EDA, modelos, proyección 2018 y conclusiones) y lee
-`panel_data.json`, que genera `dashboard/build_dashboard.py` en ese proyecto. Si cambian los datos o
-el modelo, regenéralo allá y copia esos archivos aquí.
+`dashboard/` contiene el **panel de ventas**: una página estática con el proyecto completo (EDA,
+modelos, proyección 2018 y conclusiones). `panel_ventas.html` lee `panel_data.json`, que tiene los
+resultados del modelo del proyecto de machine learning
+([proyecto_superstorep2](https://github.com/AlexT09/proyecto_superstorep2), app Dash). El panel vive
+solo en los libros: GitHub Pages no puede ejecutar la app Dash, pero sí esta página.
 
 ## App Shiny (`shiny/`)
 

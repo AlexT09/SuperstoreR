@@ -19,7 +19,7 @@
     Panel:    Resumen (proyección 2018) · Detalle (gráficos)
     Cierre:   Conclusiones
   Filtros: categoría (botones del encabezado) y región (selector del encabezado o tarjetas de Resumen).
-  #<sección> en la URL abre esa sección (p. ej. #eda, #pronostico).
+  #<sección> en la URL abre esa sección (p. ej. #eda, #proyeccion).
 -->
 <style>
 :root {
@@ -29,8 +29,8 @@
   --ink-3: rgba(255,255,255,.58);
   --surface: #123240;               /* superficie de referencia de los gráficos (validada) */
   --real: #4a93e6;                  /* serie: ventas reales */
-  --pron: #c98500;                  /* serie: proyección */
-  --pron-soft: #f0b851;
+  --proy: #c98500;                  /* serie: proyección */
+  --proy-soft: #f0b851;
   --neg: #f08a7e;
   --pos: #8fd3b0;
   --e-out: cubic-bezier(.16,1,.3,1);
@@ -125,7 +125,7 @@ select.chip option { background: #0b2531; color: #fff; }
   border-radius: calc(17*var(--u)); font-size: calc(13.5*var(--u)); font-weight: 500; background: rgba(255,255,255,.17);
   backdrop-filter: blur(calc(16*var(--u))); -webkit-backdrop-filter: blur(calc(16*var(--u)));
   animation: wipeRight .8s var(--e-out) .44s both; }
-.tag .dot { width: calc(7*var(--u)); height: calc(7*var(--u)); border-radius: 50%; background: var(--pron-soft); }
+.tag .dot { width: calc(7*var(--u)); height: calc(7*var(--u)); border-radius: 50%; background: var(--proy-soft); }
 h1 { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 500; font-size: calc(60*var(--u));
   line-height: calc(72*var(--u)); letter-spacing: calc(.2*var(--u)); margin-top: calc(18*var(--u)); }
 h1 .ln { display: block; overflow: hidden; }
@@ -195,7 +195,7 @@ h1 .ln:nth-child(2) > span { animation-delay: .67s; color: rgba(255,255,255,.82)
 .scroll { position: absolute; left: calc(126*var(--u)); right: calc(37*var(--u)); top: calc(96*var(--u)); bottom: 0;
   overflow-y: auto; padding-bottom: calc(30*var(--u)); scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.25) transparent; }
 .scroll h2 { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 500; font-size: calc(30*var(--u)); margin: calc(8*var(--u)) 0 calc(4*var(--u)); }
-.scroll h4 { font-size: calc(13*var(--u)); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--pron-soft);
+.scroll h4 { font-size: calc(13*var(--u)); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--proy-soft);
   margin: calc(26*var(--u)) 0 calc(12*var(--u)); }
 .scroll .intro { font-size: calc(14*var(--u)); color: var(--ink-2); margin-bottom: calc(16*var(--u)); max-width: calc(820*var(--u)); }
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(16*var(--u)); }
@@ -255,7 +255,7 @@ pre.code .c { color: rgba(255,255,255,.5); }
 .paso { position: relative; padding: calc(14*var(--u)) calc(12*var(--u)); border-radius: calc(16*var(--u)); background: rgba(255,255,255,.07);
   font-size: calc(12.5*var(--u)); color: var(--ink-2); line-height: 1.45; }
 .paso .num { display: grid; place-items: center; width: calc(26*var(--u)); height: calc(26*var(--u)); border-radius: 50%;
-  background: var(--pron-soft); color: #10303e; font-weight: 700; font-size: calc(13*var(--u)); }
+  background: var(--proy-soft); color: #10303e; font-weight: 700; font-size: calc(13*var(--u)); }
 .paso b { display: block; color: #fff; font-size: calc(14*var(--u)); margin: calc(8*var(--u)) 0 calc(4*var(--u)); }
 .portada { padding: calc(30*var(--u)) 0 calc(10*var(--u)); max-width: calc(860*var(--u)); }
 .portada h1 { font-size: calc(54*var(--u)); line-height: calc(64*var(--u)); }
@@ -514,8 +514,7 @@ pre.code .c { color: rgba(255,255,255,.5); }
             meses siguientes.</li>
           <li>Semilla fija (42) para que los resultados se puedan reproducir.</li></ul></div></div>
         <div class="glass panel"><h3>Búsqueda de hiperparámetros</h3><div class="prose"><ul>
-          <li><b>Grid Search:</b> prueba todas las combinaciones de una rejilla definida.</li>
-          <li><b>Random Search:</b> prueba 12 combinaciones al azar de rangos continuos.</li>
+          <li><b>Grid Search:</b> prueba todas las combinaciones de una rejilla de hiperparámetros definida para cada modelo.</li>
           <li>Criterio: menor MAE en validación cruzada. El mejor modelo se elige con ese error, no con el de 2017, para
             que la prueba siga siendo independiente.</li>
           <li>Referencia: proyectar lo mismo que el mismo mes del año anterior. Un modelo solo aporta si la supera.</li></ul></div></div>
@@ -578,27 +577,19 @@ mensual.to_csv("data/ventas_mensuales.csv", index=False)       <span class="c">#
           <div class="plot" id="p-hlog"></div><p class="note" data-t="densidad_log"></p></div>
         <div class="glass panel"><h3>Pedidos por categoría</h3><div class="plot" id="p-bcat"></div><p class="note" data-t="barras_categoria"></p></div>
         <div class="glass panel"><h3>Pedidos por región</h3><div class="plot" id="p-breg"></div><p class="note" data-t="barras_region"></p></div>
-        <div class="glass panel wide"><h3>Pedidos por estado</h3><div class="plot tall" id="p-mped"></div><p class="note" data-t="mapa"></p></div>
       </div>
       <h4>2 · Análisis bivariado</h4>
       <div class="grid">
-        <div class="glass panel"><h3>Boxplot: Sales por categoría</h3><div class="q">La línea punteada es la media</div>
-          <div class="plot" id="p-boxcat"></div><p class="note" data-t="box_categoria"></p></div>
         <div class="glass panel"><h3>Boxplot: log(Sales) por categoría</h3><div class="plot" id="p-boxlog"></div><p class="note" data-t="box_log_categoria"></p></div>
         <div class="glass panel"><h3>Boxplot: Sales por región</h3><div class="plot" id="p-boxreg"></div><p class="note" data-t="box_region"></p></div>
-        <div class="glass panel"><h3>Boxplot: Sales por segmento</h3><div class="plot" id="p-boxseg"></div><p class="note" data-t="box_segmento"></p></div>
-        <div class="glass panel"><h3>Pedidos por categoría y región</h3><div class="q">El área del círculo es el número de pedidos</div>
-          <div class="plot" id="p-burb"></div><p class="note" data-t="burbuja"></p></div>
-        <div class="glass panel"><h3>Bins 2D: Discount vs. Sales</h3><div class="q">Pedidos de hasta $1.500</div>
-          <div class="plot" id="p-bins"></div><p class="note" data-t="bins2d"></p></div>
-        <div class="glass panel wide"><h3>Correlación entre variables continuas</h3><div class="plot" id="p-corr"></div><p class="note" data-t="correlacion"></p></div>
+        <div class="glass panel wide"><h3>Boxplot: Sales por segmento</h3><div class="plot" id="p-boxseg"></div><p class="note" data-t="box_segmento"></p></div>
       </div>
       <h4>3 · Ventas en el tiempo</h4>
       <div class="grid">
         <div class="glass panel"><h3>Evolución mensual de ventas</h3><div class="plot" id="p-mens"></div><p class="note" data-t="mensual"></p></div>
-        <div class="glass panel"><h3>Tendencia de ventas en el tiempo (loess)</h3><div class="plot" id="p-loess"></div><p class="note" data-t="loess"></p></div>
-        <div class="glass panel wide"><h3>Tendencia de ventas por categoría</h3><div class="plot" id="p-tcat"></div><p class="note" data-t="tendencia_categoria"></p></div>
-        <div class="glass panel wide"><h3>Tendencia de ventas por región</h3><div class="plot tall" id="p-treg"></div><p class="note" data-t="facetas_region"></p></div>
+        <div class="glass panel"><h3>Tendencia: promedio móvil de 12 meses</h3><div class="plot" id="p-movil"></div><p class="note" data-t="tendencia"></p></div>
+        <div class="glass panel"><h3>Estacionalidad: % de las ventas del año por mes</h3><div class="plot" id="p-estac"></div><p class="note" data-t="estacionalidad"></p></div>
+        <div class="glass panel"><h3>Tendencia de ventas por categoría</h3><div class="q">Las líneas son el promedio móvil de 12 meses</div><div class="plot" id="p-tcat"></div><p class="note" data-t="tendencia_categoria"></p></div>
       </div>
       <div class="pager"></div>
     </div>
@@ -614,7 +605,7 @@ mensual.to_csv("data/ventas_mensuales.csv", index=False)       <span class="c">#
 
     <div class="forecast">
       <div class="legend" aria-hidden="true">
-        <span><i style="background:var(--pron-soft)"></i>2018 proyección</span>
+        <span><i style="background:var(--proy-soft)"></i>2018 proyección</span>
         <span><i style="background:var(--real)"></i>2017 real</span>
       </div>
       <div class="cols vals" id="vals"></div>
@@ -678,15 +669,10 @@ mensual.to_csv("data/ventas_mensuales.csv", index=False)       <span class="c">#
   <section class="view" id="v-comparacion" aria-label="Comparación">
     <div class="scroll">
       <h2>Comparación</h2>
-      <p class="intro">Qué modelo proyecta mejor, qué método de búsqueda conviene y cuánto confiar en la proyección anual.</p>
-      <div class="grid">
-        <div class="glass panel"><h3>Ranking de modelos (MAE en 2017)</h3>
-          <div class="q">Menor es mejor · la línea es la referencia</div><div class="plot" id="p-ranking"></div>
-          <p class="note" id="rank-note"></p></div>
-        <div class="glass panel"><h3>Grid Search vs. Random Search</h3>
-          <div class="q">Error en validación cruzada (índice), menor es mejor</div><div class="plot" id="p-busq"></div>
-          <p class="note" id="busq-note"></p></div>
-      </div>
+      <p class="intro">Qué modelo proyecta mejor y cuánto confiar en la proyección anual.</p>
+      <div class="glass panel"><h3>Ranking de modelos (MAE en 2017)</h3>
+        <div class="q">Menor es mejor · la línea es la referencia</div><div class="plot" id="p-ranking"></div>
+        <p class="note" id="rank-note"></p></div>
       <h4>¿Cuánto confiar en la proyección de un año completo?</h4>
       <div class="kpis k3" id="rec-kpis"></div>
       <div class="glass panel"><h3>Prueba a 12 meses: 2017 proyectado solo con datos hasta 2016</h3>
@@ -694,33 +680,26 @@ mensual.to_csv("data/ventas_mensuales.csv", index=False)       <span class="c">#
         <p class="note">Es la misma forma en que se proyecta 2018: cada mes proyectado se usa como historia del siguiente,
           sin conocer ningún dato real del año. El modelo acierta el total del año y la forma estacional; los errores están
           en el detalle de cada mes. La referencia subestima todo el año porque repite 2016 sin el crecimiento.</p></div>
-      <h4 id="res-h">Análisis de residuos</h4>
-      <div class="grid">
-        <div class="glass panel"><h3>Residuos del total mensual</h3><div class="plot" id="p-res"></div><p class="note" id="res-note"></p></div>
-        <div class="glass panel"><h3>Distribución de residuos por serie</h3><div class="plot" id="p-hres"></div>
-          <p class="note">La mayoría de los errores se concentran cerca de cero, con una cola de meses que vendieron mucho más
-            de lo esperado: pedidos grandes puntuales que ningún modelo puede anticipar con estas variables.</p></div>
-      </div>
       <div class="pager"></div>
     </div>
   </section>
 
   <!-- ===================== PROYECCIÓN 2018 ===================== -->
-  <section class="view" id="v-pronostico" aria-label="Proyección 2018">
+  <section class="view" id="v-proyeccion" aria-label="Proyección 2018">
     <div class="scroll">
       <h2>Proyección 2018</h2>
-      <p class="intro" id="pron-intro"></p>
-      <div class="kpis" id="pron-kpis"></div>
-      <div class="glass panel"><h3>Ventas mensuales: real 2015–2017 y proyección 2018</h3><div class="plot" id="p-pron"></div>
+      <p class="intro" id="proy-intro"></p>
+      <div class="kpis" id="proy-kpis"></div>
+      <div class="glass panel"><h3>Ventas mensuales: real 2015–2017 y proyección 2018</h3><div class="plot" id="p-proy"></div>
         <p class="note">La banda muestra el error típico de una proyección a 12 meses para esta selección, medido al
           proyectar 2017 sin conocerlo. Para el total de la empresa el error es menor que para una sola categoría en una
           región, porque al sumar series los errores se compensan.</p></div>
       <h4>Proyección por categoría y región</h4>
       <div class="grid g75">
-        <div class="glass panel"><h3>2018 frente a 2017</h3><div class="tbl-wrap"><table class="tbl" id="t-pron"></table></div>
+        <div class="glass panel"><h3>2018 frente a 2017</h3><div class="tbl-wrap"><table class="tbl" id="t-proy"></table></div>
           <p class="note">Ordenable por columna. En rojo, las combinaciones donde se proyecta una caída; en verde,
             crecimientos de 15 % o más.</p></div>
-        <div class="glass panel"><h3>Lectura para el negocio</h3><div class="prose"><ul id="pron-lectura"></ul></div></div>
+        <div class="glass panel"><h3>Lectura para el negocio</h3><div class="prose"><ul id="proy-lectura"></ul></div></div>
       </div>
       <div class="pager"></div>
     </div>
@@ -769,7 +748,7 @@ mensual.to_csv("data/ventas_mensuales.csv", index=False)       <span class="c">#
 "use strict";
 const MES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 const MES_L = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
-const C = { real: "#4a93e6", pron: "#c98500", pronSoft: "#f0b851", ref: "rgba(255,255,255,.55)", neg: "#f08a7e",
+const C = { real: "#4a93e6", proy: "#c98500", proySoft: "#f0b851", ref: "rgba(255,255,255,.55)", neg: "#f08a7e",
             cat: ["#5fc4b8", "#4a93e6", "#b89cf0"],      // Furniture, Office Supplies, Technology
             seq: [[0, "#3d7f9c"], [0.35, "#5fa3c0"], [0.7, "#8cc6de"], [1, "#c9e8f4"]],
             div: [[0, "#e66767"], [0.5, "#5e7580"], [1, "#4a93e6"]] };
@@ -786,7 +765,7 @@ const VIEWS = [
   { id: "eda", t: "EDA", g: "Datos", i: "scatter" },
   { id: "modelos", t: "Modelos y resultados", g: "Modelo", i: "model" },
   { id: "comparacion", t: "Comparación", g: "Modelo", i: "compare", f: true },
-  { id: "pronostico", t: "Proyección 2018", g: "Modelo", i: "cal", f: true },
+  { id: "proyeccion", t: "Proyección 2018", g: "Modelo", i: "cal", f: true },
   { id: "resumen", t: "Resumen 2018", g: "Panel de ventas", i: "grid", f: true },
   { id: "detalle", t: "Detalle de ventas", g: "Panel de ventas", i: "chart", f: true },
   { id: "conclusiones", t: "Conclusiones", g: "Cierre", i: "flag" },
@@ -831,7 +810,7 @@ const PASOS = [
   ["EDA", "Distribución de las ventas, factores, estacionalidad y tendencia"],
   ["Variables", "Mes del año e historial de ventas, sin información del futuro"],
   ["Modelos", "7 regresores dentro de un Pipeline"],
-  ["Ajuste", "Grid Search y Random Search con validación cruzada temporal"],
+  ["Ajuste", "Grid Search con validación cruzada temporal"],
   ["Evaluación", "2017 reservado: MAE, RMSE y R² frente a la referencia"],
   ["Proyección", "Mejor modelo reentrenado con 2015–2017 → 2018 mes a mes"],
 ];
@@ -842,21 +821,16 @@ const TEXTOS = {
   densidad_log: ["Al aplicar el logaritmo, la distribución se vuelve más simétrica y manejable. La mayor concentración de observaciones se encuentra aproximadamente entre log(Sales) = 2.5 y 4, donde está el máximo de la densidad. Hacia la derecha la densidad disminuye, con un pequeño abultamiento cerca de 5, mostrando una menor concentración de ventas altas."],
   barras_categoria: ["Office Supplies concentra el 60.3% de los pedidos (6026), muy por encima de Furniture (21.2%, 2121) y Technology (18.5%, 1847). Es decir, Office Supplies es la categoría que más rota en número de pedidos."],
   barras_region: ["West tiene mayor número de pedidos con 3203 pedidos, seguida de East con 2848. Central con 2323 y South con menor número de pedidos con 1620."],
-  mapa: ["Los pedidos se concentran en pocos estados: California (2001), New York (1128) y Texas (985) suman el 41.2% del total, y son los estados con más pedidos de West, East y Central. Esto explica por qué West y East lideran en número de pedidos. En el otro extremo, varios estados tienen menos de 10 pedidos (p. ej. Wyoming con 1)."],
-  box_categoria: ["Technology muestra el rango de ventas más alto, con algunos pedidos que superan los $20000. Office Supplies tiene la caja más baja, aunque algunos pedidos se acercan a $10000. Furniture es la categoría con el menor rango de ventas entre las tres."],
   box_log_categoria: ["Furniture (5.205) con la mediana más alta junto con Technology (5.113). Office Supplies queda muy por debajo (3.311), casi 2 puntos log menos que las otras dos.",
     "En el ancho de la caja (RIC), Technology (1.886) y Office Supplies (1.916) son muy parecidas, y Furniture es la que tiene la caja más ancha/dispersa (2.225)."],
   box_region: ["Las cajas de las cuatro regiones son casi iguales; lo que cambia son los valores atípicos, con pedidos puntuales muy grandes en South y Central. A diferencia de Category, las diferencias entre regiones son menos marcadas."],
   box_segmento: ["Medianas: Consumer 53.72, Corporate 56.54, Home Office 52.44, ningún segmento sobresale.",
     "Medias: Consumer 223.73, Corporate 233.82, Home Office 240.9, aquí Home Office tiene la media más alta.",
     "Consumer tiene 5191 pedidos, casi el triple que Home Office (1783). Consumer genera más ventas totales por tener más pedidos."],
-  burbuja: ["Office Supplies tiene los círculos más grandes en todas las regiones, sobre todo en West y East. Furniture tiene círculos intermedios, algo mayores en West y East. Technology presenta los círculos más pequeños en todas las regiones, coherente con ser la categoría de menor volumen de pedidos."],
-  bins2d: ["La mayoría de los pedidos se concentra en descuentos bajos (0.0-0.2), y las celdas con montos de venta más altos aparecen dispersas en varios niveles de descuento."],
-  correlacion: ["Sales y Profit tienen la correlación más alta del grupo (0.48, positiva moderada): a mayor venta, mayor ganancia, como es esperable. Sales y Quantity tienen una correlación débil (0.20). Sales y Discount tienen una correlación prácticamente nula (-0.03) en términos lineales, lo que contrasta con el patrón que sí se ve en el bins2D: la relación entre descuento y ventas no es lineal, por eso la correlación (que solo mide relación lineal) casi no la detecta."],
   mensual: ["Los puntos muestran un patrón que se repite cada año: las ventas son más bajas a comienzos de año y suben hacia el final, lo que sugiere un comportamiento estacional."],
-  loess: ["Usamos la curva loess para visualizar la tendencia general. La línea de tendencia se mantiene casi plana entre 2014 y 2015 y sube con claridad desde 2016, lo que indica que las ventas totales crecieron en la segunda mitad del periodo, más que una tendencia lineal constante."],
-  tendencia_categoria: ["Las tres categorías crecen hacia el final del periodo, y Technology se mantiene casi siempre por encima de las otras dos. Esto es coherente con lo visto antes: Technology tiene menos pedidos pero de mayor valor. Technology presenta picos donde sobresale claramente por encima de las otras dos categorías, reforzando que es la categoría con mayor nivel de ventas."],
-  facetas_region: ["West tiene mayor estabilidad y niveles de venta ligeramente más altos en comparación con las demás a lo largo del tiempo."],
+  tendencia: ["El promedio móvil de 12 meses quita la estacionalidad y deja ver la tendencia: se mantiene casi plano, en torno a $40.000 por mes, entre 2014 y 2015 y sube con claridad desde 2016, hasta unos $61.000 a fines de 2017. Las ventas crecieron en la segunda mitad del periodo, más que con una tendencia lineal constante."],
+  estacionalidad: ["Cada fila suma el 100 % de las ventas del año. El patrón se repite los cuatro años: enero y febrero son los meses más bajos (entre 1 % y 6 % del año cada uno) y septiembre, noviembre y diciembre los más altos (entre 11 % y 17 %). Por eso el modelo usa el mes del año y las ventas del mismo mes del año anterior."],
+  tendencia_categoria: ["Las tres categorías crecen hacia el final del periodo, y Technology tiene el nivel más alto en 27 de los 37 meses, coherente con lo visto antes: menos pedidos pero de mayor valor. Office Supplies es la que más acelera en 2017."],
 };
 
 // ---------- formato ----------
@@ -880,12 +854,12 @@ function serie(cubo, rs = regs(), cs = cats()) {   // suma [cat][reg][t] sobre l
   return out;
 }
 function cifras(rs = regs(), cs = cats()) {
-  const real = serie(D.real, rs, cs), pron = serie(D.pron, rs, cs), prueba = serie(D.prueba, rs, cs);
+  const real = serie(D.real, rs, cs), proy = serie(D.proy, rs, cs), prueba = serie(D.prueba, rs, cs);
   const r17 = real.slice(36, 48), r16 = real.slice(24, 36);
   const err = mean(r17.map((v, i) => Math.abs(v - prueba[i]))) / mean(r17) * 100;
-  const pico = pron.indexOf(Math.max(...pron));
-  return { real, pron, prueba, r17, r16, err, pico, t18: sum(pron), t17: sum(r17),
-           crec: (sum(pron) / sum(r17) - 1) * 100, temporada: sum(pron.slice(8)) / sum(pron) * 100 };
+  const pico = proy.indexOf(Math.max(...proy));
+  return { real, proy, prueba, r17, r16, err, pico, t18: sum(proy), t17: sum(r17),
+           crec: (sum(proy) / sum(r17) - 1) * 100, temporada: sum(proy.slice(8)) / sum(proy) * 100 };
 }
 const alcance = () => [S.cat < 0 ? "Todas las categorías" : D.cats[S.cat], S.reg < 0 ? "todas las regiones" : D.regs[S.reg]];
 const fecha = m => m + "-01";
@@ -906,9 +880,9 @@ function curva(pts) {                        // curva suave sin sobrepasos (mon�
 
 function dibujarFranja(k) {
   const el = $("chart"), W = el.clientWidth || 800, H = el.clientHeight || 200;
-  const top = H * 0.06, bot = H * 0.94, mx = Math.max(...k.pron, ...k.r17) * 1.05;
+  const top = H * 0.06, bot = H * 0.94, mx = Math.max(...k.proy, ...k.r17) * 1.05;
   const x = i => (i + 0.5) / 12 * W, y = v => bot - v / mx * (bot - top);
-  const pP = k.pron.map((v, i) => [x(i), y(v)]), pR = k.r17.map((v, i) => [x(i), y(v)]);
+  const pP = k.proy.map((v, i) => [x(i), y(v)]), pR = k.r17.map((v, i) => [x(i), y(v)]);
   const lineP = curva(pP), lineR = curva(pR);
   const area = `${lineP} L${x(11).toFixed(1)},${H} L${x(0).toFixed(1)},${H} Z`;
   el.querySelector("svg")?.remove();
@@ -917,21 +891,21 @@ function dibujarFranja(k) {
        aria-label="Proyección mensual 2018 frente a ventas reales 2017">
     <defs>
       <linearGradient id="wf" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="${C.pronSoft}" stop-opacity=".42"/><stop offset="1" stop-color="${C.pronSoft}" stop-opacity="0"/></linearGradient>
+        <stop offset="0" stop-color="${C.proySoft}" stop-opacity=".42"/><stop offset="1" stop-color="${C.proySoft}" stop-opacity="0"/></linearGradient>
       <linearGradient id="wg" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="${C.pronSoft}" stop-opacity=".55"/><stop offset=".5" stop-color="${C.pronSoft}"/>
-        <stop offset="1" stop-color="${C.pronSoft}" stop-opacity=".8"/></linearGradient>
+        <stop offset="0" stop-color="${C.proySoft}" stop-opacity=".55"/><stop offset=".5" stop-color="${C.proySoft}"/>
+        <stop offset="1" stop-color="${C.proySoft}" stop-opacity=".8"/></linearGradient>
       <clipPath id="wclip"><rect class="wfill-clip" x="0" y="0" width="${W}" height="${H}"/></clipPath>
     </defs>
     ${[0.25, 0.5, 0.75].map(f => `<line x1="0" x2="${W}" y1="${bot - f * (bot - top)}" y2="${bot - f * (bot - top)}" stroke="rgba(255,255,255,.08)"/>`).join("")}
     <path d="${area}" fill="url(#wf)" clip-path="url(#wclip)"/>
     <path class="wline" d="${lineR}" pathLength="1" stroke="${C.real}" stroke-width="2.2" style="animation-delay:1.1s"/>
-    <path class="wline" d="${lineP}" pathLength="1" stroke="${C.pronSoft}" stroke-width="6" stroke-opacity=".18"/>
+    <path class="wline" d="${lineP}" pathLength="1" stroke="${C.proySoft}" stroke-width="6" stroke-opacity=".18"/>
     <path class="wline" d="${lineP}" pathLength="1" stroke="url(#wg)" stroke-width="3"/>
     <line id="xh" x1="0" x2="0" y1="0" y2="${H}" stroke="rgba(255,255,255,.35)" stroke-dasharray="3 4" opacity="0"/>
-    <circle id="dP" r="5" fill="${C.pronSoft}" stroke="#0b2531" stroke-width="2" opacity="0"/>
+    <circle id="dP" r="5" fill="${C.proySoft}" stroke="#0b2531" stroke-width="2" opacity="0"/>
     <circle id="dR" r="4.5" fill="${C.real}" stroke="#0b2531" stroke-width="2" opacity="0"/>
-    ${k.pron.map((_, i) => `<rect class="hit" data-i="${i}" x="${x(i) - W / 24}" y="0" width="${W / 12}" height="${H}"/>`).join("")}
+    ${k.proy.map((_, i) => `<rect class="hit" data-i="${i}" x="${x(i) - W / 24}" y="0" width="${W / 12}" height="${H}"/>`).join("")}
   </svg>`);
   const tt = $("tt"), svg = el.querySelector("svg");
   svg.querySelectorAll(".hit").forEach(r => {
@@ -939,16 +913,16 @@ function dibujarFranja(k) {
       const i = +r.dataset.i, xi = x(i);
       svg.querySelector("#xh").setAttribute("x1", xi); svg.querySelector("#xh").setAttribute("x2", xi);
       svg.querySelector("#xh").setAttribute("opacity", 1);
-      for (const [id, v] of [["dP", k.pron[i]], ["dR", k.r17[i]]]) {
+      for (const [id, v] of [["dP", k.proy[i]], ["dR", k.r17[i]]]) {
         const c = svg.querySelector("#" + id); c.setAttribute("cx", xi); c.setAttribute("cy", y(v)); c.setAttribute("opacity", 1);
       }
       tt.innerHTML = `<b>${MES_L[i][0].toUpperCase() + MES_L[i].slice(1)}</b>
-        <div class="row"><span><span class="k" style="background:${C.pronSoft}"></span>2018 proyección</span><b>${moneyFull(k.pron[i])}</b></div>
+        <div class="row"><span><span class="k" style="background:${C.proySoft}"></span>2018 proyección</span><b>${moneyFull(k.proy[i])}</b></div>
         <div class="row"><span><span class="k" style="background:${C.real}"></span>2017 real</span><span>${moneyFull(k.r17[i])}</span></div>
-        <div class="row"><span>Variación</span><span>${pct((k.pron[i] / k.r17[i] - 1) * 100)}</span></div>`;
+        <div class="row"><span>Variación</span><span>${pct((k.proy[i] / k.r17[i] - 1) * 100)}</span></div>`;
       const left = Math.min(Math.max(xi + 14, 0), W - tt.offsetWidth - 4);
       tt.style.left = (xi > W * 0.7 ? xi - tt.offsetWidth - 14 : left) + "px";
-      tt.style.top = Math.max(y(Math.max(k.pron[i], k.r17[i])) - 40, 0) + "px"; tt.style.opacity = 1;
+      tt.style.top = Math.max(y(Math.max(k.proy[i], k.r17[i])) - 40, 0) + "px"; tt.style.opacity = 1;
     });
   });
   svg.addEventListener("mouseleave", () => {
@@ -964,9 +938,9 @@ function renderResumen() {
   $("h1b").textContent = `${pct(k.crec)} frente a 2017`;
   $("blurb").textContent =
     `${cat} en ${reg}. La temporada de septiembre a diciembre concentra el ${k.temporada.toFixed(0)} % de las ` +
-    `ventas del año, con el pico en ${MES_L[k.pico]} (${money(k.pron[k.pico])}). Error típico de la proyección: ` +
+    `ventas del año, con el pico en ${MES_L[k.pico]} (${money(k.proy[k.pico])}). Error típico de la proyección: ` +
     `±${k.err.toFixed(0)} % por mes.`;
-  $("vals").innerHTML = k.pron.map((v, i) =>
+  $("vals").innerHTML = k.proy.map((v, i) =>
     `<span class="${i === k.pico ? "on" : ""}" style="animation-delay:${(1.26 + i * .035).toFixed(2)}s">${money(v)}</span>`).join("");
   $("months").innerHTML = MES.map((m, i) =>
     `<span class="${i === k.pico ? "on" : ""}" style="animation-delay:${(2.0 + i * .03).toFixed(2)}s">${m}</span>`).join("");
@@ -1076,47 +1050,14 @@ function renderEda() {
                                 yaxis: ax({ title: { text: "Número de pedidos" } }) });
   plot("p-bcat", barras(P.cat, D.cats), barLayout("Categoría"));
   plot("p-breg", barras(P.reg, D.regs), barLayout("Región"));
-  const est = D.states.map((s, i) => [s, D.abbr[i], E.pedidosEstado[s] || 0, D.stateReg[i]]).filter(e => e[2] > 0);
-  plot("p-mped", [{ type: "choropleth", locationmode: "USA-states", locations: est.map(e => e[1]), z: est.map(e => e[2]),
-    customdata: est.map(e => [e[0], D.regs[e[3]]]), colorscale: C.seq,
-    marker: { line: { color: "rgba(10,30,40,.9)", width: 0.6 } },
-    colorbar: { thickness: 10, tickfont: { color: "rgba(255,255,255,.7)", size: 10 }, title: { text: "Pedidos", font: { color: "rgba(255,255,255,.7)", size: 11 } } },
-    hovertemplate: "<b>%{customdata[0]}</b> (%{customdata[1]})<br>%{z:,} pedidos<extra></extra>" }],
-    base({ margin: { l: 0, r: 0, t: 0, b: 0 }, geo: { scope: "usa", bgcolor: "rgba(0,0,0,0)", lakecolor: "rgba(0,0,0,0)",
-           showlakes: false, subunitcolor: "rgba(10,30,40,.9)" } }));
 
   // bivariado
   const boxLayout = (t, yt) => base({ margin: { l: 60, r: 14, t: 10, b: 40 }, xaxis: ax({ ...NOGRID, title: { text: t } }),
                                       yaxis: ax({ title: { text: yt } }) });
   const azul = ["#4a93e6", "#4a93e6", "#4a93e6", "#4a93e6"];
-  plot("p-boxcat", cajas(P.cat, D.cats, C.cat), boxLayout("Categoría", "Ventas"));
   plot("p-boxlog", cajas(P.cat, D.cats, C.cat, true), boxLayout("Categoría", "log(Ventas)"));
   plot("p-boxreg", cajas(P.reg, D.regs, azul), boxLayout("Región", "Ventas"));
   plot("p-boxseg", cajas(P.seg, E.segs, azul), boxLayout("Segmento", "Ventas"));
-
-  const cr = [];
-  D.cats.forEach((_, c) => D.regs.forEach((_, r) => cr.push([c, r, P.cat.filter((v, i) => v === c && P.reg[i] === r).length])));
-  const mx = Math.max(...cr.map(e => e[2]));
-  plot("p-burb", D.cats.map((n, c) => {
-    const e = cr.filter(v => v[0] === c);
-    return { type: "scatter", mode: "markers", name: n, x: e.map(() => n), y: e.map(v => D.regs[v[1]]),
-      marker: { size: e.map(v => v[2]), sizemode: "area", sizeref: 2 * mx / (48 ** 2), color: C.cat[c], opacity: .85,
-                line: { color: "rgba(255,255,255,.8)", width: 1 } },
-      text: e.map(v => v[2]), hovertemplate: "%{x} · %{y}<br>%{text:,} pedidos<extra></extra>" };
-  }), base({ margin: { l: 70, r: 14, t: 10, b: 40 }, xaxis: ax({ title: { text: "Categoría" } }), yaxis: ax({ title: { text: "Región" } }) }));
-
-  plot("p-bins", [{ type: "histogram2d", x: P.disc, y: P.sales, xbins: { start: -0.025, end: 0.825, size: 0.05 },
-    ybins: { start: 0, end: 1500, size: 50 }, colorscale: [[0, "rgba(255,255,255,0)"], [0.001, "#3d7f9c"], [0.3, "#5fa3c0"], [0.65, "#8cc6de"], [1, "#e6f5fb"]],
-    colorbar: { thickness: 10, tickfont: { color: "rgba(255,255,255,.7)", size: 10 }, title: { text: "Frecuencia", font: { color: "rgba(255,255,255,.7)", size: 11 } } },
-    hovertemplate: "Descuento %{x}<br>Ventas %{y}<br>%{z:,} pedidos<extra></extra>" }],
-    base({ margin: { l: 60, r: 10, t: 10, b: 40 }, xaxis: ax({ ...NOGRID, title: { text: "Discount" } }),
-           yaxis: ax({ ...NOGRID, range: [0, 1500], tickprefix: "$", title: { text: "Sales" } }) }));
-
-  const cz = E.corr.z;
-  plot("p-corr", [{ type: "heatmap", z: cz, x: E.corr.vars, y: E.corr.vars, zmin: -1, zmax: 1, colorscale: C.div, xgap: 3, ygap: 3,
-    text: cz.map(f => f.map(v => v.toFixed(2))), texttemplate: "%{text}", textfont: { color: "#fff", size: 14 }, showscale: false,
-    hovertemplate: "%{y} · %{x}<br>r = %{z:.2f}<extra></extra>" }],
-    base({ margin: { l: 80, r: 10, t: 6, b: 30 }, xaxis: { ...NOGRID }, yaxis: { ...NOGRID, autorange: "reversed" } }));
 
   // en el tiempo
   const x = D.meses.map(fecha), tot = serie(D.real, [0, 1, 2, 3], [0, 1, 2]);
@@ -1124,25 +1065,29 @@ function renderEda() {
     hovertemplate: "%{x|%b %Y}<br>%{y:$,.0f}<extra></extra>", ...extra });
   const tiempo = extra => base({ margin: { l: 56, r: 14, t: 10, b: 36 }, yaxis: ax({ ...USD, title: { text: "Ventas" } }), ...extra });
   plot("p-mens", [puntos(tot, "#8cc6de")], tiempo());
-  plot("p-loess", [puntos(tot, C.real), { x, y: E.loess.total, mode: "lines", line: { color: C.pronSoft, width: 3 }, hoverinfo: "skip" }], tiempo());
-  plot("p-tcat", D.cats.flatMap((n, c) => [
-    puntos(serie(D.real, [0, 1, 2, 3], [c]), C.cat[c], { name: n, showlegend: false, marker: { color: C.cat[c], size: 6, opacity: .55 } }),
-    { x, y: E.loess.cat[c], name: n, mode: "lines", line: { color: C.cat[c], width: 3 }, hovertemplate: "%{y:$,.0f}<extra>" + n + " (loess)</extra>" },
-  ]), tiempo({ showlegend: true, margin: { l: 56, r: 14, t: 34, b: 36 } }));
+  // promedio móvil de 12 meses: quita la estacionalidad y deja la tendencia
+  const movil = y => y.map((_, i) => i < 11 ? null : sum(y.slice(i - 11, i + 1)) / 12);
+  plot("p-movil", [puntos(tot, C.real, { name: "Ventas del mes" }),
+    { x, y: movil(tot), name: "Promedio móvil de 12 meses", mode: "lines", line: { color: C.proySoft, width: 3 },
+      hovertemplate: "%{y:$,.0f}<extra>Promedio móvil</extra>" }], tiempo({ showlegend: true, margin: { l: 56, r: 14, t: 34, b: 36 } }));
 
-  // facetas 2 × 2 por región, mismos ejes
-  const yMax = Math.max(...D.regs.flatMap((_, r) => serie(D.real, [r], [0, 1, 2]))) * 1.05, lay = tiempo({ grid: { rows: 2, columns: 2, pattern: "independent", xgap: .08, ygap: .3 } });
-  const trazas = [];
-  D.regs.forEach((n, r) => {
-    const k = r ? r + 1 : "", xa = "x" + k, ya = "y" + k;
-    trazas.push({ ...puntos(serie(D.real, [r], [0, 1, 2]), C.real, { marker: { color: C.real, size: 6, line: { color: "rgba(255,255,255,.7)", width: 1 } } }), xaxis: xa, yaxis: ya },
-                { x, y: E.loess.reg[r], mode: "lines", line: { color: C.pronSoft, width: 3 }, hoverinfo: "skip", xaxis: xa, yaxis: ya });
-    lay["xaxis" + k] = ax(); lay["yaxis" + k] = ax({ ...USD, range: [0, yMax] });
+  // estacionalidad: % de las ventas de cada año que cae en cada mes
+  const MES_C = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+  const anios = D.years.map(String), zp = D.years.map((_, a) => {
+    const y = tot.slice(a * 12, a * 12 + 12), t = sum(y);
+    return y.map(v => v / t * 100);
   });
-  lay.margin = { l: 50, r: 14, t: 28, b: 30 };
-  lay.annotations = D.regs.map((n, r) => ({ text: `<b>${n}</b>`, showarrow: false, xref: `x${r ? r + 1 : ""} domain`, yref: `y${r ? r + 1 : ""} domain`,
-    x: 0.02, y: 1.08, xanchor: "left", yanchor: "bottom", font: { size: 12.5, color: "#fff" } }));
-  plot("p-treg", trazas, lay);
+  plot("p-estac", [{ type: "heatmap", z: zp, x: MES_C, y: anios, colorscale: C.seq, xgap: 3, ygap: 3,
+    text: zp.map(f => f.map(v => v.toFixed(1))), texttemplate: "%{text}", textfont: { color: "#04121b", size: 11 },
+    colorbar: { thickness: 10, tickfont: { color: "rgba(255,255,255,.7)", size: 10 }, title: { text: "% del año", font: { color: "rgba(255,255,255,.7)", size: 11 } } },
+    hovertemplate: "%{y} · %{x}: %{z:.1f} % del año<extra></extra>" }],
+    base({ margin: { l: 44, r: 10, t: 6, b: 30 }, xaxis: { ...NOGRID }, yaxis: { ...NOGRID, autorange: "reversed" } }));
+
+  plot("p-tcat", D.cats.flatMap((n, c) => {
+    const y = serie(D.real, [0, 1, 2, 3], [c]);
+    return [puntos(y, C.cat[c], { name: n, showlegend: false, marker: { color: C.cat[c], size: 6, opacity: .55 } }),
+      { x, y: movil(y), name: n, mode: "lines", line: { color: C.cat[c], width: 3 }, hovertemplate: "%{y:$,.0f}<extra>" + n + " (promedio móvil)</extra>" }];
+  }), tiempo({ showlegend: true, margin: { l: 56, r: 14, t: 34, b: 36 } }));
 }
 
 // ---------- Detalle ----------
@@ -1155,24 +1100,24 @@ function renderDetalle() {
   plot("p-serie", [
     { x: meses.slice(0, 48), y: k.real, name: "Real", mode: "lines", line: { color: C.real, width: 2 },
       hovertemplate: "%{y:$,.0f}<extra>Real</extra>" },
-    { x: meses.slice(47), y: [k.real[47]].concat(k.pron), name: "Proyección 2018", mode: "lines",
-      line: { color: C.pronSoft, width: 2.4, dash: "dash" }, hovertemplate: "%{y:$,.0f}<extra>Proyección</extra>" },
+    { x: meses.slice(47), y: [k.real[47]].concat(k.proy), name: "Proyección 2018", mode: "lines",
+      line: { color: C.proySoft, width: 2.4, dash: "dash" }, hovertemplate: "%{y:$,.0f}<extra>Proyección</extra>" },
   ], base({ hovermode: "x unified", showlegend: true, margin: { l: 56, r: 14, t: 34, b: 36 }, yaxis: ax({ ...USD, title: { text: "Ventas del mes" } }),
             xaxis: ax({ hoverformat: "%b %Y" }) }));
 
   // 2. estacionalidad mes × año (2018 = proyección)
-  const z = [0, 1, 2, 3].map(a => k.real.slice(a * 12, a * 12 + 12)).concat([k.pron]);
+  const z = [0, 1, 2, 3].map(a => k.real.slice(a * 12, a * 12 + 12)).concat([k.proy]);
   plot("p-heat", [{ type: "heatmap", z, x: MES, y: ["2014", "2015", "2016", "2017", "2018 (p)"], colorscale: C.seq,
     xgap: 2, ygap: 2, colorbar: { thickness: 10, tickfont: { color: "rgba(255,255,255,.7)", size: 10 }, ...USD },
     hovertemplate: "%{x} %{y}<br>%{z:$,.0f}<extra></extra>" }],
     base({ margin: { l: 70, r: 10, t: 6, b: 30 }, yaxis: { ...NOGRID, type: "category", autorange: "reversed" }, xaxis: { ...NOGRID } }));
 
   // 3. categoría × región: variación de la proyección 2018 frente a 2017
-  const mz = D.cats.map((_, c) => D.regs.map((_, r) => (sum(D.pron[c][r]) / sum(D.real[c][r].slice(36)) - 1) * 100));
+  const mz = D.cats.map((_, c) => D.regs.map((_, r) => (sum(D.proy[c][r]) / sum(D.real[c][r].slice(36)) - 1) * 100));
   const lim = Math.max(...mz.flat().map(Math.abs));
   plot("p-matriz", [{ type: "heatmap", z: mz, x: D.regs, y: D.cats, colorscale: C.div, zmin: -lim, zmax: lim, xgap: 3, ygap: 3,
     text: mz.map(f => f.map(v => pct(v, 0))), texttemplate: "%{text}", textfont: { color: "#fff", size: 13 },
-    customdata: D.cats.map((_, c) => D.regs.map((_, r) => sum(D.pron[c][r]))),
+    customdata: D.cats.map((_, c) => D.regs.map((_, r) => sum(D.proy[c][r]))),
     hovertemplate: "%{y} · %{x}<br>2018: %{customdata:$,.0f}<br>vs. 2017: %{text}<extra></extra>", showscale: false }],
     base({ margin: { l: 104, r: 10, t: 6, b: 30 }, yaxis: { ...NOGRID }, xaxis: { ...NOGRID } }));
 
@@ -1204,9 +1149,9 @@ function renderModelos() {
   const M = D.modelo, p = M.prueba, rf = M.pruebaRef;
   const mejora = (1 - p.MAE / rf.MAE) * 100;
   $("mod-intro").textContent = `7 modelos de regresión evaluados en 2017, un año que no vieron al entrenar. ${M.nombre} ` +
-    `(${M.busqueda}) fue el mejor por validación cruzada.`;
+    `fue el mejor por validación cruzada.`;
   $("mod-kpis").innerHTML = kpis([
-    ["Mejor modelo", M.nombre, `${M.busqueda} · elegido por validación cruzada`],
+    ["Mejor modelo", M.nombre, "elegido por validación cruzada (Grid Search)"],
     ["MAE en 2017", moneyFull(p.MAE), `${mejora.toFixed(0)} % menos error que la referencia (${moneyFull(rf.MAE)})`],
     ["Error en el total mensual", `${p.total_MAE_pct.toFixed(1)} %`, `referencia: ${rf.total_MAE_pct.toFixed(1)} % · R² ${p.total_R2.toFixed(2)}`],
     ["Desvío del total 2017", pct(p.total_desvio_total_pct), `referencia: ${pct(rf.total_desvio_total_pct)}`],
@@ -1224,9 +1169,9 @@ function renderModelos() {
     { x, y: A.real, name: "Real", mode: "lines+markers", line: { color: C.real, width: 2 }, marker: { size: 5 },
       hovertemplate: "%{y:$,.0f}<extra>Real</extra>" },
     { x: x.slice(0, ip), y: A.pred[m].slice(0, ip), name: "Proyección (entrenamiento)", mode: "lines",
-      line: { color: C.pronSoft, width: 2.2, dash: "dot" }, hovertemplate: "%{y:$,.0f}<extra>Entrenamiento</extra>" },
+      line: { color: C.proySoft, width: 2.2, dash: "dot" }, hovertemplate: "%{y:$,.0f}<extra>Entrenamiento</extra>" },
     { x: x.slice(ip), y: A.pred[m].slice(ip), name: "Proyección (prueba)", mode: "lines",
-      line: { color: C.pronSoft, width: 2.6 }, hovertemplate: "%{y:$,.0f}<extra>Prueba</extra>" },
+      line: { color: C.proySoft, width: 2.6 }, hovertemplate: "%{y:$,.0f}<extra>Prueba</extra>" },
   ], base({ hovermode: "x unified", showlegend: true, margin: { l: 60, r: 14, t: 34, b: 36 },
             yaxis: ax({ tickprefix: "$", tickformat: ",.0f", title: { text: "Ventas del mes (USD)" } }), xaxis: ax({ hoverformat: "%b %Y" }),
             shapes: [{ type: "rect", xref: "x", yref: "paper", x0: x[ip], x1: x[x.length - 1], y0: 0, y1: 1,
@@ -1236,12 +1181,12 @@ function renderModelos() {
 
   // tabla de métricas
   const fmtP = v => v === null ? "None" : typeof v === "number" && !Number.isInteger(v) ? +v.toPrecision(3) : v;
-  const filas = M.tabla.map(f => `<tr class="${f.modelo === M.nombre ? "best" : ""}"><td>${f.modelo}</td><td>${f.busqueda}</td>
+  const filas = M.tabla.map(f => `<tr class="${f.modelo === M.nombre ? "best" : ""}"><td>${f.modelo}</td>
     <td class="num">${moneyFull(f.mae)}</td><td class="num">${moneyFull(f.rmse)}</td><td class="num">${f.r2.toFixed(2)}</td>
     <td class="num">${f.totalPct.toFixed(1)} %</td><td><small>${Object.entries(f.params).map(([k, v]) => `${k}=${fmtP(v)}`).join(", ")}</small></td></tr>`);
-  filas.push(`<tr class="ref"><td>Referencia (año anterior)</td><td>—</td><td class="num">${moneyFull(M.ref.mae)}</td>
+  filas.push(`<tr class="ref"><td>Referencia (año anterior)</td><td class="num">${moneyFull(M.ref.mae)}</td>
     <td class="num">${moneyFull(M.ref.rmse)}</td><td class="num">${M.ref.r2.toFixed(2)}</td><td class="num">${M.ref.totalPct.toFixed(1)} %</td><td>—</td></tr>`);
-  $("t-metricas").innerHTML = `<thead><tr><th>Modelo</th><th>Búsqueda</th><th class="num">MAE</th><th class="num">RMSE</th>
+  $("t-metricas").innerHTML = `<thead><tr><th>Modelo</th><th class="num">MAE</th><th class="num">RMSE</th>
     <th class="num">R²</th><th class="num">Error total mensual</th><th>Hiperparámetros</th></tr></thead><tbody>${filas.join("")}</tbody>`;
   const superan = M.tabla.filter(f => f.mae < M.ref.mae).length;
   $("metricas-note").textContent = `MAE y RMSE miden el error de cada serie mensual (la venta media por serie y mes en 2017 ` +
@@ -1267,7 +1212,7 @@ function renderComparacion() {
   // ranking
   const rk = M.ranking.filter(r => !esRef(r.modelo)).sort((a, b) => b.mae - a.mae), ref = M.ranking.find(r => esRef(r.modelo));
   plot("p-ranking", [{ type: "bar", orientation: "h", x: rk.map(r => r.mae), y: rk.map(r => r.modelo),
-    marker: { color: rk.map(r => r.modelo === M.nombre ? C.pronSoft : C.real) },
+    marker: { color: rk.map(r => r.modelo === M.nombre ? C.proySoft : C.real) },
     text: rk.map(r => moneyFull(r.mae)), textposition: "outside", cliponaxis: false, textfont: { color: "rgba(255,255,255,.75)", size: 11 },
     hovertemplate: "%{y}<br>MAE %{x:$,.0f}<extra></extra>" }],
     base({ margin: { l: 120, r: 50, t: 20, b: 30 }, xaxis: ax({ range: [0, ref.mae * 1.15], tickprefix: "$" }), yaxis: { ...NOGRID },
@@ -1282,23 +1227,6 @@ function renderComparacion() {
     : `${M.nombre} (en ámbar) se eligió por su error en validación cruzada, antes de mirar 2017; ${menor.modelo} tuvo menor ` +
       `error en 2017, pero elegir con los datos de prueba haría que esa prueba dejara de ser independiente.`);
 
-  // Grid Search vs. Random Search
-  const B = M.busquedas, mods = [...new Set(B.map(b => b.modelo))], por = met => B.filter(b => b.busqueda === met);
-  const busc = [["Grid Search", C.real], ["Random Search", "#8cc6de"]];
-  plot("p-busq", busc.map(([met, color]) => {
-    const s = mods.map(m => por(met).find(b => b.modelo === m));
-    return { type: "bar", name: met, x: mods, y: s.map(b => b.cv), marker: { color },
-      customdata: s.map(b => [b.evals, b.tiempo]),
-      hovertemplate: "%{x}<br>Error CV %{y:.3f}<br>%{customdata[0]} combinaciones · %{customdata[1]:.1f} s<extra>" + met + "</extra>" };
-  }), base({ showlegend: true, margin: { l: 50, r: 14, t: 34, b: 60 }, xaxis: { ...NOGRID, tickangle: -20 },
-             yaxis: ax({ range: [Math.min(...B.map(b => b.cv)) * 0.9, Math.max(...B.map(b => b.cv)) * 1.02], title: { text: "Error en validación cruzada" } }) }));
-  const g = met => ({ evals: sum(por(met).map(b => b.evals)), t: sum(por(met).map(b => b.tiempo)) }), gs = g("Grid Search"), rs = g("Random Search");
-  const ganaR = mods.filter(m => por("Random Search").find(b => b.modelo === m).cv < por("Grid Search").find(b => b.modelo === m).cv);
-  $("busq-note").textContent = `Grid Search evaluó ${gs.evals} combinaciones en ${gs.t.toFixed(1)} s; Random Search, ${rs.evals} ` +
-    `(12 por modelo) en ${rs.t.toFixed(1)} s. Random Search logró menor error de validación en ${ganaR.length} de ${mods.length} ` +
-    `modelos (${ganaR.join(", ")}): al muestrear rangos continuos prueba valores que una rejilla fija no incluye. Con un ` +
-    `presupuesto similar, ninguno de los dos domina, y las diferencias son pequeñas frente al error del modelo.`;
-
   // prueba a 12 meses (respeta los filtros)
   $("rec-kpis").innerHTML = kpis([
     ["Desvío del total anual", pct(rec.total_desvio_total_pct), `referencia: ${pct(rf.total_desvio_total_pct)}`],
@@ -1310,73 +1238,56 @@ function renderComparacion() {
   plot("p-prueba", [
     { x: m17, y: k.r17, name: "Real 2017", mode: "lines+markers", line: { color: C.real, width: 2 }, marker: { size: 8 },
       hovertemplate: "%{y:$,.0f}<extra>Real</extra>" },
-    { x: m17, y: k.prueba, name: "Proyección a 12 meses", mode: "lines+markers", line: { color: C.pronSoft, width: 2.4 },
+    { x: m17, y: k.prueba, name: "Proyección a 12 meses", mode: "lines+markers", line: { color: C.proySoft, width: 2.4 },
       marker: { size: 8 }, hovertemplate: "%{y:$,.0f}<extra>Proyección</extra>" },
     { x: m17, y: k.r16, name: "Referencia (repetir 2016)", mode: "lines", line: { color: C.ref, width: 1.6, dash: "dot" },
       hovertemplate: "%{y:$,.0f}<extra>Referencia</extra>" },
   ], base({ hovermode: "x unified", showlegend: true, margin: { l: 56, r: 14, t: 34, b: 36 }, yaxis: ax({ ...USD, title: { text: "Ventas del mes" } }),
             xaxis: ax({ hoverformat: "%B", tickformat: "%b" }) }));
-
-  // residuos del mejor modelo en 2017 (total de la empresa y por serie)
-  $("res-h").textContent = `Análisis de residuos (${M.nombre}, prueba 2017)`;
-  const A = M.ajuste, ip = A.meses.indexOf(A.inicioPrueba);
-  const res = A.real.slice(ip).map((v, i) => v - A.pred[M.nombre][ip + i]);
-  plot("p-res", [{ type: "bar", x: A.meses.slice(ip).map(fecha), y: res, marker: { color: res.map(v => v >= 0 ? C.real : C.neg) },
-    hovertemplate: "%{x|%B}<br>%{y:$,.0f}<extra></extra>" }],
-    base({ margin: { l: 64, r: 14, t: 10, b: 36 }, xaxis: ax({ ...NOGRID, tickformat: "%b" }),
-           yaxis: ax({ tickprefix: "$", tickformat: ",.0f", zeroline: true, zerolinecolor: "rgba(255,255,255,.4)", title: { text: "Real − proyectado (USD)" } }) }));
-  $("res-note").textContent = `Barras arriba de cero: el mes vendió más de lo proyectado. Hay meses por encima y por debajo, y ` +
-    `en el año se compensan (el total quedó a ${pct(M.prueba.total_desvio_total_pct)} del real). Los errores más grandes están en ` +
-    `noviembre y diciembre, los meses de mayor venta, donde los pedidos grandes de fin de año cambian de un mes a otro.`;
-  plot("p-hres", [{ type: "histogram", x: M.residuos, nbinsx: 30, marker: { color: C.real, line: { width: 0 } }, opacity: .9,
-    hovertemplate: "%{x}<br>%{y} series-mes<extra></extra>" }],
-    base({ bargap: .04, margin: { l: 50, r: 14, t: 10, b: 40 }, xaxis: ax({ tickprefix: "$", title: { text: "Real − proyectado por serie y mes (USD)" } }),
-           yaxis: ax({ title: { text: "Frecuencia" } }),
-           shapes: [{ type: "line", x0: 0, x1: 0, yref: "paper", y0: 0, y1: 1, line: { color: C.pronSoft, dash: "dash", width: 1.5 } }] }));
 }
 
 // ---------- Proyección 2018 ----------
-function renderPronostico() {
+function renderProyeccion() {
   const M = D.modelo, k = cifras(), [cat, reg] = alcance();
-  $("pron-intro").textContent = `Ventas esperadas por mes con ${M.nombre}, reentrenado con 2015–2017 · ${cat} · ${reg}.`;
-  $("pron-kpis").innerHTML = kpis([
+  $("proy-intro").textContent = `Ventas esperadas por mes con ${M.nombre}, reentrenado con 2015–2017 · ${cat} · ${reg}.`;
+  $("proy-kpis").innerHTML = kpis([
     ["Proyección 2018", moneyFull(k.t18), `real 2017: ${moneyFull(k.t17)}`],
     ["Variación esperada", pct(k.crec), "frente a 2017"],
-    ["Mes pico", MES_L[k.pico][0].toUpperCase() + MES_L[k.pico].slice(1), moneyFull(k.pron[k.pico])],
+    ["Mes pico", MES_L[k.pico][0].toUpperCase() + MES_L[k.pico].slice(1), moneyFull(k.proy[k.pico])],
     ["Error típico mensual", `±${k.err.toFixed(0)} %`, "proyección a 12 meses (prueba 2017)"],
   ]);
 
   const xr = D.meses.slice(12).map(fecha), x18 = D.meses18.map(fecha), e = k.err / 100;
-  const hi = k.pron.map(v => v * (1 + e)), lo = k.pron.map(v => v * (1 - e));
-  plot("p-pron", [
+  const hi = k.proy.map(v => v * (1 + e)), lo = k.proy.map(v => v * (1 - e));
+  plot("p-proy", [
     { x: x18.concat(x18.slice().reverse()), y: hi.concat(lo.slice().reverse()), fill: "toself", fillcolor: "rgba(240,184,81,.16)",
       line: { width: 0 }, hoverinfo: "skip", name: `Error típico (±${k.err.toFixed(0)} %)` },
     { x: xr, y: k.real.slice(12), name: "Real", mode: "lines+markers", line: { color: C.real, width: 2 }, marker: { size: 4 },
       hovertemplate: "%{y:$,.0f}<extra>Real</extra>" },
-    { x: [xr[xr.length - 1]].concat(x18), y: [k.real[47]].concat(k.pron), name: "Proyección 2018", mode: "lines+markers",
-      line: { color: C.pronSoft, width: 2.5, dash: "dash" }, marker: { size: 5 }, hovertemplate: "%{y:$,.0f}<extra>Proyección</extra>" },
+    { x: [xr[xr.length - 1]].concat(x18), y: [k.real[47]].concat(k.proy), name: "Proyección 2018", mode: "lines+markers",
+      line: { color: C.proySoft, width: 2.5, dash: "dash" }, marker: { size: 5 }, hovertemplate: "%{y:$,.0f}<extra>Proyección</extra>" },
   ], base({ hovermode: "x unified", showlegend: true, margin: { l: 60, r: 14, t: 34, b: 36 },
             yaxis: ax({ tickprefix: "$", tickformat: ",.0f", title: { text: "Ventas del mes (USD)" } }), xaxis: ax({ hoverformat: "%b %Y" }) }));
 
   // tabla de las 12 combinaciones, ordenable
   const t = [];
   D.cats.forEach((c, ci) => D.regs.forEach((r, ri) => {
-    const v17 = sum(D.real[ci][ri].slice(36)), v18 = sum(D.pron[ci][ri]);
+    const v17 = sum(D.real[ci][ri].slice(36)), v18 = sum(D.proy[ci][ri]);
     t.push({ c, r, v17, v18, crec: (v18 / v17 - 1) * 100 });
   }));
   const o = S.orden, col = [["c", "Categoría"], ["r", "Región"], ["v17", "Ventas 2017"], ["v18", "Proyección 2018"], ["crec", "Variación"]];
   const filas = t.slice().sort((a, b) => (a[o.col] > b[o.col] ? 1 : a[o.col] < b[o.col] ? -1 : 0) * (o.asc ? 1 : -1));
-  $("t-pron").innerHTML = `<thead><tr>${col.map(([id, n], i) => `<th class="${i > 1 ? "num" : ""}"><button data-col="${id}">${n}${o.col === id ? (o.asc ? " ▲" : " ▼") : ""}</button></th>`).join("")}</tr></thead>
+  $("t-proy").innerHTML = `<thead><tr>${col.map(([id, n], i) => `<th class="${i > 1 ? "num" : ""}"><button data-col="${id}">${n}${o.col === id ? (o.asc ? " ▲" : " ▼") : ""}</button></th>`).join("")}</tr></thead>
     <tbody>${filas.map(f => `<tr><td>${f.c}</td><td>${f.r}</td><td class="num">${moneyFull(f.v17)}</td><td class="num">${moneyFull(f.v18)}</td>
       <td class="num ${f.crec < 0 ? "neg" : f.crec >= 15 ? "hi" : ""}">${pct(f.crec)}</td></tr>`).join("")}</tbody>`;
-  $("t-pron").querySelectorAll("th button").forEach(b => b.addEventListener("click", () => {
+  $("t-proy").querySelectorAll("th button").forEach(b => b.addEventListener("click", () => {
     S.orden = { col: b.dataset.col, asc: o.col === b.dataset.col ? !o.asc : b.dataset.col.length === 1 };
-    renderPronostico();
+    renderProyeccion();
   }));
 
   // lectura para el negocio (siempre con el total de la empresa)
   const g = cifras([0, 1, 2, 3], [0, 1, 2]), top = t.slice().sort((a, b) => b.crec - a.crec)[0], caidas = t.filter(f => f.crec < 0);
-  $("pron-lectura").innerHTML = [
+  $("proy-lectura").innerHTML = [
     `Se proyectan <b>${moneyFull(g.t18)}</b> en 2018, ${pct(g.crec, 0)} frente a 2017 ` +
       `(${moneyFull(g.t17)}). El modelo extiende el crecimiento de 2016–2017.`,
     `La temporada alta (septiembre a diciembre) concentra el ${g.temporada.toFixed(0)} % de las ventas del año en solo 4 meses: ` +
@@ -1405,7 +1316,7 @@ function renderConclusiones() {
 
 // ---------- navegación y filtros ----------
 const RENDER = { etl: renderEtl, eda: renderEda, resumen: renderResumen, detalle: renderDetalle, modelos: renderModelos,
-                 comparacion: renderComparacion, pronostico: renderPronostico, conclusiones: renderConclusiones };
+                 comparacion: renderComparacion, proyeccion: renderProyeccion, conclusiones: renderConclusiones };
 const vista = id => VIEWS.find(v => v.id === id);
 function render() {
   document.querySelectorAll(".chip[data-cat]").forEach(b => b.setAttribute("aria-pressed", +b.dataset.cat === S.cat));
