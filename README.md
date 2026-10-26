@@ -9,9 +9,11 @@ Libro publicado: **https://alext09.github.io/rbook/**
 
 - **R** 4.1 o superior, con los paquetes `bookdown`, `tidyverse` y `plotly`
 - **pandoc** (viene incluido con RStudio)
+- Para la app Shiny: `shiny`, `shinydashboard`, `DT`, `caret` y `randomForest`
 
 ```r
-install.packages(c("bookdown", "tidyverse", "plotly"))
+install.packages(c("bookdown", "tidyverse", "plotly",
+                   "shiny", "shinydashboard", "DT", "caret", "randomForest"))
 ```
 
 ## Cómo construir el libro
@@ -25,14 +27,14 @@ Rscript build.R
 El libro queda en `docs/`, que es la carpeta que publica GitHub Pages (rama `main`, carpeta `/docs`).
 `build.R` construye el libro con `bookdown::render_book()` y copia el dashboard a `docs/dashboard/`.
 
-Para verlo con el dashboard 3D funcionando, sírvelo por HTTP:
+Para verlo con el panel de ventas funcionando, sírvelo por HTTP:
 
 ```powershell
 python -m http.server 8000 --directory docs
 ```
 
 Y abre **http://localhost:8000**. Abriendo `docs/index.html` con doble clic se ven todos los
-capítulos y gráficas, pero el dashboard 3D no carga sus datos (usa `fetch`).
+capítulos y gráficas, pero el panel de ventas no carga sus datos (usa `fetch`).
 
 ## Capítulos
 
@@ -45,7 +47,7 @@ capítulos y gráficas, pero el dashboard 3D no carga sus datos (usa `fetch`).
 | Marco teórico | `04-marco-teorico.Rmd` | Marco teórico |
 | Metodología (ETL) | `05-metodologia.Rmd` | Metodología |
 | EDA | `06-eda.Rmd` | EDA |
-| Dashboard | `07-dashboard.Rmd` | Dashboard |
+| Dashboard (panel de ventas y app Shiny) | `07-dashboard.Rmd` | Presentación |
 | Limitaciones | `08-limitaciones.Rmd` | Limitaciones |
 | Conclusiones | `09-conclusiones.Rmd` | Conclusiones |
 
@@ -61,10 +63,40 @@ detrás de "Mostrar código" (`code-folding.html`).
 
 ## Dashboard
 
-`dashboard/` es una copia de `3DWebDashboard/` del proyecto Dash (incluye `dashboard_core.js` y
-`dashboard_data.json`), y `dashboard/dashboard_2d.html` es el `assets/dashboard.html` que genera
-`dashboard/build_dashboard.py`. Si cambian los datos, regenéralos en el proyecto Dash y copia esos
-archivos aquí.
+`dashboard/` es una copia de `panel/` del proyecto Dash
+([proyecto_superstorep2](https://github.com/AlexT09/proyecto_superstorep2)): `panel_ventas.html`
+contiene el proyecto completo (EDA, modelos, proyección 2018 y conclusiones) y lee
+`panel_data.json`, que genera `dashboard/build_dashboard.py` en ese proyecto. Si cambian los datos o
+el modelo, regenéralo allá y copia esos archivos aquí.
+
+## App Shiny (`shiny/`)
+
+App con **shinydashboard** y la estructura del capítulo *Visualización con shiny* del curso:
+
+```
+shiny/
+├── global.R                     # Librerías, carga de datos y preprocesamiento (tabla mensual)
+├── ui.R                         # dashboardPage(): cabecera, menú lateral y pestañas
+├── server.R                     # Lógica reactiva de cada pestaña
+├── superstore_transformado.csv
+└── www/
+    └── logo.svg
+```
+
+- **Análisis Exploratorio:** `valueBox` con el resumen del dataset, gráfico interactivo
+  (`ggplotly`) según la variable y el tipo de gráfico, filtro por año y tabla con `DT`.
+- **Entrenamiento del Modelo:** regresión lineal o Random Forest con `caret::train()`, al
+  presionar el botón (`observeEvent`). Los meses se dividen en orden (por defecto, 2015–2016 para
+  entrenar y 2017 para probar) y se comparan contra la referencia "mismo mes del año anterior".
+  El botón *Guardar Modelo* lo guarda como `.rds`.
+- **Predicciones:** formulario con categoría, región, mes e historia de la serie, botones de
+  ejemplo (temporada alta y baja) y predicción con `eventReactive`, mostrada en un `infoBox`.
+
+Para ejecutarla, desde la raíz del repositorio:
+
+```r
+shiny::runApp("shiny")
+```
 
 ## Estructura
 
@@ -76,7 +108,8 @@ archivos aquí.
 ├── build.R                # Construye el libro en docs/
 ├── code-folding.html      # "Mostrar código" en cada gráfica
 ├── style.css
-├── dashboard/             # Dashboard 3D (se copia a docs/dashboard/)
+├── dashboard/             # Panel de ventas (se copia a docs/dashboard/)
+├── shiny/                 # App Shiny (global.R, ui.R, server.R, www/)
 ├── Sample - Superstore.csv
 ├── superstore_transformado.csv
 └── docs/                  # Libro generado (GitHub Pages)

@@ -212,7 +212,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="dashboard.html"><a href="dashboard.html"><i class="fa fa-check"></i>Dashboard</a>
 <ul>
-<li class="chapter" data-level="" data-path="dashboard.html"><a href="dashboard.html#dashboard-3d-de-ventas-sample-superstore"><i class="fa fa-check"></i>Dashboard 3D de ventas · Sample Superstore</a></li>
+<li class="chapter" data-level="" data-path="dashboard.html"><a href="dashboard.html#panel-de-ventas-sample-superstore"><i class="fa fa-check"></i>Panel de ventas · Sample Superstore</a></li>
+<li class="chapter" data-level="" data-path="dashboard.html"><a href="dashboard.html#app-shiny"><i class="fa fa-check"></i>App Shiny</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="limitaciones.html"><a href="limitaciones.html"><i class="fa fa-check"></i>Limitaciones</a>
 <ul>
@@ -245,11 +246,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="dashboard" class="section level1 unnumbered hasAnchor">
 <h1>Dashboard<a href="dashboard.html#dashboard" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><em>Dashboard de ventas interactivo — insights que responden a los objetivos del proyecto (Sample Superstore)</em></p>
-<div id="dashboard-3d-de-ventas-sample-superstore" class="section level2 hasAnchor">
-<h2>Dashboard 3D de ventas · Sample Superstore<a href="dashboard.html#dashboard-3d-de-ventas-sample-superstore" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<iframe src="dashboard/3DWebDashboard.html" title="Dashboard 3D de ventas · Sample Superstore" style="width:100%;height:820px;border:0;border-radius:12px" loading="lazy">
+<p><em>Panel de ventas: el proyecto completo en una sola página, del planteamiento a la proyección 2018</em></p>
+<div id="panel-de-ventas-sample-superstore" class="section level2 hasAnchor">
+<h2>Panel de ventas · Sample Superstore<a href="dashboard.html#panel-de-ventas-sample-superstore" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<iframe src="dashboard/panel_ventas.html" title="Panel de ventas · Sample Superstore" style="width:100%;height:820px;border:0;border-radius:12px" loading="lazy">
 </iframe>
+<p>
+<a href="dashboard/panel_ventas.html" target="_blank">Abrir el panel en una pestaña nueva ↗</a>
+</p>
+</div>
+<div id="app-shiny" class="section level2 hasAnchor">
+<h2>App Shiny<a href="dashboard.html#app-shiny" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La carpeta <code>shiny/</code> del repositorio contiene una app hecha con <strong>Shiny</strong> y <strong>shinydashboard</strong>, con
+la estructura del capítulo <em>Visualización con shiny</em> del curso: <code>global.R</code> (librerías, datos y
+preprocesamiento), <code>ui.R</code> (interfaz) y <code>server.R</code> (lógica), más la carpeta <code>www/</code> con el logo.</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pestaña</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Análisis Exploratorio</td>
+<td>Resumen del dataset, gráfico interactivo según la variable y el tipo de gráfico elegidos, filtro por año y tabla de datos</td>
+</tr>
+<tr class="even">
+<td>Entrenamiento del Modelo</td>
+<td>Entrena una regresión lineal o un Random Forest (<code>caret</code>) con los primeros meses y lo evalúa en los últimos: métricas, real vs. predicho e importancia de variables. Permite guardar el modelo como <code>.rds</code></td>
+</tr>
+<tr class="odd">
+<td>Predicciones</td>
+<td>Formulario con la categoría, la región, el mes y la historia de la serie; predice las ventas del mes con el modelo entrenado</td>
+</tr>
+</tbody>
+</table>
+<p>Para ejecutarla desde R (en la raíz del repositorio):</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="dashboard.html#cb22-1" tabindex="-1"></a>shiny<span class="sc">::</span><span class="fu">runApp</span>(<span class="st">&quot;shiny&quot;</span>)</span></code></pre></div>
 
 </div>
 </div>

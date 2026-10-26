@@ -2,7 +2,9 @@
 # Ejecutar:  Rscript build.R
 bookdown::render_book("index.Rmd", quiet = TRUE)
 
-# El dashboard 3D y su favicon no los referencia ningún .Rmd: se copian aparte
+# El panel de ventas y el favicon no los referencia ningún .Rmd: se copian aparte
+# (se borra la copia anterior para que no queden archivos viejos)
+unlink("docs/dashboard", recursive = TRUE)
 file.copy("dashboard", "docs", recursive = TRUE, overwrite = TRUE)
 file.copy("favicon.ico", "docs", overwrite = TRUE)
 file.create("docs/.nojekyll")
