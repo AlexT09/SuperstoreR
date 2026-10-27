@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>App Shiny | Proyección de ventas Sample Superstore</title>
+  <meta name="description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="App Shiny | Proyección de ventas Sample Superstore" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="App Shiny | Proyección de ventas Sample Superstore" />
+  
+  <meta name="twitter:description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
+  
+
+<meta name="author" content="Alex Teran y David Estrada" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="conclusiones.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Proyección de ventas Sample Superstore</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introducción</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#el-proyecto"><i class="fa fa-check"></i>El proyecto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#preguntas-del-proyecto"><i class="fa fa-check"></i>Preguntas del proyecto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#contexto"><i class="fa fa-check"></i>Contexto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#impacto-para-el-negocio"><i class="fa fa-check"></i>Impacto para el negocio</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html"><i class="fa fa-check"></i>Problema y objetivos</a>
+<ul>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#planteamiento-del-problema"><i class="fa fa-check"></i>Planteamiento del problema</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#objetivo-general"><i class="fa fa-check"></i>Objetivo general</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i>Objetivos específicos</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#justificaci%C3%B3n"><i class="fa fa-check"></i>Justificación</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html"><i class="fa fa-check"></i>Marco teórico</a>
+<ul>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#conceptos-clave"><i class="fa fa-check"></i>Conceptos clave</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#modelos-de-regresi%C3%B3n-utilizados"><i class="fa fa-check"></i>Modelos de regresión utilizados</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#m%C3%A9tricas-de-evaluaci%C3%B3n"><i class="fa fa-check"></i>Métricas de evaluación</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#operacionalizaci%C3%B3n-de-variables"><i class="fa fa-check"></i>Operacionalización de variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#variables-del-dataset"><i class="fa fa-check"></i>Variables del dataset</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#variables-del-modelo-una-fila-categor%C3%ADa-regi%C3%B3n-mes"><i class="fa fa-check"></i>Variables del modelo (una fila = categoría × región × mes)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html"><i class="fa fa-check"></i>Metodología</a>
+<ul>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#flujo-del-proyecto"><i class="fa fa-check"></i>Flujo del proyecto</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#datos-y-unidad-de-an%C3%A1lisis"><i class="fa fa-check"></i>Datos y unidad de análisis</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#variable-objetivo"><i class="fa fa-check"></i>Variable objetivo</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#preprocesamiento-y-validaci%C3%B3n"><i class="fa fa-check"></i>Preprocesamiento y validación</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#b%C3%BAsqueda-de-hiperpar%C3%A1metros"><i class="fa fa-check"></i>Búsqueda de hiperparámetros</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html"><i class="fa fa-check"></i>ETL</a>
+<ul>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#resultado-del-etl"><i class="fa fa-check"></i>Resultado del ETL</a></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#c%C3%B3digo-datagenerate_data.r"><i class="fa fa-check"></i>Código (<code>data/generate_data.R</code>)</a></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#tabla-mensual-muestra-de-2017"><i class="fa fa-check"></i>Tabla mensual (muestra de 2017)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html"><i class="fa fa-check"></i>EDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado"><i class="fa fa-check"></i>1 · Análisis univariado</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#resumen-estad%C3%ADstico-de-sales-usd-por-l%C3%ADnea-de-pedido"><i class="fa fa-check"></i>Resumen estadístico de Sales (USD por línea de pedido)</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#histograma-de-sales"><i class="fa fa-check"></i>Histograma de Sales</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#histograma-de-densidad-de-logsales"><i class="fa fa-check"></i>Histograma de densidad de log(Sales)</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-l%C3%ADneas-de-pedido-por-categor%C3%ADa"><i class="fa fa-check"></i>Barras: líneas de pedido por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-l%C3%ADneas-de-pedido-por-regi%C3%B3n"><i class="fa fa-check"></i>Barras: líneas de pedido por región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#mapa-l%C3%ADneas-de-pedido-por-estado"><i class="fa fa-check"></i>Mapa: líneas de pedido por estado</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado"><i class="fa fa-check"></i>2 · Análisis bivariado</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-categor%C3%ADa"><i class="fa fa-check"></i>Cajas: Sales por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-regi%C3%B3n"><i class="fa fa-check"></i>Cajas: Sales por región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-segmento"><i class="fa fa-check"></i>Cajas: Sales por segmento</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#burbujas-l%C3%ADneas-por-categor%C3%ADa-y-regi%C3%B3n"><i class="fa fa-check"></i>Burbujas: líneas por categoría y región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#contenedores-2d-descuento-y-ventas"><i class="fa fa-check"></i>Contenedores 2D: descuento y ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#correlaci%C3%B3n-entre-variables-num%C3%A9ricas"><i class="fa fa-check"></i>Correlación entre variables numéricas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#ventas-en-el-tiempo"><i class="fa fa-check"></i>3 · Ventas en el tiempo</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#evoluci%C3%B3n-mensual-de-ventas"><i class="fa fa-check"></i>Evolución mensual de ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-promedio-m%C3%B3vil-de-12-meses"><i class="fa fa-check"></i>Tendencia: promedio móvil de 12 meses</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#estacionalidad-de-las-ventas-del-a%C3%B1o-por-mes"><i class="fa fa-check"></i>Estacionalidad: % de las ventas del año por mes</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-por-categor%C3%ADa"><i class="fa fa-check"></i>Tendencia de ventas por categoría</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-y-relaci%C3%B3n-con-el-modelo"><i class="fa fa-check"></i>4 · Atípicos y relación con el modelo</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-su-peso-en-l%C3%ADneas-y-en-ventas"><i class="fa fa-check"></i>Atípicos: su peso en líneas y en ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#dispersi%C3%B3n-con-l%C3%ADnea-de-tendencia-el-mes-contra-el-mismo-mes-del-a%C3%B1o-anterior"><i class="fa fa-check"></i>Dispersión con línea de tendencia: el mes contra el mismo mes del año anterior</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html"><i class="fa fa-check"></i>Modelos y resultados</a>
+<ul>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#resumen"><i class="fa fa-check"></i>Resumen</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#real-vs.-proyectado-ventas-totales-de-la-empresa-por-mes"><i class="fa fa-check"></i>Real vs. proyectado: ventas totales de la empresa por mes</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#m%C3%A9tricas-por-categor%C3%ADa-regi%C3%B3n-mes-prueba-2017"><i class="fa fa-check"></i>Métricas por categoría × región × mes (prueba 2017)</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#hiperpar%C3%A1metros-probados-con-grid-search"><i class="fa fa-check"></i>Hiperparámetros probados con Grid Search</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#hay-sobreajuste-error-en-entrenamiento-vs.-prueba"><i class="fa fa-check"></i>¿Hay sobreajuste? Error en entrenamiento vs. prueba</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#importancia-de-variables-random-forest"><i class="fa fa-check"></i>Importancia de variables (Random Forest)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html"><i class="fa fa-check"></i>Comparación</a>
+<ul>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html#ranking-de-modelos-mae-en-2017"><i class="fa fa-check"></i>Ranking de modelos (MAE en 2017)</a></li>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html#cu%C3%A1nto-confiar-en-la-proyecci%C3%B3n-de-un-a%C3%B1o-completo"><i class="fa fa-check"></i>¿Cuánto confiar en la proyección de un año completo?</a>
+<ul>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html#proyectado-solo-con-datos-hasta-2016"><i class="fa fa-check"></i>2017 proyectado solo con datos hasta 2016</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html"><i class="fa fa-check"></i>Proyección 2018</a>
+<ul>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#ventas-mensuales-real-20152017-y-proyecci%C3%B3n-2018"><i class="fa fa-check"></i>Ventas mensuales: real 2015–2017 y proyección 2018</a></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#proyecci%C3%B3n-por-categor%C3%ADa-y-regi%C3%B3n"><i class="fa fa-check"></i>Proyección por categoría y región</a></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#lectura-para-el-negocio"><i class="fa fa-check"></i>Lectura para el negocio</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i>Conclusiones</a>
+<ul>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#an%C3%A1lisis-exploratorio"><i class="fa fa-check"></i>Análisis exploratorio</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#modelo-de-proyecci%C3%B3n"><i class="fa fa-check"></i>Modelo de proyección</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#recomendaciones-para-el-negocio"><i class="fa fa-check"></i>Recomendaciones para el negocio</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#limitaciones"><i class="fa fa-check"></i>Limitaciones</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html"><i class="fa fa-check"></i>App Shiny</a>
+<ul>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html#c%C3%B3mo-ejecutarla"><i class="fa fa-check"></i>Cómo ejecutarla</a></li>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html#estructura"><i class="fa fa-check"></i>Estructura</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/AlexT09/rbook" target="blank">Repositorio en GitHub</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Proyección de ventas Sample Superstore</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="app-shiny" class="section level1 unnumbered hasAnchor">
+<h1>App Shiny<a href="app-shiny.html#app-shiny" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><em>El mismo proyecto en un dashboard interactivo</em></p>
+<p>La carpeta <code>app/</code> contiene una app hecha con <strong>Shiny</strong> y <strong>shinydashboard</strong>, con la estructura del
+capítulo <em>Visualización con shiny</em> del curso: <code>global.R</code> (librerías, datos y preprocesamiento),
+<code>ui.R</code> (interfaz) y <code>server.R</code> (lógica), más la carpeta <code>www/</code> con el logo y los estilos. Usa el
+mismo código que este libro (<code>R/</code>) y los resultados del modelo (<code>model/artifacts/</code>), así que muestra
+las mismas gráficas y cifras.</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Sección del menú</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Introducción · Problema y objetivos · Marco teórico · Metodología</td>
+<td>Planteamiento del proyecto en cajas (<code>box</code>) y cifras clave (<code>valueBox</code>)</td>
+</tr>
+<tr class="even">
+<td>ETL</td>
+<td>Código del ETL y la tabla mensual completa con filtros (<code>DT</code>)</td>
+</tr>
+<tr class="odd">
+<td>Análisis exploratorio</td>
+<td>Univariado, bivariado, en el tiempo y atípicos (ggplot2 + <code>ggplotly</code>), y un <strong>explorador interactivo</strong>: variable, tipo de gráfico y rango de años, con la tabla de datos filtrada</td>
+</tr>
+<tr class="even">
+<td>Modelos y resultados</td>
+<td>Métricas, rejillas, sobreajuste e importancia; se puede elegir cualquier modelo para ver su ajuste</td>
+</tr>
+<tr class="odd">
+<td>Entrenamiento del modelo</td>
+<td>Elige uno de los 7 modelos y lo entrena al presionar el botón (<code>observeEvent</code>): Grid Search con validación cruzada temporal y evaluación en 2017. Permite guardar el modelo como <code>.rds</code></td>
+</tr>
+<tr class="even">
+<td>Comparación · Proyección 2018</td>
+<td>Ranking de modelos, prueba a 12 meses y proyección filtrable por categoría y región</td>
+</tr>
+<tr class="odd">
+<td>Predicción</td>
+<td>Formulario con categoría, región, mes e historia de la serie, botones de ejemplo (temporada alta y baja) y predicción con <code>eventReactive</code>, mostrada en <code>infoBox</code></td>
+</tr>
+<tr class="even">
+<td>Conclusiones</td>
+<td>Hallazgos, recomendaciones y limitaciones</td>
+</tr>
+</tbody>
+</table>
+<div id="cómo-ejecutarla" class="section level2 hasAnchor">
+<h2>Cómo ejecutarla<a href="app-shiny.html#c%C3%B3mo-ejecutarla" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Desde RStudio, abriendo <code>Rbook.Rproj</code>, o desde una consola de R en la raíz del repositorio:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="app-shiny.html#cb2-1" tabindex="-1"></a>shiny<span class="sc">::</span><span class="fu">runApp</span>(<span class="st">&quot;app&quot;</span>)</span></code></pre></div>
+</div>
+<div id="estructura" class="section level2 hasAnchor">
+<h2>Estructura<a href="app-shiny.html#estructura" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre><code>app/
+├── global.R      # Librerías, código compartido, datos, resultados del modelo y componentes
+├── ui.R          # dashboardPage(): cabecera, menú lateral y una pestaña por sección
+├── server.R      # Lógica reactiva de cada sección
+└── www/          # Logo, favicon y ajustes de estilo (custom.css)</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="conclusiones.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": null,
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  },
+  "info": false
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+Category,Region,Mes,Proyeccion,Sales
+Furniture,Central,2017-01-01,3585.04,2230.01
+Furniture,East,2017-01-01,1804.87,1213.66
+Furniture,South,2017-01-01,1785.38,481.86
+Furniture,West,2017-01-01,2921.51,2038.51
+Office Supplies,Central,2017-01-01,1955.7,12704.29
+Office Supplies,East,2017-01-01,3557.39,2972.22
+Office Supplies,South,2017-01-01,1686.86,578.2
+Office Supplies,West,2017-01-01,1581.26,5019.59
+Technology,Central,2017-01-01,1939.54,6756.36
+Technology,East,2017-01-01,3496,1197.41
+Technology,South,2017-01-01,2458.68,3755.53
+Technology,West,2017-01-01,3799.2,5023.75
+Furniture,Central,2017-02-01,1365.08,1204.46
+Furniture,East,2017-02-01,1739.14,1773.9
+Furniture,South,2017-02-01,1803.17,788.67
+Furniture,West,2017-02-01,1817.04,3099.31
+Office Supplies,Central,2017-02-01,1168.02,1391.35
+Office Supplies,East,2017-02-01,3589.99,1514.81
+Office Supplies,South,2017-02-01,1912.54,1365.04
+Office Supplies,West,2017-02-01,1905.73,3136.58
+Technology,Central,2017-02-01,9642.65,739.02
+Technology,East,2017-02-01,5235.27,1679.81
+Technology,South,2017-02-01,3196.65,29.16
+Technology,West,2017-02-01,4371.94,3579.03
+Furniture,Central,2017-03-01,5039.05,7286.8
+Furniture,East,2017-03-01,4501.56,1579.21
+Furniture,South,2017-03-01,2257.41,353.1
+Furniture,West,2017-03-01,7070.28,1674.33
+Office Supplies,Central,2017-03-01,4870.84,3236.21
+Office Supplies,East,2017-03-01,5803.37,2256.57
+Office Supplies,South,2017-03-01,2527.42,2059.42
+Office Supplies,West,2017-03-01,5028.07,6998.08
+Technology,Central,2017-03-01,5521.35,4981.57
+Technology,East,2017-03-01,6955.8,3864.17
+Technology,South,2017-03-01,2845.71,4231.2
+Technology,West,2017-03-01,6578.42,20351.68
+Furniture,Central,2017-04-01,3865.07,1179.13
+Furniture,East,2017-04-01,3572.69,2745.16
+Furniture,South,2017-04-01,2335.89,2846.99
+Furniture,West,2017-04-01,5900.73,2294.68
+Office Supplies,Central,2017-04-01,3483.98,1521.1
+Office Supplies,East,2017-04-01,4864.42,6328.46
+Office Supplies,South,2017-04-01,2113.66,4553.88
+Office Supplies,West,2017-04-01,3909.98,2668.76
+Technology,Central,2017-04-01,5161.2,682.89
+Technology,East,2017-04-01,6407.34,1157.29
+Technology,South,2017-04-01,2654.27,2046.88
+Technology,West,2017-04-01,4555.59,8496.32
+Furniture,Central,2017-05-01,3791.04,4559.97
+Furniture,East,2017-05-01,3446.66,2419.45
+Furniture,South,2017-05-01,2171.4,7056.58
+Furniture,West,2017-05-01,5763.5,2921.57
+Office Supplies,Central,2017-05-01,3398.1,5555.78
+Office Supplies,East,2017-05-01,4901.03,2218.58
+Office Supplies,South,2017-05-01,1917.01,2084.36
+Office Supplies,West,2017-05-01,3481.11,3878.24
+Technology,Central,2017-05-01,6161.71,1473.1
+Technology,East,2017-05-01,6490.66,1481.34
+Technology,South,2017-05-01,2586.14,1802.81
+Technology,West,2017-05-01,5418.7,8809.34
+Furniture,Central,2017-06-01,4238.78,5340.77
+Furniture,East,2017-06-01,3560.14,4832.55
+Furniture,South,2017-06-01,2275.3,2301.99
+Furniture,West,2017-06-01,5492.25,6533.28
+Office Supplies,Central,2017-06-01,3520.08,4775.7
+Office Supplies,East,2017-06-01,4982.58,4279.5
+Office Supplies,South,2017-06-01,2033.78,2497.75
+Office Supplies,West,2017-06-01,3941.3,5359.09
+Technology,Central,2017-06-01,5486.08,2850.3
+Technology,East,2017-06-01,5935.93,6049.17
+Technology,South,2017-06-01,2767.03,4134.18
+Technology,West,2017-06-01,5764.1,4027.45
+Furniture,Central,2017-07-01,4192.75,2301.74
+Furniture,East,2017-07-01,3672.39,2821.53
+Furniture,South,2017-07-01,2305.25,2002.89
+Furniture,West,2017-07-01,5611.66,4686.86
+Office Supplies,Central,2017-07-01,3256.15,4152.93
+Office Supplies,East,2017-07-01,4917.04,3226.86
+Office Supplies,South,2017-07-01,2052.18,651.86
+Office Supplies,West,2017-07-01,3834.94,2209.82
+Technology,Central,2017-07-01,5737.87,2418.28
+Technology,East,2017-07-01,6253.55,6273.43
+Technology,South,2017-07-01,3278.91,647.35
+Technology,West,2017-07-01,5249.68,13870.85
+Furniture,Central,2017-08-01,4382.59,461.01
+Furniture,East,2017-08-01,3733.7,8848.09
+Furniture,South,2017-08-01,2270.79,1485.96
+Furniture,West,2017-08-01,5696.64,4646.82
+Office Supplies,Central,2017-08-01,3549.15,2344.94
+Office Supplies,East,2017-08-01,5027.98,9556.47
+Office Supplies,South,2017-08-01,2026.87,3298.15
+Office Supplies,West,2017-08-01,4024.22,14860.29
+Technology,Central,2017-08-01,6440.31,3447.04
+Technology,East,2017-08-01,5498.13,2353.9
+Technology,South,2017-08-01,3082.95,5587.43
+Technology,West,2017-08-01,5971.95,6230.79
+Furniture,Central,2017-09-01,7901.56,5034.31
+Furniture,East,2017-09-01,6813.64,10993.65
+Furniture,South,2017-09-01,4385.06,1309.2
+Furniture,West,2017-09-01,10207.19,11691.05
+Office Supplies,Central,2017-09-01,5940.01,4572.42
+Office Supplies,East,2017-09-01,9789.5,8761.8
+Office Supplies,South,2017-09-01,3895.56,7391.08
+Office Supplies,West,2017-09-01,6304.92,11170.55
+Technology,Central,2017-09-01,10238.46,7736.27
+Technology,East,2017-09-01,9576.08,12660.65
+Technology,South,2017-09-01,5622.57,1500.24
+Technology,West,2017-09-01,10345.44,5045.44
+Furniture,Central,2017-10-01,4881.73,3350.7
+Furniture,East,2017-10-01,6098.25,5788.8
+Furniture,South,2017-10-01,2511.91,7142.37
+Furniture,West,2017-10-01,8012.12,5602.2
+Office Supplies,Central,2017-10-01,6780.08,4628.35
+Office Supplies,East,2017-10-01,5902.99,3576.6
+Office Supplies,South,2017-10-01,2757.62,3873.81
+Office Supplies,West,2017-10-01,7730.03,10958.43
+Technology,Central,2017-10-01,11805.14,4143.29
+Technology,East,2017-10-01,8651.88,22939.79
+Technology,South,2017-10-01,3307.03,1120.78
+Technology,West,2017-10-01,7192.8,4651.81
+Furniture,Central,2017-11-01,9473.1,5068.5
+Furniture,East,2017-11-01,7058.62,10882.99
+Furniture,South,2017-11-01,4607.39,6950.55
+Furniture,West,2017-11-01,12855.63,14154.68
+Office Supplies,Central,2017-11-01,6559.15,6016.68
+Office Supplies,East,2017-11-01,7711.46,12166.42
+Office Supplies,South,2017-11-01,4325.97,6310.29
+Office Supplies,West,2017-11-01,7623.59,6978.95
+Technology,Central,2017-11-01,8292.02,4069.81
+Technology,East,2017-11-01,12735.33,22584.22
+Technology,South,2017-11-01,5657.96,15456.58
+Technology,West,2017-11-01,8965.02,7808.16
+Furniture,Central,2017-12-01,10611.79,6504.89
+Furniture,East,2017-12-01,9689,6954.87
+Furniture,South,2017-12-01,4551.47,5585.28
+Furniture,West,2017-12-01,15214.04,12362.43
+Office Supplies,Central,2017-12-01,9397.59,7870.8
+Office Supplies,East,2017-12-01,11182.5,8232.31
+Office Supplies,South,2017-12-01,4689.96,5108.69
+Office Supplies,West,2017-12-01,10426.05,9225.14
+Technology,Central,2017-12-01,15235.26,4507.38
+Technology,East,2017-12-01,14834.28,4897.24
+Technology,South,2017-12-01,6246.75,4515.76
+Technology,West,2017-12-01,13004.28,8064.52

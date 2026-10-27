@@ -1,0 +1,69 @@
+# Modelos y resultados {-#modelos}
+
+*7 modelos de regresión evaluados en 2017, un año que no vieron al entrenar*
+
+```{r modelos-datos}
+p <- resumen$prueba
+rf <- resumen$referencia
+t <- textos_modelos()
+```
+
+## Resumen
+
+- **Mejor modelo:** `r resumen$mejor_modelo`, elegido por validación cruzada (Grid Search).
+- **MAE en 2017:** `r usd(p$MAE)`, un `r pct((1 - p$MAE / rf$MAE) * 100, 0)` menos error que la
+  referencia (`r usd(rf$MAE)`).
+- **Error en el total mensual:** `r pct(p$total_MAE_pct)` (referencia: `r pct(rf$total_MAE_pct)`).
+- **Desvío del total 2017:** `r pct(p$total_desvio_total_pct, signo = TRUE)` (referencia:
+  `r pct(rf$total_desvio_total_pct, signo = TRUE)`).
+
+## Real vs. proyectado: ventas totales de la empresa por mes
+
+```{r ajuste}
+interactivo(fig_ajuste(resumen$mejor_modelo))
+```
+
+Cada punto es la suma de las 12 series del mes. La zona sombreada es 2017: el modelo no vio esos
+meses al entrenar. En la [app Shiny](#app-shiny) se puede elegir cualquier otro modelo para comparar.
+
+## Métricas por categoría × región × mes (prueba 2017)
+
+```{r metricas}
+res <- mejores_por_modelo()
+ref <- load_artifact("resultados_modelos.csv") %>% filter(modelo == REFERENCIA)
+bind_rows(res, ref) %>%
+  transmute(Modelo = modelo, MAE = usd(MAE), RMSE = usd(RMSE), `R²` = sprintf("%.2f", R2),
+            `Error total mensual` = pct(total_MAE_pct)) %>%
+  tabla()
+```
+
+`r t$metricas`
+
+## Hiperparámetros probados con Grid Search
+
+```{r rejillas}
+res %>% transmute(
+  Modelo = ifelse(elegible, modelo, paste(modelo, "(no elegible)")), Combinaciones = evaluaciones,
+  `Rejilla probada` = sapply(rejilla, fmt_rejilla), `Elegido` = sapply(hiperparametros, fmt_params),
+  `Error de validación` = sprintf("%.4f", cv_MAE_indice)
+) %>% tabla()
+```
+
+Cada combinación de la rejilla se entrenó con validación cruzada temporal (4 pliegues) y se eligió la
+de menor MAE del índice en validación.
+
+## ¿Hay sobreajuste? Error en entrenamiento vs. prueba
+
+```{r sobreajuste}
+interactivo(fig_sobreajuste(errores_por_conjunto()))
+```
+
+`r t$sobreajuste`
+
+## Importancia de variables (`r resumen$mejor_modelo`)
+
+```{r importancia}
+interactivo(fig_importancia())
+```
+
+`r t$importancia`

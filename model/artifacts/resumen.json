@@ -1,0 +1,49 @@
+{
+  "mejor_modelo": "Random Forest",
+  "hiperparametros": {
+    "profundidad": 5,
+    "hoja": 5,
+    "variables": 0.5
+  },
+  "prueba": {
+    "MAE": 2697.4196,
+    "RMSE": 3824.2643,
+    "R2": 0.1556,
+    "MAE_pct": 52.976,
+    "total_MAE": 12728.4156,
+    "total_MAE_pct": 20.8317,
+    "total_R2": 0.5783,
+    "total_desvio_total_pct": 2.0504
+  },
+  "referencia": {
+    "MAE": 2912.0932,
+    "RMSE": 4378.7222,
+    "R2": -0.1071,
+    "MAE_pct": 57.1921,
+    "total_MAE": 15467.8883,
+    "total_MAE_pct": 25.3152,
+    "total_R2": 0.4574,
+    "total_desvio_total_pct": -16.9131
+  },
+  "prueba_recursiva": {
+    "MAE": 2740.9062,
+    "RMSE": 3827.8404,
+    "R2": 0.154,
+    "MAE_pct": 53.8301,
+    "total_MAE": 11431.2593,
+    "total_RMSE": 15954.7194,
+    "total_R2": 0.6168,
+    "total_MAE_pct": 18.7087,
+    "total_desvio_total_pct": 4.3806
+  },
+  "entrenamiento": "2015-01 a 2016-12",
+  "prueba_periodo": "2017-01 a 2017-12",
+  "filas": {
+    "entrenamiento": 288,
+    "prueba": 144
+  },
+  "validacion": "Validación cruzada temporal (4 pliegues, cada uno valida con los 3 meses siguientes)",
+  "ventas_2017": 733215.28,
+  "proyeccion_2018": 909045.15,
+  "semilla": 42
+}

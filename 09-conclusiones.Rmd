@@ -1,18 +1,27 @@
 # Conclusiones {-#conclusiones}
 
-*Lo que aprendimos del análisis*
+*Lo que aprendimos, qué recomendamos y qué tener en cuenta*
 
-## Conclusión
+## Análisis exploratorio
 
-El análisis univariado muestra que `Sales` tiene una distribución muy sesgada hacia valores bajos,
-con pocos pedidos de alto valor. El análisis bivariado indica que `Category` es el factor que más
-explica diferencias en el valor de venta — Technology y Furniture tienen pedidos individuales más
-grandes, mientras que Office Supplies domina en volumen pero con pedidos de menor valor.
+```{r conclusiones-eda, results = "asis"}
+cat(conclusiones_eda(df), sep = "\n\n")
+```
 
-`Region` y `Segment` muestran diferencias más leves. El descuento no se relaciona linealmente con las
-ventas, como se observa en el gráfico de bins 2D.
+## Modelo de proyección
 
-Los pedidos atípicos (regla del rango intercuantil) son el 11.7 % de los pedidos pero el 64 % de las
-ventas: son el núcleo del negocio y no se eliminan. En el tiempo, las ventas tienen un patrón
-estacional que se repite cada año (bajas en enero y febrero, altas de septiembre a diciembre), y cada
-mes se parece al mismo mes del año anterior: esa es la relación que usa el modelo de proyección.
+```{r conclusiones-modelo, results = "asis"}
+lista(conclusiones_modelo())
+```
+
+## Recomendaciones para el negocio
+
+```{r recomendaciones, results = "asis"}
+lista(RECOMENDACIONES, numerada = TRUE)
+```
+
+## Limitaciones
+
+```{r limitaciones, results = "asis"}
+lista(LIMITACIONES)
+```

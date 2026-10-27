@@ -1,95 +1,112 @@
-# R/common.R
-# Utilidades compartidas: paleta de colores y estilo común de las figuras de plotly.
-# Es el equivalente en R del common.py de la app Dash (mismos colores y mismo estilo).
+# R/common.R — Utilidades compartidas por la app Shiny, el libro y los scripts del modelo:
+# rutas, carga de datos y resultados, paleta de colores, estilo de las gráficas y formatos.
 
-library(tidyverse)
-library(plotly)
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(tidyr)
+  library(readr)
+  library(lubridate)
+  library(ggplot2)
+  library(plotly)
+})
+
+# ---------------------------------------------------------------- rutas
+# La raíz del proyecto es la carpeta que contiene Rbook.Rproj; así las rutas funcionan igual desde
+# la raíz (libro y scripts) y desde app/ (Shiny cambia el directorio de trabajo a la carpeta de la app).
+buscar_raiz <- function(dir = getwd()) {
+  while (!file.exists(file.path(dir, "Rbook.Rproj"))) {
+    padre <- dirname(dir)
+    if (padre == dir) stop("No se encontró Rbook.Rproj: ejecute desde la carpeta del proyecto.")
+    dir <- padre
+  }
+  normalizePath(dir, winslash = "/")
+}
+ROOT <- buscar_raiz()
+RAW_PATH <- file.path(ROOT, "data", "raw", "Sample - Superstore.csv")
+DATA_PATH <- file.path(ROOT, "data", "superstore_transformado.csv")
+MENSUAL_PATH <- file.path(ROOT, "data", "ventas_mensuales.csv")
+ART <- file.path(ROOT, "model", "artifacts") # salidas de model/train_model.R
 
 # ---------------------------------------------------------------- colores
-# Un único color de marca (azul petróleo) en distintas tintas.
-BRAND <- "#2E6F95"
-BRAND_DARK <- "#1F5570"
-BRAND_DARKER <- "#153B4E"
-BRAND_LIGHT <- "#EAF2F7"
+# Cada color tiene una función fija: azul = ventas reales, ámbar = proyección, verde = mejor
+# resultado o crecimiento, coral = caídas. Las categorías tienen tonos distintos para distinguirlas.
+REAL <- "#4a93e6"
+PROY <- "#f0b851"
+POS <- "#8fd3b0"
+NEG <- "#f08a7e"
+CATEGORY_COLORS <- c("Furniture" = "#2ca58d", "Office Supplies" = "#4a93e6", "Technology" = "#8e6cd8")
+COLORWAY <- c("#4a93e6", "#2ca58d", "#8e6cd8", "#e0a030", "#5fa3c0", "#e66767")
+GRIS <- "#7a8494" # referencia y líneas auxiliares
 
-PASTEL <- c(
-  blue = "#DCEBF2",
-  green = "#B7D4E3",
-  peach = "#8FBBD1",
-  pink = "#63A0BC",
-  yellow = "#3B85A8",
-  lavender = "#1F5570"
-)
-COLORWAY <- unname(PASTEL)
-TEXT <- "#2f3247"
-GRID <- "#EEF0F6"
-# Tintas más saturadas, para líneas/puntos que necesitan más contraste sobre blanco
-ACCENT <- c(
-  blue = "#3B85A8",
-  pink = "#63A0BC",
-  green = "#3B85A8",
-  peach = "#1F5570",
-  lavender = "#1F5570",
-  yellow = "#8FBBD1"
-)
-MARK <- BRAND_DARKER # color de puntos de referencia (p. ej. la media en un boxplot)
-# Tres tintas del mismo azul para distinguir categorías sin salir del color de marca
-CATEGORY_COLORS <- c(
-  "Furniture" = "#8FBBD1",
-  "Office Supplies" = "#153B4E",
-  "Technology" = "#3B85A8"
-)
-CATEGORY_ACCENT <- c(
-  "Furniture" = "#63A0BC",
-  "Office Supplies" = "#153B4E",
-  "Technology" = "#1F5570"
-)
-MONO_SCALE <- list(c(0, "#FFFFFF"), c(0.5, PASTEL[["yellow"]]), c(1, BRAND_DARKER))
-
-# Código de 2 letras de cada estado, requerido por los mapas de plotly (locationmode = "USA-states")
-STATE_ABBR <- c(
-  "Alabama" = "AL", "Arizona" = "AZ", "Arkansas" = "AR", "California" = "CA", "Colorado" = "CO",
-  "Connecticut" = "CT", "Delaware" = "DE", "District of Columbia" = "DC", "Florida" = "FL", "Georgia" = "GA",
-  "Idaho" = "ID", "Illinois" = "IL", "Indiana" = "IN", "Iowa" = "IA", "Kansas" = "KS", "Kentucky" = "KY",
-  "Louisiana" = "LA", "Maine" = "ME", "Maryland" = "MD", "Massachusetts" = "MA", "Michigan" = "MI",
-  "Minnesota" = "MN", "Mississippi" = "MS", "Missouri" = "MO", "Montana" = "MT", "Nebraska" = "NE",
-  "Nevada" = "NV", "New Hampshire" = "NH", "New Jersey" = "NJ", "New Mexico" = "NM", "New York" = "NY",
-  "North Carolina" = "NC", "North Dakota" = "ND", "Ohio" = "OH", "Oklahoma" = "OK", "Oregon" = "OR",
-  "Pennsylvania" = "PA", "Rhode Island" = "RI", "South Carolina" = "SC", "South Dakota" = "SD",
-  "Tennessee" = "TN", "Texas" = "TX", "Utah" = "UT", "Vermont" = "VT", "Virginia" = "VA", "Washington" = "WA",
-  "West Virginia" = "WV", "Wisconsin" = "WI", "Wyoming" = "WY"
+# ---------------------------------------------------------------- gráficas
+# Como en el curso: cada gráfica se hace con ggplot2 y se vuelve interactiva con plotly::ggplotly().
+theme_set(
+  theme_minimal(base_size = 12) +
+    theme(panel.grid.minor = element_blank(), legend.position = "bottom",
+          axis.title = element_text(color = "#4b5263"), plot.margin = ggplot2::margin(8, 12, 8, 8)) # (randomForest también tiene margin())
 )
 
-# Marcador blanco alrededor de los puntos (mismo borde que en la app)
-WHITE_LINE <- list(width = 1, color = "white")
-
-style_fig <- function(p, height = 360, margin = list(l = 40, r = 20, t = 20, b = 40)) {
-  # Aplica el estilo común a cualquier figura de plotly (equivalente a style_fig() de la app):
-  # se aplica al final, así que el estilo de los ejes vale para todos (también los de las facetas).
-  p$height <- height
-  p <- p %>%
-    layout(
-      font = list(family = "Nunito, Segoe UI, sans-serif", color = TEXT),
-      paper_bgcolor = "rgba(0,0,0,0)",
-      plot_bgcolor = "rgba(0,0,0,0)",
-      colorway = COLORWAY,
-      margin = margin,
-      legend = list(orientation = "h", y = -0.2),
-      hovermode = "closest"
-    ) %>%
-    config(displayModeBar = FALSE) %>%
-    plotly_build()
-  ejes <- grep("^[xy]axis[0-9]*$", names(p$x$layout), value = TRUE)
-  for (eje in union(ejes, c("xaxis", "yaxis"))) {
-    p$x$layout[[eje]] <- modifyList(p$x$layout[[eje]] %||% list(),
-                                    list(gridcolor = GRID, zeroline = FALSE, ticks = "", automargin = TRUE))
-  }
-  p
+interactivo <- function(p, leyenda = TRUE) {
+  # ggplot -> gráfica interactiva (sin barra de herramientas y con la leyenda abajo). Si la gráfica trae
+  # un texto preparado para la ventana emergente (aes text), se muestra solo ese; si no, todos los valores.
+  con_texto <- "text" %in% names(p$mapping) || any(vapply(p$layers, function(l) "text" %in% names(l$mapping), TRUE))
+  ggplotly(p, tooltip = if (con_texto) "text" else "all") %>%
+    layout(legend = list(orientation = "h", x = 0, y = -0.18, title = list(text = "")), showlegend = leyenda,
+           font = list(family = "Inter, Segoe UI, sans-serif", size = 12, color = "#3b4252"),
+           hoverlabel = list(bgcolor = "white", bordercolor = "#d5dde6", font = list(color = "#1f2430", size = 12))) %>%
+    config(displayModeBar = FALSE)
 }
 
-lowess_line <- function(x, y) {
-  # Curva loess: mismo algoritmo que trendline = "lowess" de plotly en Python
-  # (frac = 2/3, 3 iteraciones robustas, sin interpolación: delta = 0).
-  fit <- stats::lowess(as.numeric(x), y, f = 2 / 3, iter = 3, delta = 0)
-  tibble(x = as.Date(fit$x, origin = "1970-01-01"), y = fit$y)
+dolares <- scales::label_dollar(accuracy = 1)
+dolares_k <- scales::label_dollar(scale = 1e-3, suffix = "k", accuracy = 1)
+
+# ---------------------------------------------------------------- datos
+.cache <- new.env()
+cache <- function(clave, expr) {
+  if (is.null(.cache[[clave]])) .cache[[clave]] <- force(expr)
+  .cache[[clave]]
 }
+
+load_data <- function() {
+  # Una fila por línea de pedido (salida de data/generate_data.R)
+  cache("data", read_csv(DATA_PATH, show_col_types = FALSE, progress = FALSE))
+}
+
+load_mensual <- function() {
+  # Ventas por categoría × región × mes (salida de data/generate_data.R)
+  cache("mensual", read_csv(MENSUAL_PATH, show_col_types = FALSE, progress = FALSE))
+}
+
+# ---------------------------------------------------------------- resultados del modelo
+# La app y el libro nunca entrenan: solo leen lo que deja model/train_model.R en model/artifacts/.
+REFERENCIA <- "Referencia (año anterior)"
+
+modelo_listo <- function() file.exists(file.path(ART, "resumen.json"))
+
+load_artifact <- function(nombre) {
+  cache(paste0("art_", nombre), {
+    ruta <- file.path(ART, nombre)
+    if (grepl("\\.json$", nombre)) jsonlite::fromJSON(ruta, simplifyVector = TRUE)
+    else read_csv(ruta, show_col_types = FALSE, progress = FALSE)
+  })
+}
+
+mejores_por_modelo <- function() {
+  # Resultados de los 7 modelos (sin la referencia), ordenados por MAE en la prueba
+  load_artifact("resultados_modelos.csv") %>% filter(modelo != REFERENCIA) %>% arrange(MAE)
+}
+
+# ---------------------------------------------------------------- formatos
+usd <- function(x, dec = 0) paste0("$", formatC(x, format = "f", digits = dec, big.mark = ","))
+num <- function(x, dec = 0) formatC(x, format = "f", digits = dec, big.mark = ",")
+pct <- function(x, dec = 1, signo = FALSE) {
+  paste0(if (signo) ifelse(x >= 0, "+", "") else "", formatC(x, format = "f", digits = dec), " %")
+}
+enumerar <- function(x) {
+  # c("a", "b", "c") -> "a, b y c"
+  if (length(x) <= 1) return(paste(x, collapse = ""))
+  paste(paste(x[-length(x)], collapse = ", "), "y", x[length(x)])
+}
+MESES <- c("Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic")
+MESES_LARGOS <- c("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
+                  "septiembre", "octubre", "noviembre", "diciembre")

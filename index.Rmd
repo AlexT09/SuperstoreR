@@ -1,32 +1,60 @@
 ---
-title: "Proyecto Sample Superstore"
-subtitle: "Factores que explican el nivel de ventas · Análisis exploratorio de datos (EDA)"
+title: "Proyección de ventas Sample Superstore"
+subtitle: "Qué explica las ventas y cuánto se venderá · EDA y proyección con machine learning en R"
 author: "Alex Teran y David Estrada"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
 lang: es
-description: "Análisis exploratorio de datos (EDA) del dataset Sample Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas."
+description: "Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny."
 ---
 
 ```{r setup-global, include=FALSE}
-# Sin mensajes de carga de paquetes ni avisos en el libro; las figuras ocupan todo el ancho
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, out.width = "100%")
+# Sin código, mensajes ni avisos en el libro; las figuras ocupan todo el ancho.
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%")
+
+# Mismo código que usa la app Shiny: datos, gráficas (ggplot2 + ggplotly) y textos
+for (f in c("R/common.R", "model/features.R", "R/eda.R", "R/resultados.R", "R/contenido.R")) {
+  source(f, encoding = "UTF-8")
+}
+tabla <- function(df) knitr::kable(df, align = "l")
+lista <- function(x, numerada = FALSE) {
+  cat(paste0(if (numerada) paste0(seq_along(x), ". ") else "- ", x), sep = "\n")
+}
+df <- load_data()
+mensual <- load_mensual()
+resumen <- load_artifact("resumen.json")
 ```
 
 # Introducción {-#introduccion}
 
-*Análisis exploratorio de datos del dataset Sample Superstore*
+*Del análisis de las ventas de Sample Superstore a su proyección*
 
-## El problema
+## El proyecto
 
-Sample Superstore es un conjunto de datos de muestra de una gran cadena minorista —una simulación
-con fines analíticos— sobre el que se realiza un análisis exploratorio de datos (EDA) para ofrecer
-información que ayude a la empresa a aumentar sus beneficios y, al mismo tiempo, minimizar sus
-pérdidas.
+Sample Superstore es un conjunto de datos de muestra de una cadena minorista de Estados Unidos
+(2014–2017) —una simulación con fines analíticos— con cerca de 10.000 líneas de pedido de muebles,
+artículos de oficina y tecnología.
 
-## Pregunta problema
+El proyecto tiene dos partes: un análisis exploratorio (EDA) que identifica qué explica el nivel de
+ventas, y un modelo de machine learning que usa esos hallazgos para proyectar cuánto venderá la
+empresa cada mes, por categoría y región. Todo está hecho en R y se presenta también en una
+[app Shiny](#app-shiny).
 
-**¿Qué factores (categoría, región, segmento) explican el nivel de ventas (`Sales`)?**
+## Preguntas del proyecto
 
-Recorre las pestañas para conocer el contexto, los objetivos, la metodología y el EDA.
+1. **`r PREGUNTAS[1]`**
+2. **`r PREGUNTAS[2]`**
+
+## Contexto
+
+Una cadena minorista vende a través de varias categorías de producto, regiones y segmentos de
+cliente, y sus ventas cambian a lo largo del año. Saber qué combinación de factores mueve las ventas,
+y anticipar cuánto se venderá, es un insumo directo para planificar: cuánto inventario comprar, qué
+metas fijar a cada región y cuándo reforzar la operación.
+
+## Impacto para el negocio
+
+```{r impacto, results = "asis"}
+lista(IMPACTO)
+```

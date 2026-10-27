@@ -1,0 +1,38 @@
+# App Shiny {-#app-shiny}
+
+*El mismo proyecto en un dashboard interactivo*
+
+La carpeta `app/` contiene una app hecha con **Shiny** y **shinydashboard**, con la estructura del
+capítulo *Visualización con shiny* del curso: `global.R` (librerías, datos y preprocesamiento),
+`ui.R` (interfaz) y `server.R` (lógica), más la carpeta `www/` con el logo y los estilos. Usa el
+mismo código que este libro (`R/`) y los resultados del modelo (`model/artifacts/`), así que muestra
+las mismas gráficas y cifras.
+
+| Sección del menú | Qué hace |
+|---|---|
+| Introducción · Problema y objetivos · Marco teórico · Metodología | Planteamiento del proyecto en cajas (`box`) y cifras clave (`valueBox`) |
+| ETL | Código del ETL y la tabla mensual completa con filtros (`DT`) |
+| Análisis exploratorio | Univariado, bivariado, en el tiempo y atípicos (ggplot2 + `ggplotly`), y un **explorador interactivo**: variable, tipo de gráfico y rango de años, con la tabla de datos filtrada |
+| Modelos y resultados | Métricas, rejillas, sobreajuste e importancia; se puede elegir cualquier modelo para ver su ajuste |
+| Entrenamiento del modelo | Elige uno de los 7 modelos y lo entrena al presionar el botón (`observeEvent`): Grid Search con validación cruzada temporal y evaluación en 2017. Permite guardar el modelo como `.rds` |
+| Comparación · Proyección 2018 | Ranking de modelos, prueba a 12 meses y proyección filtrable por categoría y región |
+| Predicción | Formulario con categoría, región, mes e historia de la serie, botones de ejemplo (temporada alta y baja) y predicción con `eventReactive`, mostrada en `infoBox` |
+| Conclusiones | Hallazgos, recomendaciones y limitaciones |
+
+## Cómo ejecutarla
+
+Desde RStudio, abriendo `Rbook.Rproj`, o desde una consola de R en la raíz del repositorio:
+
+```r
+shiny::runApp("app")
+```
+
+## Estructura
+
+```
+app/
+├── global.R      # Librerías, código compartido, datos, resultados del modelo y componentes
+├── ui.R          # dashboardPage(): cabecera, menú lateral y una pestaña por sección
+├── server.R      # Lógica reactiva de cada sección
+└── www/          # Logo, favicon y ajustes de estilo (custom.css)
+```

@@ -4,15 +4,16 @@ delete_merged_file: true
 new_session: false
 rmd_files:
   - index.Rmd
-  - 01-contexto.Rmd
-  - 02-problema.Rmd
-  - 03-objetivos.Rmd
-  - 04-marco-teorico.Rmd
-  - 05-metodologia.Rmd
-  - 06-eda.Rmd
-  - 07-dashboard.Rmd
-  - 08-limitaciones.Rmd
+  - 01-problema.Rmd
+  - 02-marco-teorico.Rmd
+  - 03-metodologia.Rmd
+  - 04-etl.Rmd
+  - 05-eda.Rmd
+  - 06-modelos.Rmd
+  - 07-comparacion.Rmd
+  - 08-proyeccion.Rmd
   - 09-conclusiones.Rmd
+  - 10-app-shiny.Rmd
 language:
   ui:
     chapter_name: ""

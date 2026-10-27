@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Proyección 2018 | Proyección de ventas Sample Superstore</title>
+  <meta name="description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Proyección 2018 | Proyección de ventas Sample Superstore" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Proyección 2018 | Proyección de ventas Sample Superstore" />
+  
+  <meta name="twitter:description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
+  
+
+<meta name="author" content="Alex Teran y David Estrada" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="comparacion.html"/>
+<link rel="next" href="conclusiones.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Proyección de ventas Sample Superstore</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introducción</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#el-proyecto"><i class="fa fa-check"></i>El proyecto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#preguntas-del-proyecto"><i class="fa fa-check"></i>Preguntas del proyecto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#contexto"><i class="fa fa-check"></i>Contexto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#impacto-para-el-negocio"><i class="fa fa-check"></i>Impacto para el negocio</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html"><i class="fa fa-check"></i>Problema y objetivos</a>
+<ul>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#planteamiento-del-problema"><i class="fa fa-check"></i>Planteamiento del problema</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#objetivo-general"><i class="fa fa-check"></i>Objetivo general</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i>Objetivos específicos</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#justificaci%C3%B3n"><i class="fa fa-check"></i>Justificación</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html"><i class="fa fa-check"></i>Marco teórico</a>
+<ul>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#conceptos-clave"><i class="fa fa-check"></i>Conceptos clave</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#modelos-de-regresi%C3%B3n-utilizados"><i class="fa fa-check"></i>Modelos de regresión utilizados</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#m%C3%A9tricas-de-evaluaci%C3%B3n"><i class="fa fa-check"></i>Métricas de evaluación</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#operacionalizaci%C3%B3n-de-variables"><i class="fa fa-check"></i>Operacionalización de variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#variables-del-dataset"><i class="fa fa-check"></i>Variables del dataset</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#variables-del-modelo-una-fila-categor%C3%ADa-regi%C3%B3n-mes"><i class="fa fa-check"></i>Variables del modelo (una fila = categoría × región × mes)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html"><i class="fa fa-check"></i>Metodología</a>
+<ul>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#flujo-del-proyecto"><i class="fa fa-check"></i>Flujo del proyecto</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#datos-y-unidad-de-an%C3%A1lisis"><i class="fa fa-check"></i>Datos y unidad de análisis</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#variable-objetivo"><i class="fa fa-check"></i>Variable objetivo</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#preprocesamiento-y-validaci%C3%B3n"><i class="fa fa-check"></i>Preprocesamiento y validación</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#b%C3%BAsqueda-de-hiperpar%C3%A1metros"><i class="fa fa-check"></i>Búsqueda de hiperparámetros</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html"><i class="fa fa-check"></i>ETL</a>
+<ul>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#resultado-del-etl"><i class="fa fa-check"></i>Resultado del ETL</a></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#c%C3%B3digo-datagenerate_data.r"><i class="fa fa-check"></i>Código (<code>data/generate_data.R</code>)</a></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#tabla-mensual-muestra-de-2017"><i class="fa fa-check"></i>Tabla mensual (muestra de 2017)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html"><i class="fa fa-check"></i>EDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado"><i class="fa fa-check"></i>1 · Análisis univariado</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#resumen-estad%C3%ADstico-de-sales-usd-por-l%C3%ADnea-de-pedido"><i class="fa fa-check"></i>Resumen estadístico de Sales (USD por línea de pedido)</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#histograma-de-sales"><i class="fa fa-check"></i>Histograma de Sales</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#histograma-de-densidad-de-logsales"><i class="fa fa-check"></i>Histograma de densidad de log(Sales)</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-l%C3%ADneas-de-pedido-por-categor%C3%ADa"><i class="fa fa-check"></i>Barras: líneas de pedido por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-l%C3%ADneas-de-pedido-por-regi%C3%B3n"><i class="fa fa-check"></i>Barras: líneas de pedido por región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#mapa-l%C3%ADneas-de-pedido-por-estado"><i class="fa fa-check"></i>Mapa: líneas de pedido por estado</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado"><i class="fa fa-check"></i>2 · Análisis bivariado</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-categor%C3%ADa"><i class="fa fa-check"></i>Cajas: Sales por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-regi%C3%B3n"><i class="fa fa-check"></i>Cajas: Sales por región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-segmento"><i class="fa fa-check"></i>Cajas: Sales por segmento</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#burbujas-l%C3%ADneas-por-categor%C3%ADa-y-regi%C3%B3n"><i class="fa fa-check"></i>Burbujas: líneas por categoría y región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#contenedores-2d-descuento-y-ventas"><i class="fa fa-check"></i>Contenedores 2D: descuento y ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#correlaci%C3%B3n-entre-variables-num%C3%A9ricas"><i class="fa fa-check"></i>Correlación entre variables numéricas</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#ventas-en-el-tiempo"><i class="fa fa-check"></i>3 · Ventas en el tiempo</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#evoluci%C3%B3n-mensual-de-ventas"><i class="fa fa-check"></i>Evolución mensual de ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-promedio-m%C3%B3vil-de-12-meses"><i class="fa fa-check"></i>Tendencia: promedio móvil de 12 meses</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#estacionalidad-de-las-ventas-del-a%C3%B1o-por-mes"><i class="fa fa-check"></i>Estacionalidad: % de las ventas del año por mes</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-por-categor%C3%ADa"><i class="fa fa-check"></i>Tendencia de ventas por categoría</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-y-relaci%C3%B3n-con-el-modelo"><i class="fa fa-check"></i>4 · Atípicos y relación con el modelo</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-su-peso-en-l%C3%ADneas-y-en-ventas"><i class="fa fa-check"></i>Atípicos: su peso en líneas y en ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#dispersi%C3%B3n-con-l%C3%ADnea-de-tendencia-el-mes-contra-el-mismo-mes-del-a%C3%B1o-anterior"><i class="fa fa-check"></i>Dispersión con línea de tendencia: el mes contra el mismo mes del año anterior</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html"><i class="fa fa-check"></i>Modelos y resultados</a>
+<ul>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#resumen"><i class="fa fa-check"></i>Resumen</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#real-vs.-proyectado-ventas-totales-de-la-empresa-por-mes"><i class="fa fa-check"></i>Real vs. proyectado: ventas totales de la empresa por mes</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#m%C3%A9tricas-por-categor%C3%ADa-regi%C3%B3n-mes-prueba-2017"><i class="fa fa-check"></i>Métricas por categoría × región × mes (prueba 2017)</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#hiperpar%C3%A1metros-probados-con-grid-search"><i class="fa fa-check"></i>Hiperparámetros probados con Grid Search</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#hay-sobreajuste-error-en-entrenamiento-vs.-prueba"><i class="fa fa-check"></i>¿Hay sobreajuste? Error en entrenamiento vs. prueba</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#importancia-de-variables-random-forest"><i class="fa fa-check"></i>Importancia de variables (Random Forest)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html"><i class="fa fa-check"></i>Comparación</a>
+<ul>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html#ranking-de-modelos-mae-en-2017"><i class="fa fa-check"></i>Ranking de modelos (MAE en 2017)</a></li>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html#cu%C3%A1nto-confiar-en-la-proyecci%C3%B3n-de-un-a%C3%B1o-completo"><i class="fa fa-check"></i>¿Cuánto confiar en la proyección de un año completo?</a>
+<ul>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html#proyectado-solo-con-datos-hasta-2016"><i class="fa fa-check"></i>2017 proyectado solo con datos hasta 2016</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html"><i class="fa fa-check"></i>Proyección 2018</a>
+<ul>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#ventas-mensuales-real-20152017-y-proyecci%C3%B3n-2018"><i class="fa fa-check"></i>Ventas mensuales: real 2015–2017 y proyección 2018</a></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#proyecci%C3%B3n-por-categor%C3%ADa-y-regi%C3%B3n"><i class="fa fa-check"></i>Proyección por categoría y región</a></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#lectura-para-el-negocio"><i class="fa fa-check"></i>Lectura para el negocio</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i>Conclusiones</a>
+<ul>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#an%C3%A1lisis-exploratorio"><i class="fa fa-check"></i>Análisis exploratorio</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#modelo-de-proyecci%C3%B3n"><i class="fa fa-check"></i>Modelo de proyección</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#recomendaciones-para-el-negocio"><i class="fa fa-check"></i>Recomendaciones para el negocio</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#limitaciones"><i class="fa fa-check"></i>Limitaciones</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html"><i class="fa fa-check"></i>App Shiny</a>
+<ul>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html#c%C3%B3mo-ejecutarla"><i class="fa fa-check"></i>Cómo ejecutarla</a></li>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html#estructura"><i class="fa fa-check"></i>Estructura</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/AlexT09/rbook" target="blank">Repositorio en GitHub</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Proyección de ventas Sample Superstore</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="proyeccion" class="section level1 unnumbered hasAnchor">
+<h1>Proyección 2018<a href="proyeccion.html#proyeccion" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><em>Ventas esperadas por mes con Random Forest, reentrenado con 2015–2017</em></p>
+<div id="ventas-mensuales-real-20152017-y-proyección-2018" class="section level2 hasAnchor">
+<h2>Ventas mensuales: real 2015–2017 y proyección 2018<a href="proyeccion.html#ventas-mensuales-real-20152017-y-proyecci%C3%B3n-2018" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-98a91a6401617d6a00af" style="width:100%;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-98a91a6401617d6a00af">{"x":{"data":[{"x":[17532,17563,17591,17622,17652,17683,17713,17744,17775,17805,17836,17866,17866,17866,17836,17805,17775,17744,17713,17683,17652,17622,17591,17563,17532,17532],"y":[35209.121065964559,30466.448770193118,52590.646739758755,45044.53848662469,48837.793499787404,50220.070665473308,48694.883404675908,57390.361136633568,91794.820327478039,77097.858351614414,101581.5198755555,100046.48823903683,100046.48823903683,146096.69176096315,148338.28012444449,112585.08164838559,134046.87967252196,83806.458863366439,71108.556595324088,73335.769334526689,71317.246500212597,65778.001513375304,76797.493260241245,44489.791229806891,51415.458934035443,35209.121065964559],"text":"","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"transparent","dash":"solid"},"fill":"toself","fillcolor":"rgba(240,184,81,0.2)","hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[16436,16467,16495,16526,16556,16587,16617,16648,16679,16709,16740,16770,16801,16832,16861,16892,16922,16953,16983,17014,17045,17075,17106,17136,17167,17198,17226,17257,17287,17318,17348,17379,17410,17440,17471,17501],"y":[18174.079999999998,11951.389999999999,38726.260000000002,34195.190000000002,30131.689999999999,24797.299999999999,28765.310000000001,36898.330000000002,64595.93,31404.91,75972.559999999998,74919.529999999999,18542.489999999998,22978.810000000001,51715.889999999999,38750.019999999997,56987.720000000001,40344.540000000001,39261.949999999997,31115.370000000003,73410.020000000004,59687.760000000002,79411.960000000006,96999.029999999999,43971.389999999999,20301.139999999999,58872.340000000004,36521.540000000001,44261.120000000003,52981.730000000003,45264.400000000001,63120.889999999999,87866.660000000003,77776.930000000008,118447.83,83829.309999999998],"text":"","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(74,147,230,1)","dash":"solid"},"hoveron":"points","name":"Real","legendgroup":"Real","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[16436,16467,16495,16526,16556,16587,16617,16648,16679,16709,16740,16770,16801,16832,16861,16892,16922,16953,16983,17014,17045,17075,17106,17136,17167,17198,17226,17257,17287,17318,17348,17379,17410,17440,17471,17501],"y":[18174.079999999998,11951.389999999999,38726.260000000002,34195.190000000002,30131.689999999999,24797.299999999999,28765.310000000001,36898.330000000002,64595.93,31404.91,75972.559999999998,74919.529999999999,18542.489999999998,22978.810000000001,51715.889999999999,38750.019999999997,56987.720000000001,40344.540000000001,39261.949999999997,31115.370000000003,73410.020000000004,59687.760000000002,79411.960000000006,96999.029999999999,43971.389999999999,20301.139999999999,58872.340000000004,36521.540000000001,44261.120000000003,52981.730000000003,45264.400000000001,63120.889999999999,87866.660000000003,77776.930000000008,118447.83,83829.309999999998],"text":["ene. 2015 · real: $18,174","feb. 2015 · real: $11,951","mar. 2015 · real: $38,726","abr. 2015 · real: $34,195","may. 2015 · real: $30,132","jun. 2015 · real: $24,797","jul. 2015 · real: $28,765","ago. 2015 · real: $36,898","sept. 2015 · real: $64,596","oct. 2015 · real: $31,405","nov. 2015 · real: $75,973","dic. 2015 · real: $74,920","ene. 2016 · real: $18,542","feb. 2016 · real: $22,979","mar. 2016 · real: $51,716","abr. 2016 · real: $38,750","may. 2016 · real: $56,988","jun. 2016 · real: $40,345","jul. 2016 · real: $39,262","ago. 2016 · real: $31,115","sept. 2016 · real: $73,410","oct. 2016 · real: $59,688","nov. 2016 · real: $79,412","dic. 2016 · real: $96,999","ene. 2017 · real: $43,971","feb. 2017 · real: $20,301","mar. 2017 · real: $58,872","abr. 2017 · real: $36,522","may. 2017 · real: $44,261","jun. 2017 · real: $52,982","jul. 2017 · real: $45,264","ago. 2017 · real: $63,121","sept. 2017 · real: $87,867","oct. 2017 · real: $77,777","nov. 2017 · real: $118,448","dic. 2017 · real: $83,829"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(74,147,230,1)","opacity":1,"size":4.5354330708661417,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(74,147,230,1)"}},"hoveron":"points","name":"Real","legendgroup":"Real","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[17501,17532,17563,17591,17622,17652,17683,17713,17744,17775,17805,17836,17866],"y":[83829.309999999998,43312.290000000001,37478.120000000003,64694.07,55411.269999999997,60077.519999999997,61777.919999999998,59901.720000000001,70598.410000000003,112920.85000000001,94841.470000000001,124959.89999999999,123071.59],"text":"","type":"scatter","mode":"lines","line":{"width":3.7795275590551185,"color":"rgba(240,184,81,1)","dash":"dash"},"hoveron":"points","name":"Proyección 2018","legendgroup":"Proyección 2018","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[17532,17563,17591,17622,17652,17683,17713,17744,17775,17805,17836,17866],"y":[43312.290000000001,37478.120000000003,64694.07,55411.269999999997,60077.519999999997,61777.919999999998,59901.720000000001,70598.410000000003,112920.85000000001,94841.470000000001,124959.89999999999,123071.59],"text":["ene. 2018 · proyección: $43,312 (rango $35,209 – $51,415)","feb. 2018 · proyección: $37,478 (rango $30,466 – $44,490)","mar. 2018 · proyección: $64,694 (rango $52,591 – $76,797)","abr. 2018 · proyección: $55,411 (rango $45,045 – $65,778)","may. 2018 · proyección: $60,078 (rango $48,838 – $71,317)","jun. 2018 · proyección: $61,778 (rango $50,220 – $73,336)","jul. 2018 · proyección: $59,902 (rango $48,695 – $71,109)","ago. 2018 · proyección: $70,598 (rango $57,390 – $83,806)","sept. 2018 · proyección: $112,921 (rango $91,795 – $134,047)","oct. 2018 · proyección: $94,841 (rango $77,098 – $112,585)","nov. 2018 · proyección: $124,960 (rango $101,582 – $148,338)","dic. 2018 · proyección: $123,072 (rango $100,046 – $146,097)"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(240,184,81,1)","opacity":1,"size":6.8031496062992138,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(240,184,81,1)"}},"hoveron":"points","name":"Proyección 2018","legendgroup":"Proyección 2018","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.626816106268159,"r":15.940224159402243,"b":27.364051473640522,"l":62.432544624325466},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"#3b4252","family":"Inter, Segoe UI, sans-serif","size":12},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[16364.5,17937.5],"tickmode":"array","ticktext":["2015","2016","2017","2018","2019"],"tickvals":[16436,16801,17167,17532,17897],"categoryorder":"array","categoryarray":["2015","2016","2017","2018","2019"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.9850560398505608,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(75,82,99,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[5132.045493777774,155157.62463066672],"tickmode":"array","ticktext":["$50k","$100k","$150k"],"tickvals":[50000,100000,150000],"categoryorder":"array","categoryarray":["$50k","$100k","$150k"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.9850560398505608,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"Ventas del mes (USD)","font":{"color":"rgba(75,82,99,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.17999999999999999,"xanchor":"center","yanchor":"top","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}}},"hovermode":"closest","barmode":"relative","hoverlabel":{"bgcolor":"white","bordercolor":"#d5dde6","font":{"color":"#1f2430","size":12}}},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"source":"A","attrs":{"2c2433f748a7":{"x":{},"ymin":{},"ymax":{},"type":"scatter"},"2c24594e1ddf":{"x":{},"y":{},"colour":{}},"2c2448e2b8e":{"x":{},"y":{},"colour":{},"text":{}},"2c247cd26fed":{"x":{},"y":{},"colour":{}},"2c2474d452a8":{"x":{},"y":{},"colour":{},"text":{}}},"cur_data":"2c2433f748a7","visdat":{"2c2433f748a7":["function (y) ","x"],"2c24594e1ddf":["function (y) ","x"],"2c2448e2b8e":["function (y) ","x"],"2c247cd26fed":["function (y) ","x"],"2c2474d452a8":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>La banda muestra el error típico de una proyección a 12 meses (±19 % para el
+total de la empresa), medido al proyectar 2017 sin conocerlo. Para una sola categoría en una región el
+error es mayor, porque al sumar series los errores se compensan. En la <a href="app-shiny.html#app-shiny">app Shiny</a> se
+puede filtrar por categoría y región.</p>
+</div>
+<div id="proyección-por-categoría-y-región" class="section level2 hasAnchor">
+<h2>Proyección por categoría y región<a href="proyeccion.html#proyecci%C3%B3n-por-categor%C3%ADa-y-regi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Categoría</th>
+<th align="left">Región</th>
+<th align="left">Ventas 2017</th>
+<th align="left">Proyección 2018</th>
+<th align="left">Variación</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Technology</td>
+<td align="left">East</td>
+<td align="left">$87,138</td>
+<td align="left">$119,787</td>
+<td align="left">+37.5 %</td>
+</tr>
+<tr class="even">
+<td align="left">Technology</td>
+<td align="left">West</td>
+<td align="left">$95,959</td>
+<td align="left">$106,352</td>
+<td align="left">+10.8 %</td>
+</tr>
+<tr class="odd">
+<td align="left">Office Supplies</td>
+<td align="left">West</td>
+<td align="left">$82,464</td>
+<td align="left">$103,064</td>
+<td align="left">+25.0 %</td>
+</tr>
+<tr class="even">
+<td align="left">Furniture</td>
+<td align="left">West</td>
+<td align="left">$71,706</td>
+<td align="left">$92,327</td>
+<td align="left">+28.8 %</td>
+</tr>
+<tr class="odd">
+<td align="left">Office Supplies</td>
+<td align="left">East</td>
+<td align="left">$65,091</td>
+<td align="left">$80,651</td>
+<td align="left">+23.9 %</td>
+</tr>
+<tr class="even">
+<td align="left">Furniture</td>
+<td align="left">East</td>
+<td align="left">$60,854</td>
+<td align="left">$78,726</td>
+<td align="left">+29.4 %</td>
+</tr>
+<tr class="odd">
+<td align="left">Technology</td>
+<td align="left">South</td>
+<td align="left">$44,828</td>
+<td align="left">$63,224</td>
+<td align="left">+41.0 %</td>
+</tr>
+<tr class="even">
+<td align="left">Office Supplies</td>
+<td align="left">Central</td>
+<td align="left">$58,771</td>
+<td align="left">$60,350</td>
+<td align="left">+2.7 %</td>
+</tr>
+<tr class="odd">
+<td align="left">Technology</td>
+<td align="left">Central</td>
+<td align="left">$43,805</td>
+<td align="left">$52,285</td>
+<td align="left">+19.4 %</td>
+</tr>
+<tr class="even">
+<td align="left">Furniture</td>
+<td align="left">South</td>
+<td align="left">$38,305</td>
+<td align="left">$51,988</td>
+<td align="left">+35.7 %</td>
+</tr>
+<tr class="odd">
+<td align="left">Office Supplies</td>
+<td align="left">South</td>
+<td align="left">$39,773</td>
+<td align="left">$50,809</td>
+<td align="left">+27.7 %</td>
+</tr>
+<tr class="even">
+<td align="left">Furniture</td>
+<td align="left">Central</td>
+<td align="left">$44,522</td>
+<td align="left">$49,484</td>
+<td align="left">+11.1 %</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="lectura-para-el-negocio" class="section level2 hasAnchor">
+<h2>Lectura para el negocio<a href="proyeccion.html#lectura-para-el-negocio" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Se proyectan $909,045 en 2018, +24 % frente a 2017 ($733,215). El modelo extiende el crecimiento de 2016–2017.</li>
+<li>La temporada alta (septiembre a diciembre) concentra el 50 % de las ventas del año en solo 4 meses: es el periodo para asegurar inventario y personal.</li>
+<li>Mayor crecimiento esperado: Technology en South (+41 %).</li>
+<li>Ninguna combinación cae; la de menor crecimiento es Office Supplies en Central (+3 %): vigilarla mes a mes.</li>
+<li>Usar la proyección como punto de partida para metas e inventario, ajustada con lo que el modelo no conoce: campañas, precios y competencia.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="comparacion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusiones.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": null,
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  },
+  "info": false
+});
+});
+</script>
+
+</body>
+
+</html>

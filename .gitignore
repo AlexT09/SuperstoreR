@@ -4,4 +4,6 @@
 .Ruserdata
 _bookdown_files/
 *_files/
+# Modelos guardados por el usuario; el modelo final del proyecto sí se versiona (lo usa la app)
 *.rds
+!model/artifacts/model.rds

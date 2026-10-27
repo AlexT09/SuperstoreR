@@ -1,0 +1,41 @@
+# Marco teórico {-#marco-teorico}
+
+*Conceptos clave, modelos y operacionalización de variables*
+
+## Conceptos clave
+
+- **Análisis exploratorio (EDA):** resume y visualiza los datos antes de modelar: variación de cada
+  variable (univariado) y covariación entre variables (bivariado). Sus hallazgos orientan qué
+  variables entran al modelo.
+- **Regresión supervisada:** aprende una función que relaciona variables de entrada (X) con un valor
+  numérico (y) a partir de ejemplos conocidos. Aquí y son las ventas de un mes y X lo que se sabe antes
+  de que empiece: categoría, región, mes del año e historial de ventas.
+- **Generalización y sobreajuste:** un modelo sirve si acierta en datos que no vio. Por eso se ajusta
+  con validación cruzada y se evalúa una sola vez en un periodo reservado (2017). Con datos en el
+  tiempo, el modelo nunca debe entrenar con meses posteriores a los que valida.
+
+## Modelos de regresión utilizados
+
+```{r modelos-info}
+tabla(MODELOS_INFO)
+```
+
+## Métricas de evaluación
+
+```{r metricas-info, results = "asis"}
+lista(sprintf("**%s:** %s", names(METRICAS_INFO), unlist(METRICAS_INFO)))
+```
+
+## Operacionalización de variables
+
+### Variables del dataset
+
+```{r variables-dataset}
+tabla(VARIABLES_DATASET)
+```
+
+### Variables del modelo (una fila = categoría × región × mes)
+
+```{r variables-modelo}
+tabla(VARIABLES_MODELO)
+```

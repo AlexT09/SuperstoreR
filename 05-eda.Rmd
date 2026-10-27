@@ -1,0 +1,158 @@
+# EDA {-#eda}
+
+*Análisis univariado, bivariado, en el tiempo y de atípicos: qué factores explican el nivel de ventas*
+
+Cada fila del dataset es una **línea de pedido**: un pedido puede incluir varios productos.
+
+## 1 · Análisis univariado
+
+### Resumen estadístico de Sales (USD por línea de pedido)
+
+```{r resumen}
+r <- eda_resumen(df)
+tabla(r$tabla)
+```
+
+`r r$texto`
+
+### Histograma de Sales
+
+```{r histograma}
+r <- eda_histograma(df); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Histograma de densidad de log(Sales)
+
+```{r log}
+r <- eda_log(df); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Barras: líneas de pedido por categoría
+
+```{r barras-categoria}
+r <- eda_barras(df, "Category", "Categoría", REAL); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Barras: líneas de pedido por región
+
+```{r barras-region}
+r <- eda_barras(df, "Region", "Región", "#2ca58d"); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Mapa: líneas de pedido por estado
+
+```{r mapa}
+r <- eda_mapa(df); interactivo(r$fig)
+```
+
+`r r$texto`
+
+## 2 · Análisis bivariado
+
+### Cajas: Sales por categoría
+
+```{r box-categoria}
+r <- eda_box(df, "Category", "Categoría"); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Cajas: Sales por región
+
+```{r box-region}
+r <- eda_box(df, "Region", "Región"); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Cajas: Sales por segmento
+
+```{r box-segmento}
+r <- eda_box(df, "Segment", "Segmento"); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Burbujas: líneas por categoría y región
+
+```{r burbuja}
+r <- eda_burbuja(df); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Contenedores 2D: descuento y ventas
+
+```{r bins2d}
+r <- eda_bins2d(df); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Correlación entre variables numéricas
+
+```{r correlacion}
+r <- eda_correlacion(df); interactivo(r$fig)
+```
+
+`r r$texto`
+
+## 3 · Ventas en el tiempo
+
+### Evolución mensual de ventas
+
+```{r mensual}
+r <- eda_mensual(df); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Tendencia: promedio móvil de 12 meses
+
+```{r movil}
+r <- eda_movil(df); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Estacionalidad: % de las ventas del año por mes
+
+```{r estacionalidad}
+r <- eda_estacionalidad(df); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Tendencia de ventas por categoría
+
+```{r tendencia-categoria}
+r <- eda_tendencia_categoria(df); interactivo(r$fig)
+```
+
+`r r$texto`
+
+## 4 · Atípicos y relación con el modelo
+
+### Atípicos: su peso en líneas y en ventas
+
+```{r atipicos}
+r <- eda_atipicos(df); interactivo(r$fig)
+```
+
+`r r$texto`
+
+### Dispersión con línea de tendencia: el mes contra el mismo mes del año anterior
+
+```{r dispersion}
+r <- eda_dispersion_rezago(mensual); interactivo(r$fig)
+```
+
+`r r$texto`

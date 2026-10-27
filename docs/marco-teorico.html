@@ -4,20 +4,20 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Marco teórico | Proyecto Sample Superstore</title>
-  <meta name="description" content="Análisis exploratorio de datos (EDA) del dataset Sample Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas." />
+  <title>Marco teórico | Proyección de ventas Sample Superstore</title>
+  <meta name="description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
   <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Marco teórico | Proyecto Sample Superstore" />
+  <meta property="og:title" content="Marco teórico | Proyección de ventas Sample Superstore" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:description" content="Análisis exploratorio de datos (EDA) del dataset Sample Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas." />
+  <meta property="og:description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Marco teórico | Proyecto Sample Superstore" />
+  <meta name="twitter:title" content="Marco teórico | Proyección de ventas Sample Superstore" />
   
-  <meta name="twitter:description" content="Análisis exploratorio de datos (EDA) del dataset Sample Superstore: qué factores (categoría, región, segmento) explican el nivel de ventas." />
+  <meta name="twitter:description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
   
 
 <meta name="author" content="Alex Teran y David Estrada" />
@@ -29,7 +29,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="objetivos.html"/>
+<link rel="prev" href="problema.html"/>
 <link rel="next" href="metodologia.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -51,8 +51,9 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.12.0/plotly.js"></script>
+<script src="libs/plotly-binding-4.12.1/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
@@ -144,91 +145,115 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Proyecto Sample Superstore</a></li>
+<li><a href="./">Proyección de ventas Sample Superstore</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introducción</a>
 <ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#el-problema"><i class="fa fa-check"></i>El problema</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#pregunta-problema"><i class="fa fa-check"></i>Pregunta problema</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#el-proyecto"><i class="fa fa-check"></i>El proyecto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#preguntas-del-proyecto"><i class="fa fa-check"></i>Preguntas del proyecto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#contexto"><i class="fa fa-check"></i>Contexto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#impacto-para-el-negocio"><i class="fa fa-check"></i>Impacto para el negocio</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="contexto.html"><a href="contexto.html"><i class="fa fa-check"></i>Contexto</a>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html"><i class="fa fa-check"></i>Problema y objetivos</a>
 <ul>
-<li class="chapter" data-level="" data-path="contexto.html"><a href="contexto.html#motivaci%C3%B3n"><i class="fa fa-check"></i>Motivación</a></li>
-<li class="chapter" data-level="" data-path="contexto.html"><a href="contexto.html#impacto-empresarial"><i class="fa fa-check"></i>Impacto empresarial</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html"><i class="fa fa-check"></i>Planteamiento del problema</a>
-<ul>
-<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#pregunta-problema-1"><i class="fa fa-check"></i>Pregunta problema</a></li>
-<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#por-qu%C3%A9-categor%C3%ADa-regi%C3%B3n-y-segmento"><i class="fa fa-check"></i>Por qué categoría, región y segmento</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="objetivos.html"><a href="objetivos.html"><i class="fa fa-check"></i>Objetivos</a>
-<ul>
-<li class="chapter" data-level="" data-path="objetivos.html"><a href="objetivos.html#objetivo-general"><i class="fa fa-check"></i>Objetivo general</a></li>
-<li class="chapter" data-level="" data-path="objetivos.html"><a href="objetivos.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i>Objetivos específicos</a></li>
-<li class="chapter" data-level="" data-path="objetivos.html"><a href="objetivos.html#variables-disponibles-y-su-tipo"><i class="fa fa-check"></i>Variables disponibles y su tipo</a></li>
-<li class="chapter" data-level="" data-path="objetivos.html"><a href="objetivos.html#preguntas-amplias"><i class="fa fa-check"></i>Preguntas amplias</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#planteamiento-del-problema"><i class="fa fa-check"></i>Planteamiento del problema</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#objetivo-general"><i class="fa fa-check"></i>Objetivo general</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i>Objetivos específicos</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#justificaci%C3%B3n"><i class="fa fa-check"></i>Justificación</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html"><i class="fa fa-check"></i>Marco teórico</a>
 <ul>
-<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#an%C3%A1lisis-exploratorio-eda"><i class="fa fa-check"></i>Análisis exploratorio (EDA)</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#conceptos-clave"><i class="fa fa-check"></i>Conceptos clave</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#modelos-de-regresi%C3%B3n-utilizados"><i class="fa fa-check"></i>Modelos de regresión utilizados</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#m%C3%A9tricas-de-evaluaci%C3%B3n"><i class="fa fa-check"></i>Métricas de evaluación</a></li>
 <li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#operacionalizaci%C3%B3n-de-variables"><i class="fa fa-check"></i>Operacionalización de variables</a>
 <ul>
-<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#tabla-de-operacionalizaci%C3%B3n"><i class="fa fa-check"></i>Tabla de operacionalización</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#variables-del-dataset"><i class="fa fa-check"></i>Variables del dataset</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#variables-del-modelo-una-fila-categor%C3%ADa-regi%C3%B3n-mes"><i class="fa fa-check"></i>Variables del modelo (una fila = categoría × región × mes)</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html"><i class="fa fa-check"></i>Metodología</a>
 <ul>
-<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#etl"><i class="fa fa-check"></i>ETL</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#flujo-del-proyecto"><i class="fa fa-check"></i>Flujo del proyecto</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#datos-y-unidad-de-an%C3%A1lisis"><i class="fa fa-check"></i>Datos y unidad de análisis</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#variable-objetivo"><i class="fa fa-check"></i>Variable objetivo</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#preprocesamiento-y-validaci%C3%B3n"><i class="fa fa-check"></i>Preprocesamiento y validación</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#b%C3%BAsqueda-de-hiperpar%C3%A1metros"><i class="fa fa-check"></i>Búsqueda de hiperparámetros</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html"><i class="fa fa-check"></i>ETL</a>
+<ul>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#resultado-del-etl"><i class="fa fa-check"></i>Resultado del ETL</a></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#c%C3%B3digo-datagenerate_data.r"><i class="fa fa-check"></i>Código (<code>data/generate_data.R</code>)</a></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#tabla-mensual-muestra-de-2017"><i class="fa fa-check"></i>Tabla mensual (muestra de 2017)</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html"><i class="fa fa-check"></i>EDA</a>
 <ul>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado"><i class="fa fa-check"></i>1 · Análisis univariado</a>
 <ul>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#resumen-estad%C3%ADstico-de-sales"><i class="fa fa-check"></i>Resumen estadístico de Sales</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#resumen-estad%C3%ADstico-de-sales-usd-por-l%C3%ADnea-de-pedido"><i class="fa fa-check"></i>Resumen estadístico de Sales (USD por línea de pedido)</a></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#histograma-de-sales"><i class="fa fa-check"></i>Histograma de Sales</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#densidad-de-logsales"><i class="fa fa-check"></i>Densidad de log(Sales)</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-pedidos-por-categor%C3%ADa"><i class="fa fa-check"></i>Barras: pedidos por categoría</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-pedidos-por-regi%C3%B3n"><i class="fa fa-check"></i>Barras: pedidos por región</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#mapa-pedidos-por-estado"><i class="fa fa-check"></i>Mapa: pedidos por estado</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#histograma-de-densidad-de-logsales"><i class="fa fa-check"></i>Histograma de densidad de log(Sales)</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-l%C3%ADneas-de-pedido-por-categor%C3%ADa"><i class="fa fa-check"></i>Barras: líneas de pedido por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-l%C3%ADneas-de-pedido-por-regi%C3%B3n"><i class="fa fa-check"></i>Barras: líneas de pedido por región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#mapa-l%C3%ADneas-de-pedido-por-estado"><i class="fa fa-check"></i>Mapa: líneas de pedido por estado</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado"><i class="fa fa-check"></i>2 · Análisis bivariado</a>
 <ul>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#boxplot-sales-por-categor%C3%ADa"><i class="fa fa-check"></i>Boxplot: Sales por categoría</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#boxplot-logsales-por-categor%C3%ADa"><i class="fa fa-check"></i>Boxplot: log(Sales) por categoría</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#boxplot-sales-por-regi%C3%B3n"><i class="fa fa-check"></i>Boxplot: Sales por región</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#boxplot-sales-por-segmento"><i class="fa fa-check"></i>Boxplot: Sales por segmento</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#pedidos-por-categor%C3%ADa-y-regi%C3%B3n"><i class="fa fa-check"></i>Pedidos por categoría y región</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#bins-2d-discount-vs.-sales"><i class="fa fa-check"></i>Bins 2D: Discount vs. Sales</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#correlaci%C3%B3n-entre-variables-continuas"><i class="fa fa-check"></i>Correlación entre variables continuas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-categor%C3%ADa"><i class="fa fa-check"></i>Cajas: Sales por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-regi%C3%B3n"><i class="fa fa-check"></i>Cajas: Sales por región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-segmento"><i class="fa fa-check"></i>Cajas: Sales por segmento</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#burbujas-l%C3%ADneas-por-categor%C3%ADa-y-regi%C3%B3n"><i class="fa fa-check"></i>Burbujas: líneas por categoría y región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#contenedores-2d-descuento-y-ventas"><i class="fa fa-check"></i>Contenedores 2D: descuento y ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#correlaci%C3%B3n-entre-variables-num%C3%A9ricas"><i class="fa fa-check"></i>Correlación entre variables numéricas</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#ventas-en-el-tiempo"><i class="fa fa-check"></i>3 · Ventas en el tiempo</a>
 <ul>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#evoluci%C3%B3n-mensual-de-ventas"><i class="fa fa-check"></i>Evolución mensual de ventas</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-en-el-tiempo-loess"><i class="fa fa-check"></i>Tendencia de ventas en el tiempo (loess)</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-por-categor%C3%ADa"><i class="fa fa-check"></i>Tendencia de ventas por categoría</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-por-regi%C3%B3n-facetas"><i class="fa fa-check"></i>Tendencia de ventas por región (facetas)</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-promedio-m%C3%B3vil-de-12-meses"><i class="fa fa-check"></i>Tendencia: promedio móvil de 12 meses</a></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#estacionalidad-de-las-ventas-del-a%C3%B1o-por-mes"><i class="fa fa-check"></i>Estacionalidad: % de las ventas del año por mes</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-por-categor%C3%ADa"><i class="fa fa-check"></i>Tendencia de ventas por categoría</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-y-relaci%C3%B3n-con-el-modelo"><i class="fa fa-check"></i>4 · Atípicos y relación con el modelo</a>
 <ul>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-su-peso-en-pedidos-y-en-ventas"><i class="fa fa-check"></i>Atípicos: su peso en pedidos y en ventas</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#dispersi%C3%B3n-el-mes-contra-el-mismo-mes-del-a%C3%B1o-anterior"><i class="fa fa-check"></i>Dispersión: el mes contra el mismo mes del año anterior</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-su-peso-en-l%C3%ADneas-y-en-ventas"><i class="fa fa-check"></i>Atípicos: su peso en líneas y en ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#dispersi%C3%B3n-con-l%C3%ADnea-de-tendencia-el-mes-contra-el-mismo-mes-del-a%C3%B1o-anterior"><i class="fa fa-check"></i>Dispersión con línea de tendencia: el mes contra el mismo mes del año anterior</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="dashboard.html"><a href="dashboard.html"><i class="fa fa-check"></i>Dashboard</a>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html"><i class="fa fa-check"></i>Modelos y resultados</a>
 <ul>
-<li class="chapter" data-level="" data-path="dashboard.html"><a href="dashboard.html#panel-de-ventas-sample-superstore"><i class="fa fa-check"></i>Panel de ventas · Sample Superstore</a></li>
-<li class="chapter" data-level="" data-path="dashboard.html"><a href="dashboard.html#app-shiny"><i class="fa fa-check"></i>App Shiny</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#resumen"><i class="fa fa-check"></i>Resumen</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#real-vs.-proyectado-ventas-totales-de-la-empresa-por-mes"><i class="fa fa-check"></i>Real vs. proyectado: ventas totales de la empresa por mes</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#m%C3%A9tricas-por-categor%C3%ADa-regi%C3%B3n-mes-prueba-2017"><i class="fa fa-check"></i>Métricas por categoría × región × mes (prueba 2017)</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#hiperpar%C3%A1metros-probados-con-grid-search"><i class="fa fa-check"></i>Hiperparámetros probados con Grid Search</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#hay-sobreajuste-error-en-entrenamiento-vs.-prueba"><i class="fa fa-check"></i>¿Hay sobreajuste? Error en entrenamiento vs. prueba</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#importancia-de-variables-random-forest"><i class="fa fa-check"></i>Importancia de variables (Random Forest)</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="limitaciones.html"><a href="limitaciones.html"><i class="fa fa-check"></i>Limitaciones</a>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html"><i class="fa fa-check"></i>Comparación</a>
 <ul>
-<li class="chapter" data-level="" data-path="limitaciones.html"><a href="limitaciones.html#datos"><i class="fa fa-check"></i>Datos</a></li>
-<li class="chapter" data-level="" data-path="limitaciones.html"><a href="limitaciones.html#interpretaci%C3%B3n"><i class="fa fa-check"></i>Interpretación</a></li>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html#ranking-de-modelos-mae-en-2017"><i class="fa fa-check"></i>Ranking de modelos (MAE en 2017)</a></li>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html#cu%C3%A1nto-confiar-en-la-proyecci%C3%B3n-de-un-a%C3%B1o-completo"><i class="fa fa-check"></i>¿Cuánto confiar en la proyección de un año completo?</a>
+<ul>
+<li class="chapter" data-level="" data-path="comparacion.html"><a href="comparacion.html#proyectado-solo-con-datos-hasta-2016"><i class="fa fa-check"></i>2017 proyectado solo con datos hasta 2016</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html"><i class="fa fa-check"></i>Proyección 2018</a>
+<ul>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#ventas-mensuales-real-20152017-y-proyecci%C3%B3n-2018"><i class="fa fa-check"></i>Ventas mensuales: real 2015–2017 y proyección 2018</a></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#proyecci%C3%B3n-por-categor%C3%ADa-y-regi%C3%B3n"><i class="fa fa-check"></i>Proyección por categoría y región</a></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#lectura-para-el-negocio"><i class="fa fa-check"></i>Lectura para el negocio</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i>Conclusiones</a>
 <ul>
-<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#conclusi%C3%B3n"><i class="fa fa-check"></i>Conclusión</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#an%C3%A1lisis-exploratorio"><i class="fa fa-check"></i>Análisis exploratorio</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#modelo-de-proyecci%C3%B3n"><i class="fa fa-check"></i>Modelo de proyección</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#recomendaciones-para-el-negocio"><i class="fa fa-check"></i>Recomendaciones para el negocio</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#limitaciones"><i class="fa fa-check"></i>Limitaciones</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html"><i class="fa fa-check"></i>App Shiny</a>
+<ul>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html#c%C3%B3mo-ejecutarla"><i class="fa fa-check"></i>Cómo ejecutarla</a></li>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html#estructura"><i class="fa fa-check"></i>Estructura</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/AlexT09/rbook" target="blank">Repositorio en GitHub</a></li>
@@ -242,7 +267,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Proyecto Sample Superstore</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Proyección de ventas Sample Superstore</a>
           </h1>
         </div>
 
@@ -252,103 +277,262 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="marco-teorico" class="section level1 unnumbered hasAnchor">
 <h1>Marco teórico<a href="marco-teorico.html#marco-teorico" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p><em>Conceptos clave y operacionalización de variables</em></p>
-<div id="análisis-exploratorio-eda" class="section level2 hasAnchor">
-<h2>Análisis exploratorio (EDA)<a href="marco-teorico.html#an%C3%A1lisis-exploratorio-eda" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Resume y visualiza los datos antes de sacar conclusiones: variación de cada variable (univariado) y
-covariación entre variables (bivariado).</p>
+<p><em>Conceptos clave, modelos y operacionalización de variables</em></p>
+<div id="conceptos-clave" class="section level2 hasAnchor">
+<h2>Conceptos clave<a href="marco-teorico.html#conceptos-clave" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>Análisis exploratorio (EDA):</strong> resume y visualiza los datos antes de modelar: variación de cada
+variable (univariado) y covariación entre variables (bivariado). Sus hallazgos orientan qué
+variables entran al modelo.</li>
+<li><strong>Regresión supervisada:</strong> aprende una función que relaciona variables de entrada (X) con un valor
+numérico (y) a partir de ejemplos conocidos. Aquí y son las ventas de un mes y X lo que se sabe antes
+de que empiece: categoría, región, mes del año e historial de ventas.</li>
+<li><strong>Generalización y sobreajuste:</strong> un modelo sirve si acierta en datos que no vio. Por eso se ajusta
+con validación cruzada y se evalúa una sola vez en un periodo reservado (2017). Con datos en el
+tiempo, el modelo nunca debe entrenar con meses posteriores a los que valida.</li>
+</ul>
 </div>
-<div id="operacionalización-de-variables" class="section level2 hasAnchor">
-<h2>Operacionalización de variables<a href="marco-teorico.html#operacionalizaci%C3%B3n-de-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="tabla-de-operacionalización" class="section level3 hasAnchor">
-<h3>Tabla de operacionalización<a href="marco-teorico.html#tabla-de-operacionalizaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="modelos-de-regresión-utilizados" class="section level2 hasAnchor">
+<h2>Modelos de regresión utilizados<a href="marco-teorico.html#modelos-de-regresi%C3%B3n-utilizados" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <table>
 <colgroup>
-<col width="20%" />
-<col width="20%" />
-<col width="20%" />
-<col width="20%" />
-<col width="20%" />
+<col width="10%" />
+<col width="76%" />
+<col width="12%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th>Variable</th>
-<th>Definición</th>
-<th>Tipo</th>
-<th>Escala / valores</th>
-<th>Rol</th>
+<th align="left">Modelo</th>
+<th align="left">Idea principal</th>
+<th align="left">Paquete de R</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>Sales</strong></td>
-<td>Valor monetario de la línea de pedido</td>
-<td>Numérica continua</td>
-<td>USD (≥ 0)</td>
-<td>Numérica</td>
+<td align="left">Ridge y Lasso</td>
+<td align="left">Regresión lineal con penalización (L2 y L1) que reduce el sobreajuste; Lasso puede anular variables poco útiles.</td>
+<td align="left">glmnet</td>
 </tr>
 <tr class="even">
-<td><strong>log(Sales)</strong></td>
-<td>Logaritmo natural de Sales (corrige la asimetría)</td>
-<td>Numérica continua</td>
-<td>Reales</td>
-<td>Transformación para el EDA</td>
+<td align="left">KNN</td>
+<td align="left">Promedia las ventas de los k meses más parecidos del historial.</td>
+<td align="left">propio (sin paquete)</td>
 </tr>
 <tr class="odd">
-<td><strong>Category</strong></td>
-<td>Familia de producto</td>
-<td>Categórica nominal</td>
-<td>Furniture, Office Supplies, Technology</td>
-<td>Categórica</td>
+<td align="left">Árbol de decisión</td>
+<td align="left">Divide los datos con reglas sí/no (p. ej. «¿es noviembre?») hasta agrupar meses similares.</td>
+<td align="left">rpart</td>
 </tr>
 <tr class="even">
-<td><strong>Sub-Category</strong></td>
-<td>Subcategoría de producto dentro de Category</td>
-<td>Categórica nominal</td>
-<td>17 subcategorías (p. ej. Chairs, Binders, Phones)</td>
-<td>Categórica</td>
+<td align="left">Random Forest</td>
+<td align="left">Promedia cientos de árboles entrenados con muestras distintas: más estable que un solo árbol.</td>
+<td align="left">randomForest</td>
 </tr>
 <tr class="odd">
-<td><strong>Region</strong></td>
-<td>Región geográfica del pedido</td>
-<td>Categórica nominal</td>
-<td>Central, East, South, West</td>
-<td>Categórica</td>
+<td align="left">XGBoost</td>
+<td align="left">Encadena árboles pequeños donde cada uno corrige el error de los anteriores (boosting).</td>
+<td align="left">xgboost</td>
 </tr>
 <tr class="even">
-<td><strong>Segment</strong></td>
-<td>Tipo de cliente</td>
-<td>Categórica nominal</td>
-<td>Consumer, Corporate, Home Office</td>
-<td>Categórica</td>
+<td align="left">SVR</td>
+<td align="left">Busca una función que deje la mayoría de los puntos dentro de un margen de error ε, con kernels para relaciones no lineales.</td>
+<td align="left">e1071</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="métricas-de-evaluación" class="section level2 hasAnchor">
+<h2>Métricas de evaluación<a href="marco-teorico.html#m%C3%A9tricas-de-evaluaci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><strong>MAE:</strong> Error absoluto medio: cuántos dólares se equivoca la proyección en promedio. Es la métrica principal porque se lee en dólares.</li>
+<li><strong>RMSE:</strong> Raíz del error cuadrático medio: castiga más los errores grandes (un mes muy mal proyectado pesa más).</li>
+<li><strong>R²:</strong> Proporción de la variación de las ventas que el modelo explica (1 = perfecto, 0 = igual que usar el promedio).</li>
+</ul>
+</div>
+<div id="operacionalización-de-variables" class="section level2 hasAnchor">
+<h2>Operacionalización de variables<a href="marco-teorico.html#operacionalizaci%C3%B3n-de-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="variables-del-dataset" class="section level3 hasAnchor">
+<h3>Variables del dataset<a href="marco-teorico.html#variables-del-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="8%" />
+<col width="31%" />
+<col width="11%" />
+<col width="31%" />
+<col width="17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Definición</th>
+<th align="left">Tipo</th>
+<th align="left">Escala / valores</th>
+<th align="left">Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Sales</td>
+<td align="left">Valor monetario de la línea de pedido</td>
+<td align="left">Numérica continua</td>
+<td align="left">USD (≥ 0)</td>
+<td align="left">EDA</td>
+</tr>
+<tr class="even">
+<td align="left">log(Sales)</td>
+<td align="left">Logaritmo natural de Sales (corrige la asimetría)</td>
+<td align="left">Numérica continua</td>
+<td align="left">Reales</td>
+<td align="left">EDA</td>
 </tr>
 <tr class="odd">
-<td><strong>Ship Mode</strong></td>
-<td>Modalidad de envío</td>
-<td>Categórica nominal</td>
-<td>Standard, Second, First Class, Same Day</td>
-<td>Categórica</td>
+<td align="left">Category</td>
+<td align="left">Familia de producto</td>
+<td align="left">Categórica nominal</td>
+<td align="left">Furniture, Office Supplies, Technology</td>
+<td align="left">EDA y modelo</td>
 </tr>
 <tr class="even">
-<td><strong>Quantity</strong></td>
-<td>Unidades por línea de pedido</td>
-<td>Numérica discreta</td>
-<td>Enteros (1–14)</td>
-<td>Numérica</td>
+<td align="left">Sub-Category</td>
+<td align="left">Subcategoría de producto dentro de Category</td>
+<td align="left">Categórica nominal</td>
+<td align="left">17 subcategorías (p. ej. Chairs, Binders, Phones)</td>
+<td align="left">EDA (explorador)</td>
 </tr>
 <tr class="odd">
-<td><strong>Discount</strong></td>
-<td>Descuento aplicado</td>
-<td>Numérica continua</td>
-<td>Proporción 0–0.8</td>
-<td>Numérica</td>
+<td align="left">Region</td>
+<td align="left">Región geográfica del pedido</td>
+<td align="left">Categórica nominal</td>
+<td align="left">Central, East, South, West</td>
+<td align="left">EDA y modelo</td>
 </tr>
 <tr class="even">
-<td><strong>Profit</strong></td>
-<td>Ganancia de la línea de pedido</td>
-<td>Numérica continua</td>
-<td>USD (puede ser negativa)</td>
-<td>Numérica</td>
+<td align="left">State</td>
+<td align="left">Estado de EE. UU. del pedido</td>
+<td align="left">Categórica nominal</td>
+<td align="left">49 estados</td>
+<td align="left">EDA (mapa)</td>
+</tr>
+<tr class="odd">
+<td align="left">Segment</td>
+<td align="left">Tipo de cliente</td>
+<td align="left">Categórica nominal</td>
+<td align="left">Consumer, Corporate, Home Office</td>
+<td align="left">EDA</td>
+</tr>
+<tr class="even">
+<td align="left">Ship Mode</td>
+<td align="left">Modalidad de envío</td>
+<td align="left">Categórica nominal</td>
+<td align="left">Standard, Second, First Class, Same Day</td>
+<td align="left">EDA (explorador)</td>
+</tr>
+<tr class="odd">
+<td align="left">Quantity</td>
+<td align="left">Unidades por línea de pedido</td>
+<td align="left">Numérica discreta</td>
+<td align="left">Enteros (1–14)</td>
+<td align="left">EDA (correlación)</td>
+</tr>
+<tr class="even">
+<td align="left">Discount</td>
+<td align="left">Descuento aplicado</td>
+<td align="left">Numérica continua</td>
+<td align="left">Proporción 0–0.8</td>
+<td align="left">EDA (bins 2D y correlación)</td>
+</tr>
+<tr class="odd">
+<td align="left">Profit</td>
+<td align="left">Ganancia de la línea de pedido</td>
+<td align="left">Numérica continua</td>
+<td align="left">USD (puede ser negativa)</td>
+<td align="left">EDA (correlación)</td>
+</tr>
+<tr class="even">
+<td align="left">Order Date</td>
+<td align="left">Fecha del pedido</td>
+<td align="left">Fecha</td>
+<td align="left">2014-01-03 a 2017-12-30</td>
+<td align="left">EDA y modelo (mes)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="variables-del-modelo-una-fila-categoría-región-mes" class="section level3 hasAnchor">
+<h3>Variables del modelo (una fila = categoría × región × mes)<a href="marco-teorico.html#variables-del-modelo-una-fila-categor%C3%ADa-regi%C3%B3n-mes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="18%" />
+<col width="40%" />
+<col width="13%" />
+<col width="8%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Definición</th>
+<th align="left">Tipo</th>
+<th align="left">Escala / valores</th>
+<th align="left">Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Ventas del mes</td>
+<td align="left">Suma de Sales de una categoría en una región durante un mes</td>
+<td align="left">Numérica continua</td>
+<td align="left">USD</td>
+<td align="left">Lo que se proyecta</td>
+</tr>
+<tr class="even">
+<td align="left">Índice de ventas</td>
+<td align="left">Ventas del mes ÷ promedio de los 12 meses anteriores (1.3 = 30 % más que el promedio)</td>
+<td align="left">Numérica continua</td>
+<td align="left">≥ 0</td>
+<td align="left">Variable objetivo (y)</td>
+</tr>
+<tr class="odd">
+<td align="left">Categoría</td>
+<td align="left">Familia de producto de la serie</td>
+<td align="left">Categórica nominal (one-hot)</td>
+<td align="left">3 valores</td>
+<td align="left">Variable independiente</td>
+</tr>
+<tr class="even">
+<td align="left">Región</td>
+<td align="left">Región de la serie</td>
+<td align="left">Categórica nominal (one-hot)</td>
+<td align="left">4 valores</td>
+<td align="left">Variable independiente</td>
+</tr>
+<tr class="odd">
+<td align="left">Mes del año</td>
+<td align="left">Posición del mes en el año como punto en un círculo (seno y coseno)</td>
+<td align="left">Numérica continua</td>
+<td align="left">−1 a 1</td>
+<td align="left">Variable independiente (estacionalidad)</td>
+</tr>
+<tr class="even">
+<td align="left">Ventas del mismo mes del año anterior</td>
+<td align="left">Ventas de hace 12 meses ÷ promedio de 12 meses</td>
+<td align="left">Numérica continua</td>
+<td align="left">≥ 0</td>
+<td align="left">Variable independiente</td>
+</tr>
+<tr class="odd">
+<td align="left">Ventas del mes anterior</td>
+<td align="left">Ventas de hace 1 mes ÷ promedio de 12 meses</td>
+<td align="left">Numérica continua</td>
+<td align="left">≥ 0</td>
+<td align="left">Variable independiente</td>
+</tr>
+<tr class="even">
+<td align="left">Promedio de los últimos 3 meses</td>
+<td align="left">Media de los 3 meses previos ÷ promedio de 12 meses</td>
+<td align="left">Numérica continua</td>
+<td align="left">≥ 0</td>
+<td align="left">Variable independiente (ritmo reciente)</td>
 </tr>
 </tbody>
 </table>
@@ -356,23 +540,12 @@ covariación entre variables (bivariado).</p>
 </div>
 </div>
 </div>
-<script>
-// Oculta el código de cada gráfica detrás de "Mostrar código" (el ETL queda visible: clase .nofold)
-document.querySelectorAll("div.sourceCode").forEach(function (div) {
-  if (div.querySelector("pre.nofold") || div.closest("details")) return;
-  var details = document.createElement("details");
-  details.className = "code-fold";
-  details.innerHTML = "<summary>Mostrar código</summary>";
-  div.parentNode.insertBefore(details, div);
-  details.appendChild(div);
-});
-</script>
             </section>
 
           </div>
         </div>
       </div>
-<a href="objetivos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="problema.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="metodologia.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

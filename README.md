@@ -1,119 +1,132 @@
-# Proyecto Sample Superstore — bookdown (R)
+# Proyección de ventas Sample Superstore — R (Shiny + bookdown)
 
-Análisis exploratorio de datos (EDA) del dataset **Sample Superstore** para responder la
-pregunta de negocio: **¿qué factores (categoría, región, segmento) explican el nivel de ventas?**
+Análisis y proyección de ventas del dataset **Sample Superstore** (2014–2017), en dos partes:
+
+1. **EDA:** ¿qué factores (categoría, región, segmento, tiempo) explican el nivel de ventas?
+2. **Machine learning:** ¿cuánto venderá cada categoría en cada región, mes a mes, durante 2018?
+
+Es la versión en R del proyecto [proyecto_superstorep2](https://github.com/AlexT09/proyecto_superstorep2)
+(Python + Dash), con la misma metodología, las mismas pestañas y el mismo diseño.
 
 Libro publicado: **https://alext09.github.io/rbook/**
 
+## Contenido
+
+- **App Shiny** (`app/`) con la estructura del capítulo *Visualización con shiny* del curso
+  (`global.R`, `ui.R`, `server.R`, `shinydashboard`), con una sección del menú por etapa del proyecto.
+- **Libro bookdown** (capítulos `.Rmd`, publicado desde `docs/`) con el mismo contenido en formato de lectura.
+
+Los dos usan el mismo código (`R/`), así que muestran exactamente las mismas gráficas, cifras e
+interpretaciones. Las gráficas siguen las técnicas del capítulo de visualización del curso (histograma,
+barras, mapa, cajas con `stat_summary`, burbujas, contenedores 2D, correlación y dispersión con línea de
+tendencia) hechas con **ggplot2** y vueltas interactivas con `ggplotly`.
+
+| Pestaña / capítulo | Qué muestra |
+|---|---|
+| Introducción · Problema y objetivos · Marco teórico · Metodología | Planteamiento, modelos, variables y flujo |
+| ETL | Del CSV crudo a la tabla mensual que usa el modelo |
+| EDA | Distribución de las ventas, factores, estacionalidad, tendencia, atípicos y relación con el mes del año anterior |
+| Modelos y resultados | 7 modelos evaluados en 2017, rejillas de Grid Search, sobreajuste e importancia de variables |
+| Comparación | Ranking de los modelos frente a la referencia y prueba de la proyección a 12 meses |
+| Proyección 2018 | Proyección por categoría, región y mes, con su error típico (filtrable en la app) |
+| Entrenamiento del modelo (solo app) | Entrena el modelo elegido al presionar un botón y permite guardarlo como `.rds` |
+| Predicción (solo app) | Formulario con ejemplos de temporada alta y baja: carga `model.rds` y predice las ventas de un mes |
+| Conclusiones | Hallazgos, recomendaciones y limitaciones |
+
+## Modelo
+
+- **Qué predice:** las ventas del mes de cada categoría × región (12 series × 48 meses).
+- **Variables:** categoría, región, mes del año y el historial de ventas (mismo mes del año anterior,
+  mes anterior, promedio de 3 meses), todas conocidas antes de empezar el mes.
+- **Objetivo:** un índice, ventas del mes ÷ promedio de los 12 meses anteriores. Se convierte a
+  dólares al final, así la misma regla sirve para series grandes y pequeñas.
+- **Modelos:** Ridge y Lasso (`glmnet`), KNN (propio), Árbol de decisión (`rpart`), Random Forest
+  (`randomForest`), XGBoost (`xgboost`) y SVR (`e1071`), con el mismo preprocesamiento (one-hot +
+  estandarización).
+- **Ajuste:** Grid Search con validación cruzada temporal (4 pliegues de 3 meses).
+- **Evaluación:** entrenamiento 2015–2016, prueba 2017, contra la referencia "repetir el mismo mes
+  del año anterior". El mejor modelo se elige por validación cruzada, no por la prueba. El árbol de
+  decisión individual se compara pero no es elegible como modelo final, por inestable.
+- **Proyección 2018:** recursiva, mes a mes. Se valida igual: proyectando 2017 completo solo con
+  datos hasta 2016.
+
+Resultado actual: Random Forest, MAE por serie de $2.697 frente a $2.912 de la referencia. En la
+prueba a 12 meses el total anual quedó a +4,4 % del real (la referencia, a −16,9 %). Proyección 2018:
+$909.045 (+24 % frente a 2017).
+
 ## Requisitos
 
-- **R** 4.1 o superior, con los paquetes `bookdown`, `tidyverse` y `plotly`
-- **pandoc** (viene incluido con RStudio)
-- Para la app Shiny: `shiny`, `shinydashboard`, `DT`, `caret` y `randomForest`
+- **R** 4.1 o superior y **RStudio** (trae pandoc, que necesita el libro)
+- Paquetes:
 
 ```r
-install.packages(c("bookdown", "tidyverse", "plotly",
-                   "shiny", "shinydashboard", "DT", "caret", "randomForest"))
+install.packages(c("shiny", "shinydashboard", "DT", "ggplot2", "plotly", "scales", "maps", "dplyr", "tidyr",
+                   "readr", "lubridate", "jsonlite", "glmnet", "rpart", "randomForest", "xgboost", "e1071",
+                   "bookdown", "knitr"))
 ```
 
-## Cómo construir el libro
+## Cómo usar el proyecto
 
-Desde RStudio (abriendo `Rbook.Rproj`) o desde una terminal:
+Abre `Rbook.Rproj` en RStudio (o una consola de R en la raíz del repositorio).
+
+**App Shiny:**
+
+```r
+shiny::runApp("app")
+```
+
+**Libro** (queda en `docs/`, que es lo que publica GitHub Pages):
 
 ```powershell
 Rscript build.R
 ```
 
-El libro queda en `docs/`, que es la carpeta que publica GitHub Pages (rama `main`, carpeta `/docs`).
-`build.R` construye el libro con `bookdown::render_book()` y copia el dashboard a `docs/dashboard/`.
-
-Para verlo con el panel de ventas funcionando, sírvelo por HTTP:
+Los datos procesados y los resultados del modelo ya vienen en el repositorio. Si cambias el CSV
+original o el modelo, regenera en este orden:
 
 ```powershell
-python -m http.server 8000 --directory docs
-```
-
-Y abre **http://localhost:8000**. Abriendo `docs/index.html` con doble clic se ven todos los
-capítulos y gráficas, pero el panel de ventas no carga sus datos (usa `fetch`).
-
-## Capítulos
-
-| Capítulo | Archivo | Pestaña de la app |
-|---|---|---|
-| Introducción | `index.Rmd` | Introducción |
-| Contexto | `01-contexto.Rmd` | Contexto |
-| Planteamiento del problema | `02-problema.Rmd` | Problema |
-| Objetivos | `03-objetivos.Rmd` | Objetivos |
-| Marco teórico | `04-marco-teorico.Rmd` | Marco teórico |
-| Metodología (ETL) | `05-metodologia.Rmd` | Metodología |
-| EDA | `06-eda.Rmd` | EDA |
-| Dashboard (panel de ventas y app Shiny) | `07-dashboard.Rmd` | — |
-| Limitaciones | `08-limitaciones.Rmd` | Limitaciones |
-| Conclusiones | `09-conclusiones.Rmd` | Conclusiones |
-
-El ETL (`05-metodologia.Rmd`) se ejecuta al construir el libro: lee `Sample - Superstore.csv` y
-escribe `superstore_transformado.csv`, que es el que usa el EDA.
-
-## Gráficas
-
-Las gráficas del EDA se hacen con el paquete **plotly** de R, con los mismos tipos, colores y estilo
-que la app (`R/common.R` es el equivalente de `common.py`). La curva loess usa `stats::lowess()`, el
-mismo algoritmo que `trendline="lowess"` de plotly en Python. El código de cada gráfica está oculto
-detrás de "Mostrar código" (`code-folding.html`).
-
-## Dashboard
-
-`dashboard/` contiene el **panel de ventas**: una página estática con el proyecto completo (EDA,
-modelos, proyección 2018 y conclusiones). `panel_ventas.html` lee `panel_data.json`, que tiene los
-resultados del modelo del proyecto de machine learning
-([proyecto_superstorep2](https://github.com/AlexT09/proyecto_superstorep2), app Dash). El panel vive
-solo en los libros: GitHub Pages no puede ejecutar la app Dash, pero sí esta página.
-
-## App Shiny (`shiny/`)
-
-App con **shinydashboard** y la estructura del capítulo *Visualización con shiny* del curso:
-
-```
-shiny/
-├── global.R                     # Librerías, carga de datos y preprocesamiento (tabla mensual)
-├── ui.R                         # dashboardPage(): cabecera, menú lateral y pestañas
-├── server.R                     # Lógica reactiva de cada pestaña
-├── superstore_transformado.csv
-└── www/
-    └── logo.svg
-```
-
-- **Análisis Exploratorio:** `valueBox` con el resumen del dataset, gráfico interactivo
-  (`ggplotly`) según la variable y el tipo de gráfico, filtro por año y tabla con `DT`.
-- **Entrenamiento del Modelo:** regresión lineal o Random Forest con `caret::train()`, al
-  presionar el botón (`observeEvent`). Los meses se dividen en orden (por defecto, 2015–2016 para
-  entrenar y 2017 para probar) y se comparan contra la referencia "mismo mes del año anterior".
-  El botón *Guardar Modelo* lo guarda como `.rds`.
-- **Predicciones:** formulario con categoría, región, mes e historia de la serie, botones de
-  ejemplo (temporada alta y baja) y predicción con `eventReactive`, mostrada en un `infoBox`.
-
-Para ejecutarla, desde la raíz del repositorio:
-
-```r
-shiny::runApp("shiny")
+Rscript data/generate_data.R      # CSV crudo -> superstore_transformado.csv y ventas_mensuales.csv
+Rscript model/train_model.R       # entrena y compara (~25 s) -> model/artifacts/
+Rscript build.R                   # libro -> docs/
 ```
 
 ## Estructura
 
 ```
-├── index.Rmd … 09-conclusiones.Rmd   # Capítulos
-├── _bookdown.yml          # Orden de los capítulos y carpeta de salida (docs/)
-├── _output.yml            # Formato gitbook
-├── R/common.R             # Paleta, style_fig() y lowess_line()
-├── build.R                # Construye el libro en docs/
-├── code-folding.html      # "Mostrar código" en cada gráfica
-├── style.css
-├── dashboard/             # Panel de ventas (se copia a docs/dashboard/)
-├── shiny/                 # App Shiny (global.R, ui.R, server.R, www/)
-├── Sample - Superstore.csv
-├── superstore_transformado.csv
-└── docs/                  # Libro generado (GitHub Pages)
+├── app/                       # App Shiny (estructura del curso)
+│   ├── global.R               # Librerías, código compartido, datos y resultados del modelo
+│   ├── ui.R                   # dashboardPage(): cabecera, menú lateral y una pestaña por sección
+│   ├── server.R               # Lógica reactiva de cada sección
+│   └── www/                   # Logo, favicon y ajustes de estilo (custom.css)
+├── R/                         # Código compartido por la app y el libro
+│   ├── common.R               # Rutas, carga de datos y resultados, colores y estilo de las figuras
+│   ├── eda.R                  # Gráficas del EDA (ggplot2, técnicas del curso) e interpretaciones
+│   ├── resultados.R           # Gráficas y textos de modelos, comparación y proyección
+│   └── contenido.R            # Textos y tablas fijas (objetivos, variables, limitaciones…)
+├── data/
+│   ├── raw/                   # Dataset original
+│   ├── generate_data.R        # ETL
+│   ├── superstore_transformado.csv
+│   └── ventas_mensuales.csv   # Categoría × región × mes (entrada del modelo)
+├── model/
+│   ├── features.R             # Variables y preprocesamiento
+│   ├── modelos.R              # Los 7 modelos y sus rejillas de hiperparámetros
+│   ├── evaluate.R             # Métricas e importancia de variables
+│   ├── entrenamiento.R        # Validación cruzada temporal, Grid Search y proyección recursiva
+│   ├── train_model.R          # Entrena, compara y proyecta 2018
+│   └── artifacts/             # model.rds, resultados, predicciones y proyección (generados)
+├── index.Rmd … 10-app-shiny.Rmd   # Capítulos del libro
+├── _bookdown.yml · _output.yml    # Configuración del libro
+├── build.R                    # Construye el libro en docs/
+├── style.css                  # Estilo del libro
+└── docs/                      # Libro generado (GitHub Pages)
 ```
+
+## Problemas comunes
+
+- **`there is no package called ...`:** instala los paquetes de la sección Requisitos.
+- **El libro no compila (`pandoc` no encontrado):** ejecútalo desde RStudio, que trae pandoc.
+- **Las pestañas del modelo dicen "Modelo no entrenado":** ejecuta `Rscript model/train_model.R`.
 
 ---
 

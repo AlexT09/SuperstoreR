@@ -1,0 +1,29 @@
+# Proyección 2018 {-#proyeccion}
+
+*Ventas esperadas por mes con `r resumen$mejor_modelo`, reentrenado con 2015–2017*
+
+## Ventas mensuales: real 2015–2017 y proyección 2018
+
+```{r proyeccion}
+interactivo(fig_proyeccion())
+```
+
+La banda muestra el error típico de una proyección a 12 meses (±`r pct(error_esperado(), 0)` para el
+total de la empresa), medido al proyectar 2017 sin conocerlo. Para una sola categoría en una región el
+error es mayor, porque al sumar series los errores se compensan. En la [app Shiny](#app-shiny) se
+puede filtrar por categoría y región.
+
+## Proyección por categoría y región
+
+```{r tabla-series}
+tabla_series() %>%
+  transmute(`Categoría` = Category, `Región` = Region, `Ventas 2017` = usd(v2017),
+            `Proyección 2018` = usd(v2018), `Variación` = pct(crec, signo = TRUE)) %>%
+  tabla()
+```
+
+## Lectura para el negocio
+
+```{r lectura, results = "asis"}
+lista(lectura_negocio())
+```

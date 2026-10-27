@@ -1,0 +1,8 @@
+variable,importancia,std,nombre
+mes_sin,0.01812,0.01134,Mes del año (seno)
+r_lag_12,0.01618,0.01072,Ventas del mismo mes del año anterior (relativas)
+mes_cos,0.00966,0.01334,Mes del año (coseno)
+r_prom_3m,0.00253,0.00936,Promedio de los últimos 3 meses (relativo)
+Region,-0.00107,0.0041,Región
+Category,-0.00209,0.00201,Categoría
+r_lag_1,-0.00478,0.00332,Ventas del mes anterior (relativas)

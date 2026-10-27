@@ -1,17 +1,23 @@
-p.caption { color: #777; margin-top: 10px; }
-p code { white-space: inherit; }
-pre { word-break: normal; word-wrap: normal; }
-pre code { white-space: inherit; }
+/* Estilo del libro: mismos colores que la app (azul = real, ámbar = proyección), sobre fondo claro. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* Subtítulo de cada capítulo */
-.subtitulo { color: #6b6f85; font-style: italic; margin-top: -0.6em; }
+.book .book-body .page-wrapper .page-inner section.normal { font-family: 'Inter', 'Segoe UI', sans-serif; color: #2b3140; }
+.book .book-body .page-wrapper .page-inner section.normal h1 { font-weight: 600; letter-spacing: -.01em; }
+.book .book-body .page-wrapper .page-inner section.normal h2 {
+  font-weight: 600; font-size: 1.25em; padding-left: 10px; border-left: 3px solid #f0b851; margin-top: 1.8em;
+}
+.book .book-body .page-wrapper .page-inner section.normal h3 { font-weight: 600; font-size: 1.05em; color: #2f6fa8; }
+.book .book-body .page-wrapper .page-inner section.normal h1 + p em { color: #6b7385; }
+.book .book-body .page-wrapper .page-inner section.normal a { color: #2f6fa8; }
 
-/* Bloques de código plegables */
-details.code-fold { margin: 0.6em 0 1em; border-left: 3px solid #2E6F95; background: #f7f9fb; }
-details.code-fold > summary { cursor: pointer; padding: 6px 12px; font-weight: 600; color: #1F5570; }
-details.code-fold[open] > summary { border-bottom: 1px solid #e3e8ee; }
-details.code-fold div.sourceCode { margin: 0; }
-
-/* Tabla de resumen y de operacionalización */
+/* Tablas */
+.book .book-body .page-wrapper .page-inner section.normal table { font-size: .9em; }
+.book .book-body .page-wrapper .page-inner section.normal table th { background: #eaf3fb; color: #1f2430; }
 .book .book-body .page-wrapper .page-inner section.normal table td,
-.book .book-body .page-wrapper .page-inner section.normal table th { padding: 6px 12px; }
+.book .book-body .page-wrapper .page-inner section.normal table th { padding: 6px 12px; border-color: #e3e8ee; }
+
+/* Código del ETL */
+.book .book-body .page-wrapper .page-inner section.normal pre { background: #f5f8fb; border-left: 3px solid #4a93e6; }
+
+/* Menú lateral: capítulo activo en azul */
+.book .book-summary ul.summary li.active > a { color: #2f6fa8; font-weight: 600; }

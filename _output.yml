@@ -1,12 +1,10 @@
 bookdown::gitbook:
   css: style.css
   number_sections: false
-  includes:
-    after_body: code-folding.html
   config:
     toc:
       before: |
-        <li><a href="./">Proyecto Sample Superstore</a></li>
+        <li><a href="./">Proyección de ventas Sample Superstore</a></li>
       after: |
         <li><a href="https://github.com/AlexT09/rbook" target="blank">Repositorio en GitHub</a></li>
     edit: null

@@ -1,0 +1,29 @@
+# Problema y objetivos {-#problema}
+
+*Qué buscamos explicar, qué buscamos predecir y para qué*
+
+## Planteamiento del problema
+
+Las ventas de Superstore varían según qué se vende (categoría), dónde (región), a quién (segmento) y
+cuándo (mes y año). Sin entender esos factores, la empresa planifica metas e inventario con base en
+intuición, y no puede anticipar los meses de mayor o menor demanda.
+
+- **Pregunta 1 (EDA):** `r PREGUNTAS[1]`
+- **Pregunta 2 (modelo):** `r PREGUNTAS[2]`
+
+## Objetivo general
+
+`r OBJETIVO_GENERAL`
+
+## Objetivos específicos
+
+```{r objetivos, results = "asis"}
+lista(OBJETIVOS_ESPECIFICOS, numerada = TRUE)
+```
+
+## Justificación
+
+Las ventas tienen un patrón estacional claro (suben hacia fin de año) y una tendencia de crecimiento
+desde 2016, como muestra el EDA. Ese comportamiento repetible es lo que hace posible proyectarlas. Se
+proyecta por categoría y región porque es el nivel al que se fijan metas e inventario, y porque a
+nivel de producto o de día los datos son demasiado escasos y ruidosos.

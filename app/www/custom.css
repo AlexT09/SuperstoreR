@@ -1,0 +1,168 @@
+/* Diseño de la app (shinydashboard / AdminLTE).
+   Una sola paleta en toda la app, la misma de las gráficas:
+   azul = ventas reales, ámbar = proyección, verde = mejor resultado, coral = alerta. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --tinta: #1f2430;          /* texto principal */
+  --tinta-2: #4b5263;        /* texto secundario */
+  --tinta-3: #7a8494;        /* notas */
+  --linea: #e3e8ee;
+  --fondo: #f3f6f9;
+  --petroleo: #0f3b57;       /* cabecera */
+  --petroleo-2: #134a6b;
+  --menu: #0b2233;           /* menú lateral */
+  --azul: #4a93e6;
+  --celeste: #5fa3c0;
+  --navy: #1f3a5f;
+  --ambar: #e0a030;
+  --verde: #2ca58d;
+  --coral: #e66767;
+  --sombra: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
+}
+
+/* ---------------------------------------------------------------- base */
+body, .content-wrapper, .main-sidebar, .main-header, h1, h2, h3, h4, .box-title {
+  font-family: 'Inter', 'Segoe UI', -apple-system, sans-serif !important;
+}
+.content-wrapper, .right-side { background: var(--fondo) !important; }
+.content { padding: 22px 26px; }
+body { color: var(--tinta); -webkit-font-smoothing: antialiased; }
+
+/* ---------------------------------------------------------------- cabecera */
+.skin-blue .main-header .logo { background: var(--petroleo) !important; font-weight: 600; font-size: 17px; letter-spacing: -.01em; }
+.skin-blue .main-header .logo:hover { background: var(--petroleo) !important; }
+.skin-blue .main-header .navbar { background: var(--petroleo-2) !important; }
+.skin-blue .main-header .navbar .sidebar-toggle:hover { background: rgba(255,255,255,.08) !important; }
+
+/* ---------------------------------------------------------------- menú lateral */
+.skin-blue .main-sidebar, .skin-blue .left-side { background: var(--menu) !important; }
+.skin-blue .sidebar-menu > li.header {
+  background: transparent !important; color: rgba(255,255,255,.42) !important;
+  font-size: 11px; font-weight: 600; letter-spacing: .09em; padding: 18px 15px 6px;
+}
+.skin-blue .sidebar-menu > li > a { color: rgba(255,255,255,.78); border-left: 3px solid transparent; font-size: 14px; }
+.skin-blue .sidebar-menu > li > a:hover, .skin-blue .sidebar-menu > li.active > a, .skin-blue .sidebar-menu > li.menu-open > a {
+  background: rgba(255,255,255,.07) !important; color: #fff !important; border-left-color: var(--ambar) !important;
+}
+.skin-blue .sidebar-menu .treeview-menu { background: rgba(0,0,0,.18) !important; }
+.skin-blue .sidebar-menu .treeview-menu > li > a { color: rgba(255,255,255,.65); }
+.skin-blue .sidebar-menu .treeview-menu > li.active > a, .skin-blue .sidebar-menu .treeview-menu > li > a:hover { color: #fff !important; }
+.sidebar-menu > li > a > .fa, .sidebar-menu > li > a > .fas, .sidebar-menu > li > a > svg { width: 20px; opacity: .85; }
+
+/* ---------------------------------------------------------------- encabezado de cada página */
+.encabezado { margin: 0 0 18px; }
+.encabezado h2 { margin: 0; font-size: 26px; font-weight: 700; color: var(--tinta); letter-spacing: -.02em; }
+.encabezado p { margin: 4px 0 0; color: var(--tinta-3); font-size: 15px; }
+
+/* ---------------------------------------------------------------- cajas: blancas, sombra suave y franja de color */
+.box {
+  background: #fff; border: none !important; border-top: 3px solid var(--azul) !important;
+  border-radius: 10px; box-shadow: var(--sombra); margin-bottom: 20px;
+}
+.box.box-solid > .box-header, .box > .box-header {
+  background: #fff !important; color: var(--tinta) !important; border-bottom: 1px solid var(--linea);
+  border-radius: 10px 10px 0 0; padding: 12px 16px;
+}
+.box > .box-header .box-title { font-size: 15px; font-weight: 600; }
+.box > .box-body { padding: 14px 16px 16px; }
+.box > .box-header .btn-box-tool { color: var(--tinta-3) !important; }
+.box.box-primary, .box.box-solid.box-primary { border-top-color: var(--azul) !important; }
+.box.box-info, .box.box-solid.box-info { border-top-color: var(--celeste) !important; }
+.box.box-success, .box.box-solid.box-success { border-top-color: var(--verde) !important; }
+.box.box-warning, .box.box-solid.box-warning { border-top-color: var(--ambar) !important; }
+.box.box-danger, .box.box-solid.box-danger { border-top-color: var(--coral) !important; }
+.box ul, .box ol { padding-left: 20px; }
+.box li { margin-bottom: 6px; line-height: 1.5; }
+
+/* Cajas de la misma fila con la misma altura */
+.content .row { display: flex; flex-wrap: wrap; }
+.content .row > [class*="col-"] { display: flex; flex-direction: column; }
+.content .row > [class*="col-"] > .box, .content .row > [class*="col-"] > .small-box,
+.content .row > [class*="col-"] > .info-box { flex: 1 1 auto; }
+.content .box .row { display: block; }
+.content .box .row > [class*="col-"] { display: block; }
+
+/* ---------------------------------------------------------------- cifras clave (valueBox): tarjeta blanca */
+.small-box {
+  background: #fff !important; color: var(--tinta) !important; border-radius: 10px; box-shadow: var(--sombra);
+  border-left: 4px solid var(--azul); margin-bottom: 20px; min-height: 104px;
+}
+.small-box .inner { padding: 16px 18px; text-align: left; padding-right: 76px; }
+.small-box h3 { font-size: 28px; font-weight: 700; color: var(--tinta); letter-spacing: -.02em; margin: 0 0 4px; white-space: nowrap; }
+.small-box p { font-size: 13px; color: var(--tinta-2); margin: 0; line-height: 1.35; }
+.small-box .icon-large {
+  position: absolute; bottom: auto;
+  top: 50%; right: 18px; transform: translateY(-50%); font-size: 22px !important;
+  width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  color: var(--azul) !important; background: rgba(74,147,230,.12); opacity: 1;
+}
+.small-box .icon-large > * { font-size: 22px !important; }
+.small-box:hover .icon-large { font-size: 22px !important; }
+.small-box.bg-navy { border-left-color: var(--navy); }       .small-box.bg-navy .icon-large { color: var(--navy) !important; background: rgba(31,58,95,.10); }
+.small-box.bg-light-blue { border-left-color: var(--celeste); } .small-box.bg-light-blue .icon-large { color: var(--celeste) !important; background: rgba(95,163,192,.14); }
+.small-box.bg-yellow { border-left-color: var(--ambar); }   .small-box.bg-yellow .icon-large { color: var(--ambar) !important; background: rgba(224,160,48,.14); }
+.small-box.bg-green { border-left-color: var(--verde); }    .small-box.bg-green .icon-large { color: var(--verde) !important; background: rgba(44,165,141,.13); }
+.small-box.bg-red { border-left-color: var(--coral); }      .small-box.bg-red .icon-large { color: var(--coral) !important; background: rgba(230,103,103,.13); }
+
+/* infoBox (predicción) */
+.info-box { border-radius: 10px; box-shadow: var(--sombra); min-height: 86px; }
+.info-box-icon { border-radius: 10px 0 0 10px; height: 86px; line-height: 86px; }
+.info-box-text { font-size: 12px; color: var(--tinta-3); letter-spacing: .04em; }
+.info-box-number { font-size: 22px; font-weight: 700; color: var(--tinta); }
+.info-box .progress-description, .info-box-content span:last-child { color: var(--tinta-2); font-size: 12px; }
+
+/* ---------------------------------------------------------------- interpretación de cada gráfica: recuadro "Lectura" */
+.texto-grafico {
+  margin-top: 12px; padding: 10px 14px; background: #f7f9fc; border-left: 3px solid var(--ambar);
+  border-radius: 0 8px 8px 0; color: var(--tinta-2); font-size: 13px; line-height: 1.55;
+}
+.texto-grafico::before {
+  content: "LECTURA"; display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .1em;
+  color: #b07a12; margin-bottom: 2px;
+}
+
+/* ---------------------------------------------------------------- indicador de carga mientras se calcula una gráfica */
+.shiny-bound-output.recalculating { opacity: .45; position: relative; }
+.html-widget-output.recalculating::after {
+  content: ""; position: absolute; top: 50%; left: 50%; width: 34px; height: 34px; margin: -17px 0 0 -17px;
+  border: 3px solid #dbe5ee; border-top-color: var(--azul); border-radius: 50%; animation: girar .8s linear infinite;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+
+/* ---------------------------------------------------------------- tablas (DT) */
+table.dataTable { font-size: 13px; color: var(--tinta); }
+table.dataTable thead th { background: #f4f7fb; color: var(--tinta-2); font-weight: 600; border-bottom: 1px solid var(--linea) !important; }
+table.dataTable tbody tr:hover { background: #f7fafd !important; }
+.dt-buttons .btn, .dt-buttons .dt-button, button.dt-button {
+  background: #fff !important; border: 1px solid var(--linea) !important; border-radius: 6px !important;
+  color: var(--tinta-2) !important; font-size: 12px !important; padding: 4px 10px !important; margin-bottom: 8px;
+}
+.dt-buttons .dt-button:hover { border-color: var(--azul) !important; color: var(--azul) !important; }
+
+/* ---------------------------------------------------------------- formularios y botones */
+.form-control, .selectize-input { border-radius: 6px !important; border-color: #d5dde6 !important; box-shadow: none !important; }
+.form-control:focus, .selectize-input.focus { border-color: var(--azul) !important; }
+label { font-weight: 600; color: var(--tinta-2); font-size: 13px; }
+.btn { border-radius: 6px; font-weight: 500; }
+.btn-primary { background: var(--azul); border-color: var(--azul); }
+.btn-success { background: var(--verde); border-color: var(--verde); }
+.btn-warning { background: var(--ambar); border-color: var(--ambar); }
+.irs--shiny .irs-bar, .irs--shiny .irs-from, .irs--shiny .irs-to, .irs--shiny .irs-single { background: var(--azul); border-color: var(--azul); }
+.help-block { color: var(--tinta-3); font-size: 12.5px; }
+
+/* ---------------------------------------------------------------- código del ETL y pie */
+pre.codigo { font-size: 12px; max-height: 420px; overflow: auto; background: #f7f9fc; border: 1px solid var(--linea); border-radius: 8px; color: var(--tinta); }
+.pie { text-align: center; color: var(--tinta-3); font-size: 12.5px; margin: 10px 0 4px; }
+
+/* ---------------------------------------------------------------- celular */
+@media (max-width: 767px) {
+  .content { padding: 14px 12px; }
+  .encabezado h2 { font-size: 21px; }
+  .small-box h3 { font-size: 23px; }
+  .content .row > [class*="col-"] { width: 100%; }
+}
+
+/* Barra de filtros del resumen: caja delgada sin título */
+.box-body.barra-filtros { padding: 10px 16px 0; }
+.barra-filtros .help-block { margin-top: 30px; }

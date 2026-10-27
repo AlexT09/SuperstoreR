@@ -1,0 +1,35 @@
+# ETL {-#etl}
+
+*Extracción, transformación y carga: de las líneas de pedido a la tabla del modelo*
+
+## Resultado del ETL
+
+```{r etl-resumen}
+tabla(tibble(
+  `Líneas de pedido` = num(nrow(df)),
+  Periodo = paste(format(min(df$Order_Date)), "a", format(max(df$Order_Date))),
+  `Valores faltantes` = num(sum(is.na(df))),
+  `Filas duplicadas` = num(sum(duplicated(df))),
+  `Tabla mensual` = sprintf("%d filas (%d meses sin ventas)", nrow(mensual), sum(mensual$Sales == 0))
+))
+```
+
+## Código (`data/generate_data.R`)
+
+```{r etl-codigo, echo = TRUE, eval = FALSE, code = readLines("data/generate_data.R", encoding = "UTF-8")}
+```
+
+Las fechas vienen como texto mes/día/año y se convierten a tipo fecha con `mdy()`. La tabla mensual
+incluye todas las combinaciones de categoría, región y mes: si en un mes no hubo pedidos, la venta
+queda en 0 en vez de desaparecer, para que cada serie tenga sus 48 meses completos.
+
+## Tabla mensual (muestra de 2017)
+
+```{r etl-muestra}
+mensual %>% filter(year(Mes) == 2017) %>% head(8) %>%
+  transmute(`Categoría` = Category, `Región` = Region, Mes = format(Mes, "%Y-%m"), `Ventas (USD)` = usd(Sales, 2)) %>%
+  tabla()
+```
+
+Cada fila es una categoría en una región durante un mes. Es la unidad que el modelo proyecta: 3
+categorías × 4 regiones = 12 series.
