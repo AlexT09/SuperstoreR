@@ -208,6 +208,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-en-el-tiempo-loess"><i class="fa fa-check"></i>Tendencia de ventas en el tiempo (loess)</a></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-por-categor%C3%ADa"><i class="fa fa-check"></i>Tendencia de ventas por categoría</a></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-por-regi%C3%B3n-facetas"><i class="fa fa-check"></i>Tendencia de ventas por región (facetas)</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#estacionalidad-de-las-ventas-del-a%C3%B1o-por-mes"><i class="fa fa-check"></i>Estacionalidad: % de las ventas del año por mes</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-y-relaci%C3%B3n-con-el-modelo"><i class="fa fa-check"></i>4 · Atípicos y relación con el modelo</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-su-peso-en-pedidos-y-en-ventas"><i class="fa fa-check"></i>Atípicos: su peso en pedidos y en ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#dispersi%C3%B3n-el-mes-contra-el-mismo-mes-del-a%C3%B1o-anterior"><i class="fa fa-check"></i>Dispersión: el mes contra el mismo mes del año anterior</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="dashboard.html"><a href="dashboard.html"><i class="fa fa-check"></i>Dashboard</a>
@@ -255,6 +261,10 @@ explica diferencias en el valor de venta — Technology y Furniture tienen pedid
 grandes, mientras que Office Supplies domina en volumen pero con pedidos de menor valor.</p>
 <p><code>Region</code> y <code>Segment</code> muestran diferencias más leves. El descuento no se relaciona linealmente con las
 ventas, como se observa en el gráfico de bins 2D.</p>
+<p>Los pedidos atípicos (regla del rango intercuantil) son el 11.7 % de los pedidos pero el 64 % de las
+ventas: son el núcleo del negocio y no se eliminan. En el tiempo, las ventas tienen un patrón
+estacional que se repite cada año (bajas en enero y febrero, altas de septiembre a diciembre), y cada
+mes se parece al mismo mes del año anterior: esa es la relación que usa el modelo de proyección.</p>
 
 </div>
 </div>

@@ -1,6 +1,6 @@
 # EDA {-#eda}
 
-*Análisis univariado y bivariado: qué factores explican el nivel de ventas*
+*Análisis univariado, bivariado, en el tiempo y de atípicos: qué factores explican el nivel de ventas*
 
 ```{r eda-setup}
 source("R/common.R")
@@ -315,3 +315,90 @@ subplot(paneles, nrows = 2, shareX = TRUE, shareY = TRUE, margin = c(0.015, 0.01
 
 West tiene mayor estabilidad y niveles de venta ligeramente más altos en comparación con las demás a
 lo largo del tiempo.
+
+### Estacionalidad: % de las ventas del año por mes
+
+```{r estacionalidad}
+MESES <- c("Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic")
+estac <- df %>%
+  mutate(anio = year(Order_Date), m = month(Order_Date)) %>%
+  group_by(anio, m) %>% summarise(Sales = sum(Sales), .groups = "drop") %>%
+  group_by(anio) %>% mutate(pct = Sales / sum(Sales) * 100) %>% ungroup()
+z <- estac %>% select(anio, m, pct) %>% pivot_wider(names_from = m, values_from = pct) %>% arrange(anio)
+zm <- as.matrix(z[, as.character(1:12)])
+plot_ly(x = MESES, y = as.character(z$anio), z = zm, type = "heatmap", xgap = 3, ygap = 3,
+        colorscale = list(c(0, BRAND_LIGHT), c(0.5, PASTEL[["pink"]]), c(1, BRAND_DARKER)),
+        text = round(zm, 1), texttemplate = "%{text}", colorbar = list(title = "% del año"),
+        hovertemplate = "%{y} · %{x}: %{z:.1f} % del año<extra></extra>") %>%
+  layout(yaxis = list(autorange = "reversed", title = ""), xaxis = list(title = "")) %>%
+  style_fig(340)
+```
+
+Cada fila suma el 100 % de las ventas del año. El patrón se repite los cuatro años: enero y febrero
+son los meses más bajos (entre 1 % y 6 % del año cada uno) y septiembre, noviembre y diciembre los más
+altos (entre 11 % y 17 %). Esta estacionalidad es la que aprovecha el modelo de proyección.
+
+## 4 · Atípicos y relación con el modelo
+
+### Atípicos: su peso en pedidos y en ventas
+
+```{r atipicos}
+q <- quantile(df$Sales, c(.25, .75))
+limite <- q[[2]] + 1.5 * (q[[2]] - q[[1]])
+atipico <- df$Sales > limite
+pct_ped <- mean(atipico) * 100
+pct_ven <- sum(df$Sales[atipico]) / sum(df$Sales) * 100
+grupos <- c("Pedidos", "Ventas (USD)")
+plot_ly(x = grupos, y = c(100 - pct_ped, 100 - pct_ven), type = "bar",
+        name = paste0("Normales (≤ $", format(round(limite), big.mark = ","), ")"),
+        marker = list(color = PASTEL[["green"]]), text = paste0(round(c(100 - pct_ped, 100 - pct_ven), 1), " %"),
+        textposition = "inside") %>%
+  add_trace(y = c(pct_ped, pct_ven), name = paste0("Atípicos (> $", format(round(limite), big.mark = ","), ")"),
+            marker = list(color = BRAND_DARKER), text = paste0(round(c(pct_ped, pct_ven), 1), " %"),
+            textfont = list(color = "white")) %>%
+  layout(barmode = "stack", yaxis = list(title = "% del total", ticksuffix = " %", range = c(0, 100)),
+         xaxis = list(title = "")) %>%
+  style_fig(340)
+```
+
+Con la regla del rango intercuantil (atípico si supera Q3 + 1.5 × RIC = $`r format(round(limite), big.mark = ",")`),
+`r format(sum(atipico), big.mark = ",")` pedidos son atípicos: el `r round(pct_ped, 1)` % de los pedidos,
+pero el `r round(pct_ven)` % de las ventas. No son errores de captura sino los pedidos grandes que
+sostienen el negocio, por eso el ETL no los elimina. Estos pedidos explican los picos de algunos meses,
+y por eso el modelo trabaja con ventas mensuales y no por pedido.
+
+### Dispersión: el mes contra el mismo mes del año anterior
+
+```{r dispersion-rezago}
+# Índice del mes = ventas del mes ÷ promedio de los 12 meses anteriores (la variable que proyecta el modelo)
+serie <- df %>%
+  mutate(Mes = floor_date(Order_Date, "month")) %>%
+  group_by(Category, Region, Mes) %>% summarise(Sales = sum(Sales), .groups = "drop") %>%
+  complete(Category, Region, Mes = seq(as.Date("2014-01-01"), as.Date("2017-12-01"), by = "month"),
+           fill = list(Sales = 0)) %>%
+  group_by(Category, Region) %>% arrange(Mes, .by_group = TRUE) %>%
+  mutate(prom_12m = as.numeric(stats::filter(lag(Sales), rep(1 / 12, 12), sides = 1)),
+         indice = Sales / prom_12m, r_lag_12 = lag(Sales, 12) / prom_12m, r_lag_1 = lag(Sales) / prom_12m) %>%
+  ungroup() %>% filter(!is.na(indice), !is.na(r_lag_12), is.finite(indice))
+r12 <- cor(serie$indice, serie$r_lag_12)
+r1 <- cor(serie$indice, serie$r_lag_1)
+ajuste <- coef(lm(indice ~ r_lag_12, data = serie))
+xs <- range(serie$r_lag_12)
+p <- plot_ly()
+for (cat in orden("Category")) {
+  d <- serie %>% filter(Category == cat)
+  p <- p %>% add_markers(data = d, x = ~r_lag_12, y = ~indice, name = cat,
+                         marker = list(color = CATEGORY_ACCENT[[cat]], size = 7, opacity = .75, line = WHITE_LINE))
+}
+p %>%
+  add_lines(x = xs, y = ajuste[[1]] + ajuste[[2]] * xs, name = "Tendencia (mínimos cuadrados)",
+            line = list(color = ACCENT[["peach"]], width = 3)) %>%
+  layout(xaxis = list(title = "Índice del mismo mes del año anterior"), yaxis = list(title = "Índice del mes")) %>%
+  style_fig(340)
+```
+
+Cada punto es una categoría en una región durante un mes (2015–2017), en índice: ventas del mes ÷
+promedio de los 12 meses anteriores. La línea sube: un mes que vendió por encima de lo normal el año
+pasado tiende a repetirlo (correlación `r round(r12, 2)`). Con el mes anterior la correlación es casi
+nula (`r round(r1, 2)`). Es la relación que usa el modelo de proyección: pesa el mismo mes del año
+anterior, no el mes anterior. La nube es ancha, por eso el error por serie es alto.

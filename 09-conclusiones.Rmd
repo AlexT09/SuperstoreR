@@ -11,3 +11,8 @@ grandes, mientras que Office Supplies domina en volumen pero con pedidos de meno
 
 `Region` y `Segment` muestran diferencias más leves. El descuento no se relaciona linealmente con las
 ventas, como se observa en el gráfico de bins 2D.
+
+Los pedidos atípicos (regla del rango intercuantil) son el 11.7 % de los pedidos pero el 64 % de las
+ventas: son el núcleo del negocio y no se eliminan. En el tiempo, las ventas tienen un patrón
+estacional que se repite cada año (bajas en enero y febrero, altas de septiembre a diciembre), y cada
+mes se parece al mismo mes del año anterior: esa es la relación que usa el modelo de proyección.

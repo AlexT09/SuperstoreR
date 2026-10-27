@@ -566,7 +566,7 @@ mensual.to_csv("data/ventas_mensuales.csv", index=False)       <span class="c">#
   <section class="view" id="v-eda" aria-label="EDA">
     <div class="scroll">
       <h2>Análisis exploratorio (EDA)</h2>
-      <p class="intro">Análisis univariado y bivariado: qué factores explican el nivel de ventas.</p>
+      <p class="intro">Análisis univariado, bivariado, en el tiempo y de atípicos: qué factores explican el nivel de ventas.</p>
       <h4>1 · Análisis univariado</h4>
       <div class="glass panel"><h3>Resumen estadístico de Sales</h3><div class="stats" id="eda-stats"></div>
         <p class="note" data-t="resumen"></p></div>
@@ -590,6 +590,13 @@ mensual.to_csv("data/ventas_mensuales.csv", index=False)       <span class="c">#
         <div class="glass panel"><h3>Tendencia: promedio móvil de 12 meses</h3><div class="plot" id="p-movil"></div><p class="note" data-t="tendencia"></p></div>
         <div class="glass panel"><h3>Estacionalidad: % de las ventas del año por mes</h3><div class="plot" id="p-estac"></div><p class="note" data-t="estacionalidad"></p></div>
         <div class="glass panel"><h3>Tendencia de ventas por categoría</h3><div class="q">Las líneas son el promedio móvil de 12 meses</div><div class="plot" id="p-tcat"></div><p class="note" data-t="tendencia_categoria"></p></div>
+      </div>
+      <h4>4 · Atípicos y relación con el modelo</h4>
+      <div class="grid">
+        <div class="glass panel"><h3>Atípicos: su peso en pedidos y en ventas</h3><div class="q">Regla del rango intercuantil</div>
+          <div class="plot" id="p-atip"></div><p class="note" id="atip-note"></p></div>
+        <div class="glass panel"><h3>Dispersión: el mes contra el mismo mes del año anterior</h3><div class="q">En índice: ventas del mes ÷ promedio de los 12 meses anteriores</div>
+          <div class="plot" id="p-disp"></div><p class="note" id="disp-note"></p></div>
       </div>
       <div class="pager"></div>
     </div>
@@ -712,11 +719,11 @@ mensual.to_csv("data/ventas_mensuales.csv", index=False)       <span class="c">#
       <p class="intro">Lo que aprendimos, qué recomendamos y qué tener en cuenta.</p>
       <div class="grid">
         <div class="glass panel"><h3>Análisis exploratorio</h3><div class="prose">
-          <p>La distribución de <code>Sales</code> es muy sesgada hacia valores bajos, con pocos pedidos de alto valor.
-            <code>Category</code> es el factor que más explica diferencias en el valor de venta: Technology y Furniture tienen
+          <p>La distribución de <code>Sales</code> es muy sesgada hacia valores bajos, con pocos pedidos de alto valor:
+            los atípicos son el 11.7 % de los pedidos pero el 64 % de las ventas, así que no se eliminan. <code>Category</code> es el factor que más explica diferencias en el valor de venta: Technology y Furniture tienen
             pedidos más grandes, mientras que Office Supplies domina en volumen con pedidos de menor valor.</p>
-          <p><code>Region</code> y <code>Segment</code> muestran diferencias leves. El descuento no se relaciona linealmente
-            con las ventas. En el tiempo, las ventas tienen un patrón estacional que se repite cada año y crecen desde 2016.</p></div></div>
+          <p><code>Region</code> y <code>Segment</code> muestran diferencias leves. En el tiempo, las ventas tienen un patrón
+            estacional que se repite cada año (bajas en enero y febrero, altas de septiembre a diciembre) y crecen desde 2016.</p></div></div>
         <div class="glass panel"><h3>Modelo de proyección</h3><div class="prose"><ul id="concl-modelo"></ul></div></div>
         <div class="glass panel"><h3>Recomendaciones para el negocio</h3><div class="prose"><ol>
           <li>Planificar inventario y personal para septiembre a diciembre a partir de la proyección mensual, sobre todo en
@@ -1088,6 +1095,56 @@ function renderEda() {
     return [puntos(y, C.cat[c], { name: n, showlegend: false, marker: { color: C.cat[c], size: 6, opacity: .55 } }),
       { x, y: movil(y), name: n, mode: "lines", line: { color: C.cat[c], width: 3 }, hovertemplate: "%{y:$,.0f}<extra>" + n + " (promedio móvil)</extra>" }];
   }), tiempo({ showlegend: true, margin: { l: 56, r: 14, t: 34, b: 36 } }));
+
+  // atípicos: regla del rango intercuantil (Q3 + 1.5 × RIC), su peso en pedidos y en ventas
+  const ord = P.sales.slice().sort((a, b) => a - b);
+  const cuantil = q => { const h = (ord.length - 1) * q, i = Math.floor(h); return ord[i] + (h - i) * ((ord[i + 1] ?? ord[i]) - ord[i]); };
+  const q1 = cuantil(.25), q3 = cuantil(.75), lim = q3 + 1.5 * (q3 - q1);
+  const atip = P.sales.filter(v => v > lim), pPed = atip.length / P.sales.length * 100, pVen = sum(atip) / sum(P.sales) * 100;
+  const limTxt = "$" + Math.round(lim).toLocaleString("en-US"), grupos = ["Pedidos", "Ventas (USD)"];
+  plot("p-atip", [
+    { type: "bar", x: grupos, y: [100 - pPed, 100 - pVen], name: `Normales (≤ ${limTxt})`, marker: { color: C.real },
+      text: [100 - pPed, 100 - pVen].map(v => v.toFixed(1) + " %"), textposition: "inside", hoverinfo: "skip" },
+    { type: "bar", x: grupos, y: [pPed, pVen], name: `Atípicos (> ${limTxt})`, marker: { color: C.proySoft },
+      text: [pPed, pVen].map(v => v.toFixed(1) + " %"), textposition: "inside", textfont: { color: "#04121b" }, hoverinfo: "skip" },
+  ], base({ barmode: "stack", showlegend: true, margin: { l: 56, r: 14, t: 34, b: 36 }, xaxis: { ...NOGRID },
+            yaxis: ax({ range: [0, 100], ticksuffix: " %", title: { text: "% del total" } }) }));
+  $("atip-note").textContent = `Con la regla del rango intercuantil (atípico si supera Q3 + 1.5 × RIC = ${limTxt}), ` +
+    `${atip.length.toLocaleString("en-US")} pedidos son atípicos: el ${pPed.toFixed(1)} % de los pedidos, pero el ` +
+    `${pVen.toFixed(0)} % de las ventas. No son errores de captura sino los pedidos grandes que sostienen el negocio, por eso ` +
+    `el ETL no los elimina. Estos pedidos explican los picos de algunos meses, y por eso el modelo trabaja con ventas ` +
+    `mensuales y no por pedido.`;
+
+  // dispersión: índice del mes vs. índice del mismo mes del año anterior (2015–2017, una serie por categoría × región)
+  const pts = D.cats.map(() => []), todos = [];
+  D.cats.forEach((_, c) => D.regs.forEach((_, r) => {
+    const y = D.real[c][r];
+    for (let t = 12; t < y.length; t++) {
+      const prom = sum(y.slice(t - 12, t)) / 12;
+      if (prom > 0) { const e = [y[t - 12] / prom, y[t] / prom, y[t - 1] / prom]; pts[c].push(e); todos.push(e); }
+    }
+  }));
+  const corr = (a, b) => {
+    const ma = sum(a) / a.length, mb = sum(b) / b.length;
+    const cov = sum(a.map((v, i) => (v - ma) * (b[i] - mb))), va = sum(a.map(v => (v - ma) ** 2)), vb = sum(b.map(v => (v - mb) ** 2));
+    return cov / Math.sqrt(va * vb);
+  };
+  const xs = todos.map(e => e[0]), ys = todos.map(e => e[1]), r12 = corr(xs, ys), r1 = corr(todos.map(e => e[2]), ys);
+  const mx = sum(xs) / xs.length, my = sum(ys) / ys.length;
+  const pend = sum(xs.map((v, i) => (v - mx) * (ys[i] - my))) / sum(xs.map(v => (v - mx) ** 2)), inter = my - pend * mx;
+  const xr = [Math.min(...xs), Math.max(...xs)];
+  plot("p-disp", [
+    ...D.cats.map((n, c) => ({ type: "scatter", mode: "markers", name: n, x: pts[c].map(e => e[0]), y: pts[c].map(e => e[1]),
+      marker: { color: C.cat[c], size: 7, opacity: .75, line: { color: "rgba(4,18,27,.85)", width: 1 } },
+      hovertemplate: "%{x:.2f} → %{y:.2f}<extra>" + n + "</extra>" })),
+    { x: xr, y: xr.map(v => inter + pend * v), mode: "lines", name: "Tendencia (mínimos cuadrados)",
+      line: { color: C.proySoft, width: 3 }, hoverinfo: "skip" },
+  ], base({ showlegend: true, margin: { l: 56, r: 14, t: 34, b: 40 },
+            xaxis: ax({ title: { text: "Índice del mismo mes del año anterior" } }), yaxis: ax({ title: { text: "Índice del mes" } }) }));
+  $("disp-note").textContent = `Cada punto es una categoría en una región durante un mes (2015–2017). La línea sube: un mes que ` +
+    `vendió por encima de lo normal el año pasado tiende a repetirlo (correlación ${r12.toFixed(2)}). Con el mes anterior la ` +
+    `correlación es casi nula (${r1.toFixed(2)}). Es la relación que usa el modelo: pesa el mismo mes del año anterior, no el ` +
+    `mes anterior. La nube es ancha, por eso el error por serie es alto.`;
 }
 
 // ---------- Detalle ----------
