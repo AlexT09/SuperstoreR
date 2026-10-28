@@ -1,7 +1,7 @@
 # R/eda.R — Gráficas e interpretaciones del análisis exploratorio (las usan la app y el libro).
 #
 # Cada gráfica sigue la técnica del capítulo de visualización del curso (ggplot2 + ggplotly):
-# histograma, gráfico de barras, mapa, gráfico de caja con resumen (stat_summary), burbujas (geom_count),
+# histograma, gráfico de barras, mapa (sf + geom_sf), gráfico de caja con resumen (stat_summary), burbujas (geom_count),
 # contenedores 2D (geom_bin2d), correlación (geom_tile), dispersión con línea de tendencia (geom_smooth).
 #
 # Cada función devuelve list(fig = <ggplot>, texto = "<interpretación>"); las cifras de los textos se
@@ -75,25 +75,6 @@ eda_barras <- function(df, col, xlabel, color = REAL) {
   list(fig = fig, texto = texto)
 }
 
-eda_mapa <- function(df) {
-  # Mapa coroplético por estado (capítulo de visualización geográfica del curso)
-  t <- df %>% count(State, Region) %>% mutate(region = tolower(State))
-  estados <- map_data("state") %>% left_join(t, by = "region")
-  top <- t %>% arrange(desc(n)) %>% head(3)
-  fig <- ggplot(estados, aes(long, lat, group = group, fill = n,
-                             text = sprintf("%s (%s): %s líneas", State, Region, num(n)))) +
-    geom_polygon(color = "white", linewidth = .2) +
-    scale_fill_gradient(low = "#eaf3fb", high = "#1f5570", na.value = "#f0f0f0", name = "Líneas") +
-    coord_fixed(1.3) +
-    theme_void() + theme(legend.position = "right")
-  texto <- sprintf(paste(
-    "Las líneas de pedido se concentran en pocos estados: %s suman el %s del total y son los estados con más",
-    "líneas de sus regiones. Por eso West y East lideran en volumen. En el otro extremo, %d estados tienen menos",
-    "de 10 líneas."),
-    enumerar(sprintf("%s (%s)", top$State, num(top$n))), pct(sum(top$n) / nrow(df) * 100), sum(t$n < 10))
-  list(fig = fig, texto = texto)
-}
-
 # ---------------------------------------------------------------- bivariado
 eda_box <- function(df, col, xlabel) {
   niveles <- sort(unique(df[[col]]))
@@ -129,20 +110,28 @@ eda_box <- function(df, col, xlabel) {
 }
 
 eda_burbuja <- function(df) {
-  # Covariación entre dos variables categóricas con el gráfico de burbuja (geom_count)
-  t <- df %>% count(Category, Region)
-  fig <- ggplot(df, aes(x = Category, y = Region, color = Category)) +
-    geom_count(aes(text = after_stat(paste0("Líneas: ", n))), alpha = .8) +
-    scale_size_area(max_size = 18, name = "Líneas") +
-    scale_color_manual(values = CATEGORY_COLORS, guide = "none") +
-    labs(x = "Categoría", y = "Región")
-  mayor <- t %>% slice_max(n, n = 1)
-  menor <- t %>% slice_min(n, n = 1)
+  # Gráfico de burbuja: volumen (líneas) contra valor (venta mediana) por subcategoría; tamaño = ventas totales
+  t <- df %>% group_by(Category, sub = `Sub-Category`) %>%
+    summarise(ventas = sum(Sales), lineas = n(), mediana = median(Sales), .groups = "drop") %>%
+    mutate(share = ventas / sum(ventas) * 100)
+  fig <- ggplot(t, aes(lineas, mediana, size = ventas, color = Category,
+                       text = sprintf("%s<br>Líneas: %s<br>Venta mediana: %s<br>Ventas totales: %s (%s)",
+                                      sub, num(lineas), usd(mediana), usd(ventas), pct(share)))) +
+    geom_point(alpha = .8) +
+    geom_text(aes(label = sub), size = 3, color = "#3b4252", position = position_nudge(y = .14), show.legend = FALSE) +
+    scale_size_continuous(range = c(3, 16), guide = "none") +
+    scale_y_log10(labels = dolares) +
+    scale_color_manual(values = CATEGORY_COLORS, name = NULL) +
+    labs(x = "Líneas de pedido (volumen)", y = "Venta mediana por línea (USD, escala log)")
+  top <- t %>% arrange(desc(ventas))
+  b <- function(s) t[t$sub == s, ]
   texto <- sprintf(paste(
-    "Cada burbuja es una combinación de categoría y región; su tamaño es el número de líneas. La más grande es",
-    "%s en %s (%s líneas) y la más pequeña %s en %s (%s). Office Supplies tiene la burbuja más grande en las",
-    "cuatro regiones: el volumen depende sobre todo de la categoría."),
-    mayor$Category, mayor$Region, num(mayor$n), menor$Category, menor$Region, num(menor$n))
+    "Gráfico de burbujas: cada una es una subcategoría y su tamaño son sus ventas totales. %s y %s lideran (cada",
+    "una con el %s del total) combinando volumen y valor. Binders tiene el mayor volumen (%s líneas) pero una",
+    "mediana de solo %s, y Copiers lo contrario: %s líneas con una mediana de %s. Qué producto se vende es el",
+    "factor que más diferencia el valor de cada línea."),
+    top$sub[1], top$sub[2], pct(top$share[1], 0), num(b("Binders")$lineas), usd(b("Binders")$mediana),
+    num(b("Copiers")$lineas), usd(b("Copiers")$mediana))
   list(fig = fig, texto = texto)
 }
 
@@ -172,22 +161,25 @@ eda_bins2d <- function(df) {
 }
 
 eda_correlacion <- function(df) {
-  # Gráfico de correlación entre variables numéricas. Escala divergente: rojo negativo, blanco 0, azul positivo.
-  vars <- c("Sales", "Quantity", "Discount", "Profit")
-  m <- cor(df[vars])
+  # Correlación de Sales con las otras variables numéricas. Profit no entra: es consecuencia de la venta.
+  # Escala divergente: rojo negativo, blanco 0, azul positivo.
+  vars <- c(Sales = "Ventas", Quantity = "Cantidad", Discount = "Descuento")
+  m <- cor(df[names(vars)])
+  dimnames(m) <- list(unname(vars), unname(vars))
   t <- as.data.frame(as.table(m)) %>% setNames(c("x", "y", "r")) %>%
-    mutate(y = factor(y, levels = rev(vars)))
+    mutate(x = factor(x, levels = vars), y = factor(y, levels = rev(vars)))
   fig <- ggplot(t, aes(x, y, fill = r, text = sprintf("%s y %s: %.2f", x, y, r))) +
     geom_tile(color = "white") +
     geom_text(aes(label = sprintf("%.2f", r)), size = 4) +
     scale_fill_gradient2(low = "#d64545", mid = "white", high = "#2f6fa8", midpoint = 0, limits = c(-1, 1), name = "r") +
     coord_fixed() + labs(x = NULL, y = NULL)
-  par <- function(a, b) m[a, b]
+  med <- df %>% group_by(Quantity) %>% summarise(m = median(Sales), .groups = "drop")
   texto <- sprintf(paste(
-    "Sales y Profit tienen la correlación más alta (%.2f, positiva moderada): a mayor venta, mayor ganancia.",
-    "Discount y Profit tienen correlación negativa (%.2f): más descuento se asocia con menos ganancia. Sales y",
-    "Quantity es débil (%.2f) y Sales y Discount es casi nula (%.2f). En rojo, las correlaciones negativas."),
-    par("Sales", "Profit"), par("Discount", "Profit"), par("Sales", "Quantity"), par("Sales", "Discount"))
+    "Correlación de Pearson de Sales con las otras variables numéricas de cada línea de pedido. Con la cantidad es",
+    "positiva pero débil (%.2f): la venta mediana sube de %s con 1 unidad a %s con 5, pero el precio del producto",
+    "pesa más que las unidades. Con el descuento es prácticamente nula (%.2f). Profit no se incluye porque es una",
+    "consecuencia de la venta, no un factor que la explique."),
+    m["Ventas", "Cantidad"], usd(med$m[med$Quantity == 1]), usd(med$m[med$Quantity == 5]), m["Ventas", "Descuento"])
   list(fig = fig, texto = texto)
 }
 
@@ -358,4 +350,52 @@ grafico_explorador <- function(d, variable, tipo) {
       p
     }
   }
+}
+
+# ---------------------------------------------------------------- geografía y otros factores de las ventas
+ventas_estado <- function(df) {
+  df %>% group_by(State, Region) %>%
+    summarise(ventas = sum(Sales), mediana = median(Sales), lineas = n(), .groups = "drop") %>%
+    mutate(share = ventas / sum(ventas) * 100, region = tolower(State)) %>% arrange(desc(ventas))
+}
+
+mapa_estados <- function(t, col, nombre, etiquetas) {
+  # Mapa coroplético con sf y geom_sf (capítulo de visualización geográfica del curso): los límites de los
+  # estados vienen del paquete maps y se convierten en un objeto sf con st_as_sf(). En gris, estados sin dato.
+  estados <- sf::st_as_sf(maps::map("state", plot = FALSE, fill = TRUE)) %>%
+    rename(region = ID) %>% left_join(t, by = "region") %>%
+    mutate(info = ifelse(is.na(State), "Sin dato",
+                         sprintf("%s (%s)<br>Ventas totales: %s<br>Venta mediana por línea: %s<br>Líneas: %s",
+                                 State, Region, usd(ventas), usd(mediana, 1), num(lineas))))
+  ggplot(estados) +
+    geom_sf(aes(fill = .data[[col]], text = info), color = "white", linewidth = .2) +
+    scale_fill_gradient(low = "#eaf3fb", high = "#1f5570", na.value = "#c9ced8", name = nombre, labels = etiquetas) +
+    coord_sf(crs = 5070) + # proyección cónica de Albers, la habitual para mapas de EE. UU.
+    theme_void() + theme(legend.position = "right")
+}
+
+eda_mapa <- function(df) {
+  # Ventas totales (Sales) por estado
+  t <- ventas_estado(df)
+  top <- head(t, 4)
+  fig <- mapa_estados(t, "ventas", "Ventas", scales::label_dollar(scale = 1e-3, suffix = "k"))
+  texto <- sprintf(paste(
+    "Ventas totales (Sales) por estado. Se concentran en pocos estados: %s suman el %s del total, y solo %s",
+    "aporta el %s. El estado explica mucho del total vendido, sobre todo por el número de pedidos."),
+    enumerar(top$State), pct(sum(top$share), 0), top$State[1], pct(top$share[1], 0))
+  list(fig = fig, texto = texto)
+}
+
+eda_mapa_mediana <- function(df) {
+  # Venta mediana por línea de pedido: la mediana con pocas líneas no es estable, solo estados con 30 o más
+  t <- ventas_estado(df)
+  ok <- t %>% filter(lineas >= 30)
+  fig <- mapa_estados(ok, "mediana", "Mediana", dolares)
+  g <- head(t, 3)
+  texto <- sprintf(paste(
+    "Venta mediana por línea de pedido en cada estado (solo los %d con 30 líneas o más; en gris, el resto). Va de",
+    "%s a %s: el valor de cada compra cambia poco entre estados. Los que más venden en total no son los de compras",
+    "más grandes (%s): su ventaja es el volumen. Por eso el modelo trabaja por región y no por estado."),
+    nrow(ok), usd(min(ok$mediana)), usd(max(ok$mediana)), enumerar(sprintf("%s %s", g$State, usd(g$mediana))))
+  list(fig = fig, texto = texto)
 }

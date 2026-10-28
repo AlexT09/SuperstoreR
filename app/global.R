@@ -31,7 +31,7 @@ resumen_eda <- eda_resumen(df)
 eda <- suppressWarnings(list(
   hist = eda_histograma(df), log = eda_log(df),
   bar_cat = eda_barras(df, "Category", "Categoría", REAL), bar_reg = eda_barras(df, "Region", "Región", "#2ca58d"),
-  mapa = eda_mapa(df),
+  mapa = eda_mapa(df), mapa_med = eda_mapa_mediana(df),
   box_cat = eda_box(df, "Category", "Categoría"), box_reg = eda_box(df, "Region", "Región"),
   box_seg = eda_box(df, "Segment", "Segmento"),
   burbuja = eda_burbuja(df), bins = eda_bins2d(df), corr = eda_correlacion(df),

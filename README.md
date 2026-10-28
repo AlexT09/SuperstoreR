@@ -25,7 +25,7 @@ tendencia) hechas con **ggplot2** y vueltas interactivas con `ggplotly`.
 |---|---|
 | Introducción · Problema y objetivos · Marco teórico · Metodología | Planteamiento, modelos, variables y flujo |
 | ETL | Del CSV crudo a la tabla mensual que usa el modelo |
-| EDA | Distribución de las ventas, factores, estacionalidad, tendencia, atípicos y relación con el mes del año anterior |
+| EDA | Distribución de las ventas, factores, estacionalidad, tendencia, atípicos, relación con el mes del año anterior, mapas por estado (sf + geom_sf), correlación, contenedores 2D y burbujas por subcategoría |
 | Modelos y resultados | 7 modelos evaluados en 2017, ranking frente a la referencia, rejillas de Grid Search, sobreajuste, importancia de variables y prueba de la proyección a 12 meses |
 | Proyección 2018 | Proyección por categoría, región y mes, con su error típico (filtrable en la app) |
 | Entrenamiento del modelo (solo app) | Entrena el modelo elegido al presionar un botón y permite guardarlo como `.rds` |
@@ -59,7 +59,7 @@ $909.045 (+24 % frente a 2017).
 - Paquetes:
 
 ```r
-install.packages(c("shiny", "shinydashboard", "DT", "ggplot2", "plotly", "scales", "maps", "dplyr", "tidyr",
+install.packages(c("shiny", "shinydashboard", "DT", "ggplot2", "plotly", "scales", "maps", "sf", "dplyr", "tidyr",
                    "readr", "lubridate", "jsonlite", "glmnet", "rpart", "randomForest", "xgboost", "e1071",
                    "bookdown", "knitr"))
 ```

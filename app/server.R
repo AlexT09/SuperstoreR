@@ -14,7 +14,7 @@ server <- function(input, output, session) {
   # --- Gráficas fijas: cada ggplot se vuelve interactivo con ggplotly ---
   output$etl_fig <- renderPlotly(interactivo(fig_etl()))
   graficas_eda <- c(eda_hist = "hist", eda_log = "log", eda_bar_cat = "bar_cat", eda_bar_reg = "bar_reg",
-                    eda_mapa = "mapa", eda_box_cat = "box_cat", eda_box_reg = "box_reg", eda_box_seg = "box_seg",
+                    eda_mapa = "mapa", eda_mapa_med = "mapa_med", eda_box_cat = "box_cat", eda_box_reg = "box_reg", eda_box_seg = "box_seg",
                     eda_burbuja = "burbuja", eda_bins = "bins", eda_corr = "corr", eda_mensual = "mensual",
                     eda_movil = "movil", eda_estac = "estac", eda_tend_cat = "tend_cat", eda_atip = "atip",
                     eda_disp = "disp")

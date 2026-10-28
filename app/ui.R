@@ -28,6 +28,7 @@ ui <- dashboardPage(skin = "blue",
                menuSubItem("Bivariado", tabName = "eda_bi"),
                menuSubItem("Ventas en el tiempo", tabName = "eda_tiempo"),
                menuSubItem("Atípicos y relación con el modelo", tabName = "eda_atip"),
+               menuSubItem("Geografía y otros factores", tabName = "eda_geo"),
                menuSubItem("Explorador interactivo", tabName = "eda_explorador")),
       tags$li(class = "header", "MODELO"),
       menuItem("Modelos y resultados", tabName = "modelos", icon = icon("gears")),
@@ -223,21 +224,15 @@ ui <- dashboardPage(skin = "blue",
         fluidRow(caja_grafico("Histograma de Sales", "eda_hist", eda$hist$texto),
                  caja_grafico("Histograma de densidad de log(Sales)", "eda_log", eda$log$texto)),
         fluidRow(caja_grafico("Barras: líneas de pedido por categoría", "eda_bar_cat", eda$bar_cat$texto, status = "info"),
-                 caja_grafico("Barras: líneas de pedido por región", "eda_bar_reg", eda$bar_reg$texto, status = "info")),
-        fluidRow(caja_grafico("Mapa: líneas de pedido por estado", "eda_mapa", eda$mapa$texto, width = 12,
-                              status = "success", alto = "420px"))
+                 caja_grafico("Barras: líneas de pedido por región", "eda_bar_reg", eda$bar_reg$texto, status = "info"))
       ),
 
       # ------------------------------------------------------------ EDA: bivariado
       tabItem(tabName = "eda_bi",
-        encabezado("Análisis bivariado", "Cómo cambian las ventas según categoría, región, segmento y descuento"),
+        encabezado("Análisis bivariado", "Cómo cambian las ventas según categoría, región y segmento"),
         fluidRow(caja_grafico("Cajas: Sales por categoría", "eda_box_cat", eda$box_cat$texto, width = 4),
                  caja_grafico("Cajas: Sales por región", "eda_box_reg", eda$box_reg$texto, width = 4),
-                 caja_grafico("Cajas: Sales por segmento", "eda_box_seg", eda$box_seg$texto, width = 4)),
-        fluidRow(caja_grafico("Burbujas: líneas por categoría y región", "eda_burbuja", eda$burbuja$texto, status = "info"),
-                 caja_grafico("Contenedores 2D: descuento y ventas", "eda_bins", eda$bins$texto, status = "info")),
-        fluidRow(caja_grafico("Correlación entre variables numéricas", "eda_corr", eda$corr$texto, width = 12,
-                              status = "success", alto = "380px"))
+                 caja_grafico("Cajas: Sales por segmento", "eda_box_seg", eda$box_seg$texto, width = 4))
       ),
 
       # ------------------------------------------------------------ EDA: en el tiempo
@@ -255,6 +250,19 @@ ui <- dashboardPage(skin = "blue",
         fluidRow(caja_grafico("Atípicos: su peso en líneas y en ventas", "eda_atip", eda$atip$texto, status = "warning"),
                  caja_grafico("Dispersión con línea de tendencia: el mes contra el mismo mes del año anterior",
                               "eda_disp", eda$disp$texto, status = "warning"))
+      ),
+
+      # ------------------------------------------------------------ EDA: geografía y otros factores
+      tabItem(tabName = "eda_geo",
+        encabezado("Geografía y otros factores de las ventas", "Sales por estado, cantidad, descuento y subcategoría"),
+        fluidRow(caja_grafico("Mapa: ventas totales por estado", "eda_mapa", eda$mapa$texto, alto = "380px"),
+                 caja_grafico("Mapa: venta mediana por línea de pedido", "eda_mapa_med", eda$mapa_med$texto, alto = "380px")),
+        fluidRow(caja_grafico("Correlación de Sales con cantidad y descuento", "eda_corr", eda$corr$texto, width = 5,
+                              status = "info", alto = "360px"),
+                 caja_grafico("Contenedores 2D: descuento y ventas", "eda_bins", eda$bins$texto, width = 7, status = "info",
+                              alto = "360px")),
+        fluidRow(caja_grafico("Burbujas: volumen y valor de las ventas por subcategoría", "eda_burbuja", eda$burbuja$texto,
+                              width = 12, status = "success", alto = "460px"))
       ),
 
       # ------------------------------------------------------------ EDA: explorador interactivo

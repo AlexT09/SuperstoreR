@@ -196,16 +196,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#histograma-de-densidad-de-logsales"><i class="fa fa-check"></i>Histograma de densidad de log(Sales)</a></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-l%C3%ADneas-de-pedido-por-categor%C3%ADa"><i class="fa fa-check"></i>Barras: líneas de pedido por categoría</a></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-l%C3%ADneas-de-pedido-por-regi%C3%B3n"><i class="fa fa-check"></i>Barras: líneas de pedido por región</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#mapa-l%C3%ADneas-de-pedido-por-estado"><i class="fa fa-check"></i>Mapa: líneas de pedido por estado</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado"><i class="fa fa-check"></i>2 · Análisis bivariado</a>
 <ul>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-categor%C3%ADa"><i class="fa fa-check"></i>Cajas: Sales por categoría</a></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-regi%C3%B3n"><i class="fa fa-check"></i>Cajas: Sales por región</a></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-segmento"><i class="fa fa-check"></i>Cajas: Sales por segmento</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#burbujas-l%C3%ADneas-por-categor%C3%ADa-y-regi%C3%B3n"><i class="fa fa-check"></i>Burbujas: líneas por categoría y región</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#contenedores-2d-descuento-y-ventas"><i class="fa fa-check"></i>Contenedores 2D: descuento y ventas</a></li>
-<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#correlaci%C3%B3n-entre-variables-num%C3%A9ricas"><i class="fa fa-check"></i>Correlación entre variables numéricas</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#ventas-en-el-tiempo"><i class="fa fa-check"></i>3 · Ventas en el tiempo</a>
 <ul>
@@ -218,6 +214,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-su-peso-en-l%C3%ADneas-y-en-ventas"><i class="fa fa-check"></i>Atípicos: su peso en líneas y en ventas</a></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#dispersi%C3%B3n-con-l%C3%ADnea-de-tendencia-el-mes-contra-el-mismo-mes-del-a%C3%B1o-anterior"><i class="fa fa-check"></i>Dispersión con línea de tendencia: el mes contra el mismo mes del año anterior</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#geograf%C3%ADa-y-otros-factores-de-las-ventas"><i class="fa fa-check"></i>5 · Geografía y otros factores de las ventas</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#mapa-ventas-totales-por-estado"><i class="fa fa-check"></i>Mapa: ventas totales por estado</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#mapa-venta-mediana-por-l%C3%ADnea-de-pedido"><i class="fa fa-check"></i>Mapa: venta mediana por línea de pedido</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#correlaci%C3%B3n-de-sales-con-cantidad-y-descuento"><i class="fa fa-check"></i>Correlación de Sales con cantidad y descuento</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#contenedores-2d-descuento-y-ventas"><i class="fa fa-check"></i>Contenedores 2D: descuento y ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#burbujas-volumen-y-valor-de-las-ventas-por-subcategor%C3%ADa"><i class="fa fa-check"></i>Burbujas: volumen y valor de las ventas por subcategoría</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html"><i class="fa fa-check"></i>Modelos y resultados</a>
@@ -302,7 +306,7 @@ las mismas gráficas y cifras.</p>
 </tr>
 <tr class="odd">
 <td>Análisis exploratorio</td>
-<td>Univariado, bivariado, en el tiempo y atípicos (ggplot2 + <code>ggplotly</code>), y un <strong>explorador interactivo</strong>: variable, tipo de gráfico y rango de años, con la tabla de datos filtrada</td>
+<td>Univariado, bivariado, en el tiempo, atípicos y geografía y otros factores (mapas con sf, correlación, contenedores 2D y burbujas; ggplot2 + <code>ggplotly</code>), y un <strong>explorador interactivo</strong>: variable, tipo de gráfico y rango de años, con la tabla de datos filtrada</td>
 </tr>
 <tr class="even">
 <td>Modelos y resultados</td>
