@@ -32,9 +32,7 @@ ui <- dashboardPage(skin = "blue",
       tags$li(class = "header", "MODELO"),
       menuItem("Modelos y resultados", tabName = "modelos", icon = icon("gears")),
       menuItem("Entrenamiento del modelo", tabName = "entrenamiento", icon = icon("play")),
-      menuItem("Comparación", tabName = "comparacion", icon = icon("ranking-star")),
-      menuItem("Proyección 2018", tabName = "proyeccion", icon = icon("chart-line")),
-      menuItem("Predicción", tabName = "prediccion", icon = icon("laptop")),
+      menuItem("Proyección y predicción", tabName = "proyeccion", icon = icon("chart-line")),
       tags$li(class = "header", "CIERRE"),
       menuItem("Conclusiones", tabName = "conclusiones", icon = icon("flag-checkered"))
     )
@@ -301,6 +299,8 @@ ui <- dashboardPage(skin = "blue",
                          "porque no capta el crecimiento de 2017."))),
           fluidRow(box(title = "Métricas por categoría × región × mes", status = "info", solidHeader = TRUE, width = 12,
                        DTOutput("tabla_metricas"), div(class = "texto-grafico", textos_modelos()$metricas))),
+          fluidRow(caja_grafico("Ranking de modelos (MAE en 2017)", "comp_ranking", texto_ranking(), width = 12,
+                                alto = "340px")),
           fluidRow(box(title = "Hiperparámetros probados con Grid Search", status = "info", solidHeader = TRUE,
                        width = 12, collapsible = TRUE, DTOutput("tabla_rejillas"),
                        div(class = "texto-grafico", "Cada combinación de la rejilla se entrenó con validación cruzada temporal",
@@ -308,7 +308,21 @@ ui <- dashboardPage(skin = "blue",
           fluidRow(caja_grafico("¿Hay sobreajuste? Error en entrenamiento vs. prueba", "modelos_sobreajuste",
                                 textos_modelos()$sobreajuste, status = "warning"),
                    caja_grafico(paste0("Importancia de variables (", resumen$mejor_modelo, ")"), "modelos_importancia",
-                                textos_modelos()$importancia, status = "warning"))
+                                textos_modelos()$importancia, status = "warning")),
+          h3(class = "titulo-seccion", "¿Cuánto confiar en la proyección de un año completo?"),
+          fluidRow(
+            valueBox(pct(resumen$prueba_recursiva$total_desvio_total_pct, signo = TRUE), sprintf("Desvío del total anual (referencia: %s)",
+                     pct(resumen$referencia$total_desvio_total_pct, signo = TRUE)), icon = icon("scale-balanced"), color = "green", width = 4),
+            valueBox(pct(resumen$prueba_recursiva$total_MAE_pct), sprintf("Error del total mensual (%s por mes)",
+                     usd(resumen$prueba_recursiva$total_MAE)), icon = icon("percent"), color = "blue", width = 4),
+            valueBox(sprintf("%.2f", resumen$prueba_recursiva$total_R2), "R² del total mensual",
+                     icon = icon("square-root-variable"), color = "light-blue", width = 4)
+          ),
+          fluidRow(caja_grafico("Prueba de la proyección a 12 meses: 2017 proyectado solo con datos hasta 2016",
+            "comp_recursiva", paste("Es la misma forma en que se proyecta 2018: cada mes proyectado se usa como historia",
+            "del siguiente, sin conocer ningún dato real del año. El modelo acierta el total del año y la forma",
+            "estacional; los errores están en el detalle de cada mes. La referencia subestima todo el año porque",
+            "repite 2016 sin el crecimiento."), width = 12, status = "success"))
         )
       ),
 
@@ -336,31 +350,9 @@ ui <- dashboardPage(skin = "blue",
         )
       ),
 
-      # ------------------------------------------------------------ Comparación
-      tabItem(tabName = "comparacion",
-        encabezado("Comparación", "Qué modelo proyecta mejor y cuánto confiar en la proyección anual"),
-        if (!listo) fluidRow(aviso_sin_modelo()) else tagList(
-          fluidRow(caja_grafico("Ranking de modelos (MAE en 2017)", "comp_ranking", texto_ranking(), width = 12,
-                                alto = "340px")),
-          fluidRow(
-            valueBox(pct(resumen$prueba_recursiva$total_desvio_total_pct, signo = TRUE), sprintf("Desvío del total anual (referencia: %s)",
-                     pct(resumen$referencia$total_desvio_total_pct, signo = TRUE)), icon = icon("scale-balanced"), color = "green", width = 4),
-            valueBox(pct(resumen$prueba_recursiva$total_MAE_pct), sprintf("Error del total mensual (%s por mes)",
-                     usd(resumen$prueba_recursiva$total_MAE)), icon = icon("percent"), color = "blue", width = 4),
-            valueBox(sprintf("%.2f", resumen$prueba_recursiva$total_R2), "R² del total mensual",
-                     icon = icon("square-root-variable"), color = "light-blue", width = 4)
-          ),
-          fluidRow(caja_grafico("Prueba de la proyección a 12 meses: 2017 proyectado solo con datos hasta 2016",
-            "comp_recursiva", paste("Es la misma forma en que se proyecta 2018: cada mes proyectado se usa como historia",
-            "del siguiente, sin conocer ningún dato real del año. El modelo acierta el total del año y la forma",
-            "estacional; los errores están en el detalle de cada mes. La referencia subestima todo el año porque",
-            "repite 2016 sin el crecimiento."), width = 12, status = "success"))
-        )
-      ),
-
       # ------------------------------------------------------------ Proyección 2018
       tabItem(tabName = "proyeccion",
-        encabezado("Proyección 2018", "Ventas esperadas por mes, categoría y región"),
+        encabezado("Proyección y predicción", "Ventas esperadas en 2018 por mes, categoría y región, y simulador de un mes"),
         if (!listo) fluidRow(aviso_sin_modelo()) else tagList(
           fluidRow(box(title = "Filtros", status = "primary", solidHeader = TRUE, width = 12,
                        fluidRow(column(3, selectInput("proy_cat", "Categoría:", c(TODAS, names(CATEGORY_COLORS)))),
@@ -378,14 +370,10 @@ ui <- dashboardPage(skin = "blue",
                 width = 7, DTOutput("tabla_proyeccion")),
             box(title = "Lectura para el negocio", status = "warning", solidHeader = TRUE, width = 5,
                 lista_html(lectura_negocio()))
-          )
-        )
-      ),
-
-      # ------------------------------------------------------------ Predicción
-      tabItem(tabName = "prediccion",
-        encabezado("Predicción", "Ventas de un mes con el modelo entrenado"),
-        if (!listo) fluidRow(aviso_sin_modelo()) else tagList(
+          ),
+          h3(class = "titulo-seccion", "Predicción interactiva de un mes (model.rds)"),
+          p(class = "subtitulo-seccion", "Simulador con el modelo entrenado: elige categoría, región y mes, cambia",
+            "la historia de la serie y presiona Predecir."),
           fluidRow(
             # Caja de atributos
             box(title = "Ingresa los datos de la serie:", status = "primary", solidHeader = TRUE, width = 4,

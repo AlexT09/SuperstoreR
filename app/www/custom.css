@@ -52,6 +52,9 @@ body { color: var(--tinta); -webkit-font-smoothing: antialiased; }
 
 /* ---------------------------------------------------------------- encabezado de cada página */
 .encabezado { margin: 0 0 18px; }
+.titulo-seccion { font-size: 18px; font-weight: 700; color: var(--tinta); margin: 22px 0 6px; padding-left: 10px;
+  border-left: 3px solid var(--azul); }
+.subtitulo-seccion { color: var(--tinta-3); font-size: 14px; margin: 0 0 12px; }
 .encabezado h2 { margin: 0; font-size: 26px; font-weight: 700; color: var(--tinta); letter-spacing: -.02em; }
 .encabezado p { margin: 4px 0 0; color: var(--tinta-3); font-size: 15px; }
 

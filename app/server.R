@@ -147,7 +147,7 @@ server <- function(input, output, session) {
     showNotification(paste("Modelo guardado en app/", archivo, sep = ""), type = "message")
   })
 
-  # --- Comparación ---
+  # --- Comparación (dentro de Modelos y resultados) ---
   output$comp_ranking <- renderPlotly(suppressWarnings(interactivo(fig_ranking())))
   output$comp_recursiva <- renderPlotly(suppressWarnings(interactivo(fig_recursiva())))
 
@@ -169,7 +169,7 @@ server <- function(input, output, session) {
       formatStyle("Variación (%)", color = styleInterval(c(0, 15), c("#d64545", "#3b4252", "#1e8e5a")), fontWeight = "bold")
   })
 
-  # --- Predicción ---
+  # --- Predicción (dentro de Proyección y predicción) ---
   # Llena el formulario con la historia real de la serie elegida
   observeEvent(list(input$pred_cat, input$pred_reg, input$pred_mes), {
     f <- fila_historia(input$pred_cat, input$pred_reg, input$pred_mes)
@@ -234,6 +234,6 @@ server <- function(input, output, session) {
   output$pred_nota <- renderUI({
     if (prediccion()$mes >= FUTURO) helpText("Enero 2018 es un mes futuro: el modelo nunca vio sus ventas, es una predicción real.")
     else helpText("El modelo final se entrenó con 2015–2017, así que ya conoce este mes. Para medir su error sin ventaja,",
-                  "vea la prueba de 2017 en la sección Comparación.")
+                  "vea la prueba de 2017 en la sección Modelos y resultados.")
   })
 }
