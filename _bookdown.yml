@@ -10,7 +10,6 @@ rmd_files:
   - 04-etl.Rmd
   - 05-eda.Rmd
   - 06-modelos.Rmd
-  - 07-comparacion.Rmd
   - 08-proyeccion.Rmd
   - 09-conclusiones.Rmd
   - 10-app-shiny.Rmd

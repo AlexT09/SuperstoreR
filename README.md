@@ -26,8 +26,7 @@ tendencia) hechas con **ggplot2** y vueltas interactivas con `ggplotly`.
 | Introducción · Problema y objetivos · Marco teórico · Metodología | Planteamiento, modelos, variables y flujo |
 | ETL | Del CSV crudo a la tabla mensual que usa el modelo |
 | EDA | Distribución de las ventas, factores, estacionalidad, tendencia, atípicos y relación con el mes del año anterior |
-| Modelos y resultados | 7 modelos evaluados en 2017, rejillas de Grid Search, sobreajuste e importancia de variables |
-| Comparación | Ranking de los modelos frente a la referencia y prueba de la proyección a 12 meses (en la app, dentro de Modelos y resultados) |
+| Modelos y resultados | 7 modelos evaluados en 2017, ranking frente a la referencia, rejillas de Grid Search, sobreajuste, importancia de variables y prueba de la proyección a 12 meses |
 | Proyección 2018 | Proyección por categoría, región y mes, con su error típico (filtrable en la app) |
 | Entrenamiento del modelo (solo app) | Entrena el modelo elegido al presionar un botón y permite guardarlo como `.rds` |
 | Predicción (solo app, al final de Proyección y predicción) | Formulario con ejemplos de temporada alta y baja: carga `model.rds` y predice las ventas de un mes |
