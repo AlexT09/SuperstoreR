@@ -79,12 +79,11 @@ PASOS <- tribble(
   "Proyección", "Mejor modelo reentrenado con 2015–2017 → 2018 mes a mes"
 )
 
-RECOMENDACIONES <- c(
-  "Planificar inventario y personal para septiembre a diciembre a partir de la proyección mensual, sobre todo en Technology y en las regiones West y East.",
-  "Fijar las metas de cada región con la proyección como base y revisarlas cada mes con las ventas reales: el error es menor un mes adelante que doce.",
-  "Vigilar las combinaciones de menor crecimiento proyectado (pestaña Proyección 2018) para actuar con anticipación.",
-  "Reentrenar el modelo cada mes con los datos nuevos (Rscript model/train_model.R)."
-)
+recomendaciones_negocio <- function(df, negrita = FALSE) {
+  # Recomendaciones para el negocio: salen de los hallazgos del EDA (hallazgos_eda, R/eda.R)
+  h <- hallazgos_eda(df)
+  if (negrita) paste0("**", h$Factor, ":** ", h$Recomendacion) else paste0(h$Factor, ": ", h$Recomendacion)
+}
 
 LIMITACIONES <- c(
   "Dataset de ejemplo (2014–2017) de una sola tienda: no generaliza a otros negocios.",

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Recomendaciones aplicadas | Proyección de ventas Sample Superstore</title>
+  <meta name="description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Recomendaciones aplicadas | Proyección de ventas Sample Superstore" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Recomendaciones aplicadas | Proyección de ventas Sample Superstore" />
+  
+  <meta name="twitter:description" content="Análisis exploratorio y proyección de ventas 2018 del dataset Sample Superstore con machine learning en R. Incluye una app Shiny." />
+  
+
+<meta name="author" content="Alex Teran y David Estrada" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="proyeccion.html"/>
+<link rel="next" href="conclusiones.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Proyección de ventas Sample Superstore</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introducción</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#el-proyecto"><i class="fa fa-check"></i>El proyecto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#preguntas-del-proyecto"><i class="fa fa-check"></i>Preguntas del proyecto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#contexto"><i class="fa fa-check"></i>Contexto</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#impacto-para-el-negocio"><i class="fa fa-check"></i>Impacto para el negocio</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html"><i class="fa fa-check"></i>Problema y objetivos</a>
+<ul>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#planteamiento-del-problema"><i class="fa fa-check"></i>Planteamiento del problema</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#objetivo-general"><i class="fa fa-check"></i>Objetivo general</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i>Objetivos específicos</a></li>
+<li class="chapter" data-level="" data-path="problema.html"><a href="problema.html#justificaci%C3%B3n"><i class="fa fa-check"></i>Justificación</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html"><i class="fa fa-check"></i>Marco teórico</a>
+<ul>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#conceptos-clave"><i class="fa fa-check"></i>Conceptos clave</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#modelos-de-regresi%C3%B3n-utilizados"><i class="fa fa-check"></i>Modelos de regresión utilizados</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#m%C3%A9tricas-de-evaluaci%C3%B3n"><i class="fa fa-check"></i>Métricas de evaluación</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#operacionalizaci%C3%B3n-de-variables"><i class="fa fa-check"></i>Operacionalización de variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#variables-del-dataset"><i class="fa fa-check"></i>Variables del dataset</a></li>
+<li class="chapter" data-level="" data-path="marco-teorico.html"><a href="marco-teorico.html#variables-del-modelo-una-fila-categor%C3%ADa-regi%C3%B3n-mes"><i class="fa fa-check"></i>Variables del modelo (una fila = categoría × región × mes)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html"><i class="fa fa-check"></i>Metodología</a>
+<ul>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#flujo-del-proyecto"><i class="fa fa-check"></i>Flujo del proyecto</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#datos-y-unidad-de-an%C3%A1lisis"><i class="fa fa-check"></i>Datos y unidad de análisis</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#variable-objetivo"><i class="fa fa-check"></i>Variable objetivo</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#preprocesamiento-y-validaci%C3%B3n"><i class="fa fa-check"></i>Preprocesamiento y validación</a></li>
+<li class="chapter" data-level="" data-path="metodologia.html"><a href="metodologia.html#b%C3%BAsqueda-de-hiperpar%C3%A1metros"><i class="fa fa-check"></i>Búsqueda de hiperparámetros</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html"><i class="fa fa-check"></i>ETL</a>
+<ul>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#resultado-del-etl"><i class="fa fa-check"></i>Resultado del ETL</a></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#c%C3%B3digo-datagenerate_data.r"><i class="fa fa-check"></i>Código (<code>data/generate_data.R</code>)</a></li>
+<li class="chapter" data-level="" data-path="etl.html"><a href="etl.html#tabla-mensual-muestra-de-2017"><i class="fa fa-check"></i>Tabla mensual (muestra de 2017)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html"><i class="fa fa-check"></i>EDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-univariado"><i class="fa fa-check"></i>1 · Análisis univariado</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#resumen-estad%C3%ADstico-de-sales-usd-por-l%C3%ADnea-de-pedido"><i class="fa fa-check"></i>Resumen estadístico de Sales (USD por línea de pedido)</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#histograma-de-sales"><i class="fa fa-check"></i>Histograma de Sales</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#histograma-de-densidad-de-logsales"><i class="fa fa-check"></i>Histograma de densidad de log(Sales)</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-l%C3%ADneas-de-pedido-por-categor%C3%ADa"><i class="fa fa-check"></i>Barras: líneas de pedido por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#barras-l%C3%ADneas-de-pedido-por-regi%C3%B3n"><i class="fa fa-check"></i>Barras: líneas de pedido por región</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#an%C3%A1lisis-bivariado"><i class="fa fa-check"></i>2 · Análisis bivariado</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-categor%C3%ADa"><i class="fa fa-check"></i>Cajas: Sales por categoría</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-regi%C3%B3n"><i class="fa fa-check"></i>Cajas: Sales por región</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#cajas-sales-por-segmento"><i class="fa fa-check"></i>Cajas: Sales por segmento</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#ventas-en-el-tiempo"><i class="fa fa-check"></i>3 · Ventas en el tiempo</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#evoluci%C3%B3n-mensual-de-ventas"><i class="fa fa-check"></i>Evolución mensual de ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-promedio-m%C3%B3vil-de-12-meses"><i class="fa fa-check"></i>Tendencia: promedio móvil de 12 meses</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#estacionalidad-de-las-ventas-del-a%C3%B1o-por-mes"><i class="fa fa-check"></i>Estacionalidad: % de las ventas del año por mes</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#tendencia-de-ventas-por-categor%C3%ADa"><i class="fa fa-check"></i>Tendencia de ventas por categoría</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-y-relaci%C3%B3n-con-el-modelo"><i class="fa fa-check"></i>4 · Atípicos y relación con el modelo</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#at%C3%ADpicos-su-peso-en-l%C3%ADneas-y-en-ventas"><i class="fa fa-check"></i>Atípicos: su peso en líneas y en ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#dispersi%C3%B3n-con-l%C3%ADnea-de-tendencia-el-mes-contra-el-mismo-mes-del-a%C3%B1o-anterior"><i class="fa fa-check"></i>Dispersión con línea de tendencia: el mes contra el mismo mes del año anterior</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#geograf%C3%ADa-y-otros-factores-de-las-ventas"><i class="fa fa-check"></i>5 · Geografía y otros factores de las ventas</a>
+<ul>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#mapa-ventas-totales-por-estado"><i class="fa fa-check"></i>Mapa: ventas totales por estado</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#mapa-venta-mediana-por-l%C3%ADnea-de-pedido"><i class="fa fa-check"></i>Mapa: venta mediana por línea de pedido</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#correlaci%C3%B3n-de-sales-con-cantidad-y-descuento"><i class="fa fa-check"></i>Correlación de Sales con cantidad y descuento</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#contenedores-2d-descuento-y-ventas"><i class="fa fa-check"></i>Contenedores 2D: descuento y ventas</a></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#burbujas-volumen-y-valor-de-las-ventas-por-subcategor%C3%ADa"><i class="fa fa-check"></i>Burbujas: volumen y valor de las ventas por subcategoría</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#hallazgos-y-recomendaciones-para-el-negocio"><i class="fa fa-check"></i>6 · Hallazgos y recomendaciones para el negocio</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html"><i class="fa fa-check"></i>Modelos y resultados</a>
+<ul>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#entrenamiento-de-los-modelos"><i class="fa fa-check"></i>Entrenamiento de los modelos</a>
+<ul>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#datos-del-modelo"><i class="fa fa-check"></i>1. Datos del modelo</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#modelos-rejillas-de-hiperpar%C3%A1metros-y-validaci%C3%B3n-cruzada"><i class="fa fa-check"></i>2. Modelos, rejillas de hiperparámetros y validación cruzada</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#entrenamiento-con-grid-search-y-evaluaci%C3%B3n-en-2017"><i class="fa fa-check"></i>3. Entrenamiento con Grid Search y evaluación en 2017</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#elecci%C3%B3n-del-mejor-modelo"><i class="fa fa-check"></i>4. Elección del mejor modelo</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#resumen"><i class="fa fa-check"></i>Resumen</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#real-vs.-proyectado-ventas-totales-de-la-empresa-por-mes"><i class="fa fa-check"></i>Real vs. proyectado: ventas totales de la empresa por mes</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#m%C3%A9tricas-por-categor%C3%ADa-regi%C3%B3n-mes-prueba-2017"><i class="fa fa-check"></i>Métricas por categoría × región × mes (prueba 2017)</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#ranking-de-modelos-mae-en-2017"><i class="fa fa-check"></i>Ranking de modelos (MAE en 2017)</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#hiperpar%C3%A1metros-probados-con-grid-search"><i class="fa fa-check"></i>Hiperparámetros probados con Grid Search</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#hay-sobreajuste-error-en-entrenamiento-vs.-prueba"><i class="fa fa-check"></i>¿Hay sobreajuste? Error en entrenamiento vs. prueba</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#importancia-de-variables-random-forest"><i class="fa fa-check"></i>Importancia de variables (Random Forest)</a></li>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#cu%C3%A1nto-confiar-en-la-proyecci%C3%B3n-de-un-a%C3%B1o-completo"><i class="fa fa-check"></i>¿Cuánto confiar en la proyección de un año completo?</a>
+<ul>
+<li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html#proyectado-solo-con-datos-hasta-2016"><i class="fa fa-check"></i>2017 proyectado solo con datos hasta 2016</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html"><i class="fa fa-check"></i>Proyección 2018</a>
+<ul>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#ventas-mensuales-real-20152017-y-proyecci%C3%B3n-2018"><i class="fa fa-check"></i>Ventas mensuales: real 2015–2017 y proyección 2018</a></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#proyecci%C3%B3n-por-categor%C3%ADa-y-regi%C3%B3n"><i class="fa fa-check"></i>Proyección por categoría y región</a></li>
+<li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#lectura-para-el-negocio"><i class="fa fa-check"></i>Lectura para el negocio</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html"><i class="fa fa-check"></i>Recomendaciones aplicadas</a>
+<ul>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#c%C3%B3mo-se-estima-el-efecto-del-descuento"><i class="fa fa-check"></i>Cómo se estima el efecto del descuento</a></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#escenario-principal-tope-de-20-en-toda-la-empresa"><i class="fa fa-check"></i>Escenario principal: tope de 20 % en toda la empresa</a></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#d%C3%B3nde-conviene-poner-el-tope"><i class="fa fa-check"></i>¿Dónde conviene poner el tope?</a></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#por-regi%C3%B3n"><i class="fa fa-check"></i>Por región</a></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#las-tres-recomendaciones-juntas"><i class="fa fa-check"></i>Las tres recomendaciones juntas</a></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#supuestos-y-l%C3%ADmites"><i class="fa fa-check"></i>Supuestos y límites</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i>Conclusiones</a>
+<ul>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#an%C3%A1lisis-exploratorio"><i class="fa fa-check"></i>Análisis exploratorio</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#modelo-de-proyecci%C3%B3n"><i class="fa fa-check"></i>Modelo de proyección</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#recomendaciones-para-el-negocio"><i class="fa fa-check"></i>Recomendaciones para el negocio</a></li>
+<li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html#limitaciones"><i class="fa fa-check"></i>Limitaciones</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html"><i class="fa fa-check"></i>App Shiny</a>
+<ul>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html#c%C3%B3mo-ejecutarla"><i class="fa fa-check"></i>Cómo ejecutarla</a></li>
+<li class="chapter" data-level="" data-path="app-shiny.html"><a href="app-shiny.html#estructura"><i class="fa fa-check"></i>Estructura</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/AlexT09/SuperstoreR" target="blank">Repositorio en GitHub</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Proyección de ventas Sample Superstore</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="recomendaciones" class="section level1 unnumbered hasAnchor">
+<h1>Recomendaciones aplicadas<a href="recomendaciones.html#recomendaciones" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><em>Cómo cambiaría la proyección 2018 si el negocio aplica las recomendaciones del EDA</em></p>
+<p>El modelo de proyección solo conoce el calendario y las ventas pasadas, así que no puede recibir una
+acción del negocio. Por eso cada recomendación se aplica como un efecto sobre la proyección base:</p>
+<blockquote>
+<p><strong>Proyección con recomendaciones = proyección base 2018 (Random Forest) × efecto de cada recomendación</strong></p>
+</blockquote>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Recomendación</th>
+<th>De dónde sale el efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tope de descuento</td>
+<td>Un segundo modelo de machine learning, que predice el margen de cada línea de pedido según su descuento (<code>model/train_descuentos.R</code>)</td>
+</tr>
+<tr class="even">
+<td>Reforzar la temporada alta</td>
+<td>Supuesto: un % más de ventas de septiembre a diciembre</td>
+</tr>
+<tr class="odd">
+<td>Impulsar una categoría</td>
+<td>Supuesto: un % más de ventas de esa categoría</td>
+</tr>
+</tbody>
+</table>
+<p>El descuento es la única acción del negocio que registran los datos, por eso es la única que se puede
+estimar con un modelo. En la <a href="app-shiny.html#app-shiny">app Shiny</a> el simulador es interactivo; aquí se muestran los
+escenarios principales.</p>
+<div id="cómo-se-estima-el-efecto-del-descuento" class="section level2 hasAnchor">
+<h2>Cómo se estima el efecto del descuento<a href="recomendaciones.html#c%C3%B3mo-se-estima-el-efecto-del-descuento" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<colgroup>
+<col width="37%" />
+<col width="22%" />
+<col width="18%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Modelo</th>
+<th align="left">Error CV (puntos de margen)</th>
+<th align="left">Error en 2017 (puntos)</th>
+<th align="left">Desvío de la ganancia 2017</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">XGBoost</td>
+<td align="left">6.76</td>
+<td align="left">6.65</td>
+<td align="left">+6.2 %</td>
+</tr>
+<tr class="even">
+<td align="left">Random Forest</td>
+<td align="left">6.92</td>
+<td align="left">6.76</td>
+<td align="left">+5.1 %</td>
+</tr>
+<tr class="odd">
+<td align="left">Árbol de decisión</td>
+<td align="left">7.17</td>
+<td align="left">7.02</td>
+<td align="left">+2.2 %</td>
+</tr>
+<tr class="even">
+<td align="left">KNN</td>
+<td align="left">8.30</td>
+<td align="left">7.51</td>
+<td align="left">+6.2 %</td>
+</tr>
+<tr class="odd">
+<td align="left">Ridge</td>
+<td align="left">14.56</td>
+<td align="left">14.40</td>
+<td align="left">+5.5 %</td>
+</tr>
+<tr class="even">
+<td align="left">Referencia (promedio subcategoría × descuento)</td>
+<td align="left">—</td>
+<td align="left">6.57</td>
+<td align="left">+5.0 %</td>
+</tr>
+</tbody>
+</table>
+<p>Cada fila de entrenamiento es una línea de pedido (6,682 de 2014–2016) y el modelo predice su margen (ganancia ÷ venta) según descuento, cantidad, subcategoría, región y segmento. Se eligió XGBoost por validación cruzada, igual que en la proyección. En 2017 se equivoca en 6.7 puntos de margen por línea, casi lo mismo que la referencia (6.6): no la supera en precisión. Se usa porque la referencia solo conoce combinaciones que ya ocurrieron, y el simulador necesita otras (por ejemplo, una subcategoría con 20 % de descuento en una región donde siempre se vendió con 70 %). Ninguno de los dos prueba causa: estiman lo que suele pasar en los datos.</p>
+<p>Para simular una línea con descuento mayor que el tope:</p>
+<ul>
+<li><strong>Precio:</strong> la venta pasa a <code>Sales × (1 − tope) / (1 − descuento)</code>. Las unidades no cambian, porque en
+los datos el descuento no se relaciona con la cantidad por línea (correlación 0,01).</li>
+<li><strong>Margen:</strong> el real más el cambio que predice el modelo al pasar del descuento original al tope.</li>
+<li><strong>Pedidos perdidos:</strong> cuántos clientes dejarían de comprar sin el descuento no se puede estimar con
+estos datos. Es un supuesto (25 % en el escenario principal) y más abajo se ve cómo cambia el resultado.</li>
+</ul>
+</div>
+<div id="escenario-principal-tope-de-20-en-toda-la-empresa" class="section level2 hasAnchor">
+<h2>Escenario principal: tope de 20 % en toda la empresa<a href="recomendaciones.html#escenario-principal-tope-de-20-en-toda-la-empresa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-303df45a4401f5f5ab48" style="width:100%;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-303df45a4401f5f5ab48">{"x":{"data":[{"x":[16436,16467,16495,16526,16556,16587,16617,16648,16679,16709,16740,16770,16801,16832,16861,16892,16922,16953,16983,17014,17045,17075,17106,17136,17167,17198,17226,17257,17287,17318,17348,17379,17410,17440,17471,17501],"y":[18174.079999999998,11951.389999999999,38726.260000000002,34195.190000000002,30131.689999999999,24797.299999999999,28765.310000000001,36898.330000000002,64595.93,31404.91,75972.559999999998,74919.529999999999,18542.489999999998,22978.810000000001,51715.889999999999,38750.019999999997,56987.720000000001,40344.540000000001,39261.949999999997,31115.370000000003,73410.020000000004,59687.760000000002,79411.960000000006,96999.029999999999,43971.389999999999,20301.139999999999,58872.340000000004,36521.540000000001,44261.120000000003,52981.730000000003,45264.400000000001,63120.889999999999,87866.660000000003,77776.930000000008,118447.83,83829.309999999998],"text":"","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(74,147,230,1)","dash":"solid"},"hoveron":"points","name":"Real","legendgroup":"Real","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[16436,16467,16495,16526,16556,16587,16617,16648,16679,16709,16740,16770,16801,16832,16861,16892,16922,16953,16983,17014,17045,17075,17106,17136,17167,17198,17226,17257,17287,17318,17348,17379,17410,17440,17471,17501],"y":[18174.079999999998,11951.389999999999,38726.260000000002,34195.190000000002,30131.689999999999,24797.299999999999,28765.310000000001,36898.330000000002,64595.93,31404.91,75972.559999999998,74919.529999999999,18542.489999999998,22978.810000000001,51715.889999999999,38750.019999999997,56987.720000000001,40344.540000000001,39261.949999999997,31115.370000000003,73410.020000000004,59687.760000000002,79411.960000000006,96999.029999999999,43971.389999999999,20301.139999999999,58872.340000000004,36521.540000000001,44261.120000000003,52981.730000000003,45264.400000000001,63120.889999999999,87866.660000000003,77776.930000000008,118447.83,83829.309999999998],"text":["ene. 2015 · real: $18,174","feb. 2015 · real: $11,951","mar. 2015 · real: $38,726","abr. 2015 · real: $34,195","may. 2015 · real: $30,132","jun. 2015 · real: $24,797","jul. 2015 · real: $28,765","ago. 2015 · real: $36,898","sept. 2015 · real: $64,596","oct. 2015 · real: $31,405","nov. 2015 · real: $75,973","dic. 2015 · real: $74,920","ene. 2016 · real: $18,542","feb. 2016 · real: $22,979","mar. 2016 · real: $51,716","abr. 2016 · real: $38,750","may. 2016 · real: $56,988","jun. 2016 · real: $40,345","jul. 2016 · real: $39,262","ago. 2016 · real: $31,115","sept. 2016 · real: $73,410","oct. 2016 · real: $59,688","nov. 2016 · real: $79,412","dic. 2016 · real: $96,999","ene. 2017 · real: $43,971","feb. 2017 · real: $20,301","mar. 2017 · real: $58,872","abr. 2017 · real: $36,522","may. 2017 · real: $44,261","jun. 2017 · real: $52,982","jul. 2017 · real: $45,264","ago. 2017 · real: $63,121","sept. 2017 · real: $87,867","oct. 2017 · real: $77,777","nov. 2017 · real: $118,448","dic. 2017 · real: $83,829"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(74,147,230,1)","opacity":1,"size":4.5354330708661417,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(74,147,230,1)"}},"hoveron":"points","name":"Real","legendgroup":"Real","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[17501,17532,17563,17591,17622,17652,17683,17713,17744,17775,17805,17836,17866],"y":[83829.309999999998,43312.290000000001,37478.120000000003,64694.07,55411.269999999997,60077.519999999997,61777.919999999998,59901.720000000001,70598.410000000003,112920.85000000001,94841.470000000001,124959.89999999999,123071.59],"text":"","type":"scatter","mode":"lines","line":{"width":3.7795275590551185,"color":"rgba(240,184,81,1)","dash":"dash"},"hoveron":"points","name":"Proyección base 2018","legendgroup":"Proyección base 2018","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[17501,17532,17563,17591,17622,17652,17683,17713,17744,17775,17805,17836,17866],"y":[83829.309999999998,45245.646510595157,38738.632429926402,66923.28860986061,57317.704356957955,62176.996713422515,63791.918317744894,61841.316322536812,72784.884578923011,116323.9371345151,97824.761071372996,129002.80845005401,127307.58019857631],"text":"","type":"scatter","mode":"lines","line":{"width":3.7795275590551185,"color":"rgba(44,165,141,1)","dash":"solid"},"hoveron":"points","name":"Con tope de 20 %","legendgroup":"Con tope de 20 %","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[17532,17563,17591,17622,17652,17683,17713,17744,17775,17805,17836,17866],"y":[43312.290000000001,37478.120000000003,64694.07,55411.269999999997,60077.519999999997,61777.919999999998,59901.720000000001,70598.410000000003,112920.85000000001,94841.470000000001,124959.89999999999,123071.59],"text":["ene. 2018 · Proyección base 2018: $43,312","feb. 2018 · Proyección base 2018: $37,478","mar. 2018 · Proyección base 2018: $64,694","abr. 2018 · Proyección base 2018: $55,411","may. 2018 · Proyección base 2018: $60,078","jun. 2018 · Proyección base 2018: $61,778","jul. 2018 · Proyección base 2018: $59,902","ago. 2018 · Proyección base 2018: $70,598","sept. 2018 · Proyección base 2018: $112,921","oct. 2018 · Proyección base 2018: $94,841","nov. 2018 · Proyección base 2018: $124,960","dic. 2018 · Proyección base 2018: $123,072"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(240,184,81,1)","opacity":1,"size":6.8031496062992138,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(240,184,81,1)"}},"hoveron":"points","name":"Proyección base 2018","legendgroup":"Proyección base 2018","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[17532,17563,17591,17622,17652,17683,17713,17744,17775,17805,17836,17866],"y":[45245.646510595157,38738.632429926402,66923.28860986061,57317.704356957955,62176.996713422515,63791.918317744894,61841.316322536812,72784.884578923011,116323.9371345151,97824.761071372996,129002.80845005401,127307.58019857631],"text":["ene. 2018 · Con tope de 20 %: $45,246","feb. 2018 · Con tope de 20 %: $38,739","mar. 2018 · Con tope de 20 %: $66,923","abr. 2018 · Con tope de 20 %: $57,318","may. 2018 · Con tope de 20 %: $62,177","jun. 2018 · Con tope de 20 %: $63,792","jul. 2018 · Con tope de 20 %: $61,841","ago. 2018 · Con tope de 20 %: $72,785","sept. 2018 · Con tope de 20 %: $116,324","oct. 2018 · Con tope de 20 %: $97,825","nov. 2018 · Con tope de 20 %: $129,003","dic. 2018 · Con tope de 20 %: $127,308"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(44,165,141,1)","opacity":1,"size":6.8031496062992138,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(44,165,141,1)"}},"hoveron":"points","name":"Con tope de 20 %","legendgroup":"Con tope de 20 %","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.626816106268159,"r":15.940224159402243,"b":27.364051473640522,"l":62.432544624325466},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"#3b4252","family":"Inter, Segoe UI, sans-serif","size":12},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[16364.5,17937.5],"tickmode":"array","ticktext":["2015","2016","2017","2018","2019"],"tickvals":[16436,16801,17167,17532,17897],"categoryorder":"array","categoryarray":["2015","2016","2017","2018","2019"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.9850560398505608,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(75,82,99,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6098.8190774972982,134855.37937255672],"tickmode":"array","ticktext":["$50k","$100k"],"tickvals":[50000,100000],"categoryorder":"array","categoryarray":["$50k","$100k"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.9850560398505608,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"Ventas del mes (USD)","font":{"color":"rgba(75,82,99,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.17999999999999999,"xanchor":"center","yanchor":"top","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}}},"hovermode":"closest","barmode":"relative","hoverlabel":{"bgcolor":"white","bordercolor":"#d5dde6","font":{"color":"#1f2430","size":12}}},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"source":"A","attrs":{"4c98416143b2":{"x":{},"y":{},"colour":{},"type":"scatter"},"4c984aef3adc":{"x":{},"y":{},"colour":{},"text":{}},"4c989977393":{"x":{},"y":{},"colour":{},"linetype":{}},"4c985e0564ac":{"x":{},"y":{},"colour":{},"text":{}}},"cur_data":"4c98416143b2","visdat":{"4c98416143b2":["function (y) ","x"],"4c984aef3adc":["function (y) ","x"],"4c989977393":["function (y) ","x"],"4c985e0564ac":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<ul>
+<li><strong>Ventas 2018:</strong> $939,279 (base $909,045, +3.3 %).</li>
+<li><strong>Ganancia 2018:</strong> $195,983 (base $116,927, +67.6 %).</li>
+<li><strong>Margen:</strong> 20.9 % (base 12.9 %).</li>
+<li>Con un tope de 20 % en toda la empresa se recorta el descuento de 455 líneas de pedido de 2017. La ganancia mejora aunque se pierdan todos esos pedidos, porque hoy dejan pérdida. Las ventas no bajan si se pierde menos del 40 %. En total, la ganancia de 2018 pasa de $116,927 a $195,983 (+68 %).</li>
+</ul>
+<p>Con menos descuento, las líneas recortadas pagan más por las mismas unidades: aunque se pierda una
+parte de esos pedidos, las ventas casi no cambian y la ganancia sube, porque los descuentos de más de
+20 % hoy dejan pérdida.</p>
+</div>
+<div id="dónde-conviene-poner-el-tope" class="section level2 hasAnchor">
+<h2>¿Dónde conviene poner el tope?<a href="recomendaciones.html#d%C3%B3nde-conviene-poner-el-tope" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Ganancia que habría tenido 2017 con cada tope, según cuántos de los pedidos recortados se pierdan.</p>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-f637c14b1b9c7653bbe6" style="width:100%;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-f637c14b1b9c7653bbe6">{"x":{"data":[{"x":[-4,84],"y":[93439.26999999999,93439.26999999999],"text":"","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"rgba(122,132,148,1)","dash":"dash"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[80],"y":[93439.26999999999],"text":"Real 2017: $93,439","hovertext":"","textfont":{"size":12.472440944881889,"color":"rgba(122,132,148,1)"},"type":"scatter","mode":"text","hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,10,15,20,30,40,50,60,70,80],"y":[273270.17999999999,197046.20000000001,169797.85999999999,165978.94,131208.42999999999,117206.17999999999,102005.85000000001,94793.859999999986,98047.739999999991,93439.26999999999],"text":"","type":"scatter","mode":"lines","line":{"width":3.7795275590551185,"color":"rgba(44,165,141,1)","dash":"solid"},"hoveron":"points","name":"Se pierde el 0 % de esos pedidos","legendgroup":"Se pierde el 0 % de esos pedidos","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,10,15,20,30,40,50,60,70,80],"y":[230992.065,174649.22750000001,154347.35749999998,159736.4975,132691.715,120108.6825,106685.23,100784.0175,100206.73749999999,93439.26999999999],"text":"","type":"scatter","mode":"lines","line":{"width":3.7795275590551185,"color":"rgba(74,147,230,1)","dash":"solid"},"hoveron":"points","name":"Se pierde el 25 % de esos pedidos","legendgroup":"Se pierde el 25 % de esos pedidos","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,10,15,20,30,40,50,60,70,80],"y":[188713.95000000001,152252.255,138896.85499999998,153494.05499999999,134175,123011.185,111364.61,106774.175,102365.735,93439.26999999999],"text":"","type":"scatter","mode":"lines","line":{"width":3.7795275590551185,"color":"rgba(240,184,81,1)","dash":"solid"},"hoveron":"points","name":"Se pierde el 50 % de esos pedidos","legendgroup":"Se pierde el 50 % de esos pedidos","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,10,15,20,30,40,50,60,70,80],"y":[104157.72,107458.31,107995.85000000001,141009.16999999998,137141.57000000001,128816.18999999999,120723.37,118754.48999999999,106683.73,93439.26999999999],"text":"","type":"scatter","mode":"lines","line":{"width":3.7795275590551185,"color":"rgba(240,138,126,1)","dash":"solid"},"hoveron":"points","name":"Se pierde el 100 % de esos pedidos","legendgroup":"Se pierde el 100 % de esos pedidos","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,10,15,20,30,40,50,60,70,80],"y":[273270.17999999999,197046.20000000001,169797.85999999999,165978.94,131208.42999999999,117206.17999999999,102005.85000000001,94793.859999999986,98047.739999999991,93439.26999999999],"text":["Tope 0 % · Se pierde el 0 % de esos pedidos<br>Ganancia: $273,270","Tope 10 % · Se pierde el 0 % de esos pedidos<br>Ganancia: $197,046","Tope 15 % · Se pierde el 0 % de esos pedidos<br>Ganancia: $169,798","Tope 20 % · Se pierde el 0 % de esos pedidos<br>Ganancia: $165,979","Tope 30 % · Se pierde el 0 % de esos pedidos<br>Ganancia: $131,208","Tope 40 % · Se pierde el 0 % de esos pedidos<br>Ganancia: $117,206","Tope 50 % · Se pierde el 0 % de esos pedidos<br>Ganancia: $102,006","Tope 60 % · Se pierde el 0 % de esos pedidos<br>Ganancia: $94,794","Tope 70 % · Se pierde el 0 % de esos pedidos<br>Ganancia: $98,048","Tope 80 % · Se pierde el 0 % de esos pedidos<br>Ganancia: $93,439"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(44,165,141,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(44,165,141,1)"}},"hoveron":"points","name":"Se pierde el 0 % de esos pedidos","legendgroup":"Se pierde el 0 % de esos pedidos","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,10,15,20,30,40,50,60,70,80],"y":[230992.065,174649.22750000001,154347.35749999998,159736.4975,132691.715,120108.6825,106685.23,100784.0175,100206.73749999999,93439.26999999999],"text":["Tope 0 % · Se pierde el 25 % de esos pedidos<br>Ganancia: $230,992","Tope 10 % · Se pierde el 25 % de esos pedidos<br>Ganancia: $174,649","Tope 15 % · Se pierde el 25 % de esos pedidos<br>Ganancia: $154,347","Tope 20 % · Se pierde el 25 % de esos pedidos<br>Ganancia: $159,736","Tope 30 % · Se pierde el 25 % de esos pedidos<br>Ganancia: $132,692","Tope 40 % · Se pierde el 25 % de esos pedidos<br>Ganancia: $120,109","Tope 50 % · Se pierde el 25 % de esos pedidos<br>Ganancia: $106,685","Tope 60 % · Se pierde el 25 % de esos pedidos<br>Ganancia: $100,784","Tope 70 % · Se pierde el 25 % de esos pedidos<br>Ganancia: $100,207","Tope 80 % · Se pierde el 25 % de esos pedidos<br>Ganancia: $93,439"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(74,147,230,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(74,147,230,1)"}},"hoveron":"points","name":"Se pierde el 25 % de esos pedidos","legendgroup":"Se pierde el 25 % de esos pedidos","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,10,15,20,30,40,50,60,70,80],"y":[188713.95000000001,152252.255,138896.85499999998,153494.05499999999,134175,123011.185,111364.61,106774.175,102365.735,93439.26999999999],"text":["Tope 0 % · Se pierde el 50 % de esos pedidos<br>Ganancia: $188,714","Tope 10 % · Se pierde el 50 % de esos pedidos<br>Ganancia: $152,252","Tope 15 % · Se pierde el 50 % de esos pedidos<br>Ganancia: $138,897","Tope 20 % · Se pierde el 50 % de esos pedidos<br>Ganancia: $153,494","Tope 30 % · Se pierde el 50 % de esos pedidos<br>Ganancia: $134,175","Tope 40 % · Se pierde el 50 % de esos pedidos<br>Ganancia: $123,011","Tope 50 % · Se pierde el 50 % de esos pedidos<br>Ganancia: $111,365","Tope 60 % · Se pierde el 50 % de esos pedidos<br>Ganancia: $106,774","Tope 70 % · Se pierde el 50 % de esos pedidos<br>Ganancia: $102,366","Tope 80 % · Se pierde el 50 % de esos pedidos<br>Ganancia: $93,439"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(240,184,81,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(240,184,81,1)"}},"hoveron":"points","name":"Se pierde el 50 % de esos pedidos","legendgroup":"Se pierde el 50 % de esos pedidos","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0,10,15,20,30,40,50,60,70,80],"y":[104157.72,107458.31,107995.85000000001,141009.16999999998,137141.57000000001,128816.18999999999,120723.37,118754.48999999999,106683.73,93439.26999999999],"text":["Tope 0 % · Se pierde el 100 % de esos pedidos<br>Ganancia: $104,158","Tope 10 % · Se pierde el 100 % de esos pedidos<br>Ganancia: $107,458","Tope 15 % · Se pierde el 100 % de esos pedidos<br>Ganancia: $107,996","Tope 20 % · Se pierde el 100 % de esos pedidos<br>Ganancia: $141,009","Tope 30 % · Se pierde el 100 % de esos pedidos<br>Ganancia: $137,142","Tope 40 % · Se pierde el 100 % de esos pedidos<br>Ganancia: $128,816","Tope 50 % · Se pierde el 100 % de esos pedidos<br>Ganancia: $120,723","Tope 60 % · Se pierde el 100 % de esos pedidos<br>Ganancia: $118,754","Tope 70 % · Se pierde el 100 % de esos pedidos<br>Ganancia: $106,684","Tope 80 % · Se pierde el 100 % de esos pedidos<br>Ganancia: $93,439"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(240,138,126,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(240,138,126,1)"}},"hoveron":"points","name":"Se pierde el 100 % de esos pedidos","legendgroup":"Se pierde el 100 % de esos pedidos","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.626816106268159,"r":15.940224159402243,"b":43.304275633042764,"l":62.432544624325466},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"#3b4252","family":"Inter, Segoe UI, sans-serif","size":12},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-4,84],"tickmode":"array","ticktext":["0 %","10 %","15 %","20 %","30 %","40 %","50 %","60 %","70 %","80 %"],"tickvals":[0,10,15,20,30,40,50,60,70,80],"categoryorder":"array","categoryarray":["0 %","10 %","15 %","20 %","30 %","40 %","50 %","60 %","70 %","80 %"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.9850560398505608,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"y","title":{"text":"Tope de descuento","font":{"color":"rgba(75,82,99,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[84447.724499999982,282261.7255],"tickmode":"array","ticktext":["$100k","$150k","$200k","$250k"],"tickvals":[100000,150000,200000,250000],"categoryorder":"array","categoryarray":["$100k","$150k","$200k","$250k"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.9850560398505608,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"Ganancia 2017 simulada (USD)","font":{"color":"rgba(75,82,99,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.17999999999999999,"xanchor":"center","yanchor":"top","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}}},"hovermode":"closest","barmode":"relative","hoverlabel":{"bgcolor":"white","bordercolor":"#d5dde6","font":{"color":"#1f2430","size":12}}},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"source":"A","attrs":{"4c98289a5a8e":{"yintercept":{},"type":"scatter"},"4c981ea7fe0":{"x":{},"y":{}},"4c9866ce18c1":{"x":{},"y":{},"colour":{}},"4c98731e661a":{"x":{},"y":{},"colour":{},"text":{}}},"cur_data":"4c98289a5a8e","visdat":{"4c98289a5a8e":["function (y) ","x"],"4c981ea7fe0":["function (y) ","x"],"4c9866ce18c1":["function (y) ","x"],"4c98731e661a":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<ul>
+<li>Si se pierde el 0 % de los pedidos recortados, el mejor tope es 0 % ($273,270).</li>
+<li>Si se pierde el 25 % de los pedidos recortados, el mejor tope es 0 % ($230,992).</li>
+<li>Si se pierde el 50 % de los pedidos recortados, el mejor tope es 0 % ($188,714).</li>
+<li>Si se pierde el 100 % de los pedidos recortados, el mejor tope es 20 % ($141,009).</li>
+</ul>
+<p>Los topes bajos (0–15 %) dependen mucho del supuesto, porque recortan descuentos pequeños que hoy sí
+dejan ganancia. El tope de 20 % es la conclusión más sólida: aun si se perdieran todos los pedidos
+recortados, es el mejor tope y deja más ganancia que la real.</p>
+</div>
+<div id="por-región" class="section level2 hasAnchor">
+<h2>Por región<a href="recomendaciones.html#por-regi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Ganancia 2018 adicional al aplicar el tope de 20 % en una sola región, con 25 % de pedidos perdidos y
+en el peor caso (se pierden todos).</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Región</th>
+<th align="left">Con 25 % de pérdida</th>
+<th align="left">Peor caso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Central</td>
+<td align="left">$30,303 más</td>
+<td align="left">$20,624 más</td>
+</tr>
+<tr class="even">
+<td align="left">South</td>
+<td align="left">$19,922 más</td>
+<td align="left">$15,623 más</td>
+</tr>
+<tr class="odd">
+<td align="left">East</td>
+<td align="left">$19,474 más</td>
+<td align="left">$12,397 más</td>
+</tr>
+<tr class="even">
+<td align="left">West</td>
+<td align="left">$9,358 más</td>
+<td align="left">$8,348 más</td>
+</tr>
+</tbody>
+</table>
+<p>En todas las regiones el tope mejora la ganancia incluso en el peor caso. La región donde más aporta es
+la que más descuentos altos concentra, coherente con el hallazgo del EDA.</p>
+</div>
+<div id="las-tres-recomendaciones-juntas" class="section level2 hasAnchor">
+<h2>Las tres recomendaciones juntas<a href="recomendaciones.html#las-tres-recomendaciones-juntas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Tope de 20 % (25 % de pedidos perdidos), temporada alta +5 % y Technology +5 %. Los dos últimos efectos
+son supuestos ilustrativos: los datos no registran campañas, así que el modelo no puede estimarlos.</p>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-ba9c764fdb8e1ffda7bb" style="width:100%;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-ba9c764fdb8e1ffda7bb">{"x":{"data":[{"x":[3.6000000000000001,3.6000000000000001,4.4000000000000004,4.4000000000000004,3.6000000000000001],"y":[200858.85818984214,205189.35586697233,205189.35586697233,200858.85818984214,200858.85818984214],"text":"Technology +5 %: +$4,330","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"transparent","dash":"solid"},"fill":"toself","fillcolor":"rgba(44,165,141,1)","hoveron":"fills","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[2.6000000000000001,2.6000000000000001,3.3999999999999999,3.3999999999999999,2.6000000000000001],"y":[195983.19322912343,200858.85818984214,200858.85818984214,195983.19322912343,195983.19322912343],"text":"Temporada alta +5 %: +$4,876","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"transparent","dash":"solid"},"fill":"toself","fillcolor":"rgba(44,165,141,1)","hoveron":"fills","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1.6000000000000001,1.6000000000000001,2.3999999999999999,2.3999999999999999,1.6000000000000001],"y":[116926.57026524869,195983.19322912343,195983.19322912343,116926.57026524869,116926.57026524869],"text":"Tope de descuento: +$79,057","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"transparent","dash":"solid"},"fill":"toself","fillcolor":"rgba(44,165,141,1)","hoveron":"fills","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4.5999999999999996,4.5999999999999996,5.4000000000000004,5.4000000000000004,4.5999999999999996],"y":[0,205189.35586697233,205189.35586697233,0,0],"text":"Con recomendaciones: $205,189","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"transparent","dash":"solid"},"fill":"toself","fillcolor":"rgba(240,184,81,1)","hoveron":"fills","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[0.59999999999999998,0.59999999999999998,1.3999999999999999,1.3999999999999999,0.59999999999999998],"y":[0,116926.57026524869,116926.57026524869,0,0],"text":"Ganancia base: $116,927","type":"scatter","mode":"lines","line":{"width":1.8897637795275593,"color":"transparent","dash":"solid"},"fill":"toself","fillcolor":"rgba(240,184,81,1)","hoveron":"fills","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1,2,3,4,5],"y":[127186.0380585973,206242.66102247205,211118.32598319076,215448.82366032095,215448.82366032095],"text":["$116,927","+$79,057","+$4,876","+$4,330","$205,189"],"hovertext":["Ganancia base: $116,927","Tope de descuento: +$79,057","Temporada alta +5 %: +$4,876","Technology +5 %: +$4,330","Con recomendaciones: $205,189"],"textfont":{"size":13.228346456692915,"color":"rgba(0,0,0,1)"},"type":"scatter","mode":"text","hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.626816106268159,"r":15.940224159402243,"b":27.364051473640522,"l":62.432544624325466},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"#3b4252","family":"Inter, Segoe UI, sans-serif","size":12},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.35999999999999993,5.6400000000000006],"tickmode":"array","ticktext":["Ganancia base","Tope de descuento","Temporada alta +5 %","Technology +5 %","Con recomendaciones"],"tickvals":[1,2,3,3.9999999999999996,5],"categoryorder":"array","categoryarray":["Ganancia base","Tope de descuento","Temporada alta +5 %","Technology +5 %","Con recomendaciones"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.9850560398505608,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(75,82,99,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0,241302.68249955948],"tickmode":"array","ticktext":["$0k","$50k","$100k","$150k","$200k"],"tickvals":[0,50000,100000,150000,200000],"categoryorder":"array","categoryarray":["$0k","$50k","$100k","$150k","$200k"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.9850560398505608,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.72455564360919278,"zeroline":false,"anchor":"x","title":{"text":"Ganancia 2018 (USD)","font":{"color":"rgba(75,82,99,1)","family":"","size":15.940224159402243}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"orientation":"h","x":0,"y":-0.17999999999999999,"xanchor":"center","yanchor":"top","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.940224159402243}}},"hovermode":"closest","barmode":"relative","hoverlabel":{"bgcolor":"white","bordercolor":"#d5dde6","font":{"color":"#1f2430","size":12}}},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"source":"A","attrs":{"4c98535de81":{"text":{},"xmin":{},"xmax":{},"ymin":{},"ymax":{},"fill":{},"type":"scatter"},"4c98f7e876":{"text":{},"x":{},"y":{},"label":{}}},"cur_data":"4c98535de81","visdat":{"4c98535de81":["function (y) ","x"],"4c98f7e876":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>La ganancia de 2018 pasa de $116,927 a $205,189
+(+75 %) y las ventas, de $909,045
+a $980,683. El tope aporta $79,057: casi todo el cambio. Vender
+más con un margen de 21 % suma poco a la ganancia.</p>
+</div>
+<div id="supuestos-y-límites" class="section level2 hasAnchor">
+<h2>Supuestos y límites<a href="recomendaciones.html#supuestos-y-l%C3%ADmites" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>La proyección base es la del mejor modelo (pestaña Proyección). La ganancia base de 2018 usa el margen de 2017 de cada categoría en cada región.</li>
+<li>Con menos descuento, cada pedido conserva sus unidades y paga más por ellas: en los datos el descuento no se relaciona con la cantidad por línea (correlación 0,01).</li>
+<li>Lo que los datos no dicen es cuántos clientes dejarían de comprar sin el descuento. Por eso es un supuesto ajustable, y la lectura indica hasta qué pérdida conviene el tope.</li>
+<li>Los aumentos por temporada y por categoría son supuestos: los datos no registran campañas, así que el modelo no puede estimarlos.</li>
+<li>Son escenarios estimados, no causas probadas. Antes de aplicar una recomendación en toda la empresa, conviene probarla en una región y comparar con las demás.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="proyeccion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusiones.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": null,
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": null,
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  },
+  "info": false
+});
+});
+</script>
+
+</body>
+
+</html>

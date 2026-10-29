@@ -29,10 +29,12 @@ ui <- dashboardPage(skin = "blue",
                menuSubItem("Ventas en el tiempo", tabName = "eda_tiempo"),
                menuSubItem("Atípicos y relación con el modelo", tabName = "eda_atip"),
                menuSubItem("Geografía y otros factores", tabName = "eda_geo"),
+               menuSubItem("Hallazgos y recomendaciones", tabName = "eda_hallazgos"),
                menuSubItem("Explorador interactivo", tabName = "eda_explorador")),
       tags$li(class = "header", "MODELO"),
       menuItem("Modelos y resultados", tabName = "modelos", icon = icon("gears")),
       menuItem("Proyección y predicción", tabName = "proyeccion", icon = icon("chart-line")),
+      menuItem("Recomendaciones aplicadas", tabName = "recomendaciones", icon = icon("sliders")),
       tags$li(class = "header", "CIERRE"),
       menuItem("Conclusiones", tabName = "conclusiones", icon = icon("flag-checkered"))
     )
@@ -78,7 +80,7 @@ ui <- dashboardPage(skin = "blue",
           ),
           # ¿Qué hago?
           fluidRow(box(title = "Decisiones recomendadas", status = "success", solidHeader = TRUE, width = 12,
-                       lista_html(RECOMENDACIONES[1:3], numerada = TRUE)))
+                       lista_html(recomendaciones_negocio(df)[1:3], numerada = TRUE)))
         )
       ),
 
@@ -264,6 +266,17 @@ ui <- dashboardPage(skin = "blue",
                               width = 12, status = "success", alto = "460px"))
       ),
 
+      # ------------------------------------------------------------ EDA: hallazgos y recomendaciones
+      tabItem(tabName = "eda_hallazgos",
+        encabezado("Hallazgos y recomendaciones", "Qué dicen los datos y qué hacer con eso"),
+        fluidRow(box(title = "Hallazgos del EDA convertidos en recomendaciones para el negocio", status = "warning",
+                     solidHeader = TRUE, width = 12, DTOutput("tabla_hallazgos"),
+                     div(class = "texto-grafico", "La temporada es el factor más fuerte; el descuento, el que más afecta la",
+                       "ganancia. Son asociaciones observadas en 2014–2017, no causas probadas: conviene probar cada acción en",
+                       "una región antes de aplicarla a toda la empresa. La sección Recomendaciones aplicadas simula cómo",
+                       "cambiaría la proyección 2018 con ellas.")))
+      ),
+
       # ------------------------------------------------------------ EDA: explorador interactivo
       tabItem(tabName = "eda_explorador",
         encabezado("Explorador interactivo", "Elige una variable, el tipo de gráfico y el rango de años"),
@@ -408,6 +421,52 @@ ui <- dashboardPage(skin = "blue",
         )
       ),
 
+      # ------------------------------------------------------------ Recomendaciones aplicadas
+      tabItem(tabName = "recomendaciones",
+        encabezado("Recomendaciones aplicadas", "Cómo cambiaría la proyección 2018 si el negocio aplica las recomendaciones del EDA"),
+        if (!rec_listo) fluidRow(box(title = "Modelos no entrenados", status = "warning", solidHeader = TRUE, width = 12,
+          p("Ejecute ", code("Rscript model/train_model.R"), " y ", code("Rscript model/train_descuentos.R"),
+            " desde la raíz del proyecto y vuelva a abrir la app."))) else tagList(
+          fluidRow(
+            # Caja de control: cada recomendación se activa con su casilla
+            box(title = "Recomendaciones a aplicar", status = "warning", solidHeader = TRUE, width = 4,
+                checkboxInput("rec_tope_on", tags$b("Tope de descuento"), TRUE),
+                conditionalPanel("input.rec_tope_on",
+                  selectInput("rec_tope", "Descuento máximo:", setNames(TOPES_PCT, paste0(TOPES_PCT, " %")), 20),
+                  selectInput("rec_tope_reg", "Dónde se aplica:", c(TODAS, "Central", "East", "South", "West")),
+                  sliderInput("rec_perdida", "Supuesto: pedidos que se pierden al recortar el descuento (%):",
+                              min = 0, max = 100, value = 25, step = 5)),
+                hr(),
+                checkboxInput("rec_temp_on", tags$b("Reforzar la temporada alta (septiembre a diciembre)"), FALSE),
+                conditionalPanel("input.rec_temp_on",
+                  sliderInput("rec_temp", "Supuesto: aumento de ventas en esos meses (%):", min = 0, max = 20, value = 5, step = 1)),
+                hr(),
+                checkboxInput("rec_cat_on", tags$b("Impulsar una categoría con campañas"), FALSE),
+                conditionalPanel("input.rec_cat_on",
+                  selectInput("rec_cat", "Categoría:", names(CATEGORY_COLORS), "Technology"),
+                  sliderInput("rec_cat_pct", "Supuesto: aumento de ventas de esa categoría (%):", min = 0, max = 20, value = 5, step = 1)),
+                helpText("El efecto del tope sale del modelo de descuentos. Los aumentos por temporada y por categoría son",
+                         "supuestos: el modelo no puede estimarlos porque los datos no registran campañas.")),
+            # Resultados: cifras clave y proyección
+            column(8,
+              fluidRow(uiOutput("rec_kpis")),
+              fluidRow(box(title = "Ventas mensuales: real, proyección base y con recomendaciones", status = "primary",
+                           solidHeader = TRUE, width = 12, plotlyOutput("rec_fig", height = "360px"),
+                           div(class = "texto-grafico", textOutput("rec_lectura", inline = TRUE)))))
+          ),
+          fluidRow(
+            caja_grafico("Aporte de cada recomendación a la ganancia 2018", "rec_aportes",
+                         paste("Cada barra suma o resta a la ganancia base. Se aplican en orden: el tope cambia el margen y",
+                               "las demás recomendaciones venden más con ese margen nuevo."), status = "success"),
+            box(title = "¿Dónde conviene poner el tope?", status = "warning", solidHeader = TRUE, width = 6,
+                plotlyOutput("rec_curva", height = "340px"), div(class = "texto-grafico", textOutput("rec_curva_texto", inline = TRUE)))
+          ),
+          fluidRow(box(title = "Cómo se estima el efecto del descuento", status = "info", solidHeader = TRUE, width = 12,
+                       DTOutput("tabla_modelo_desc"), div(class = "texto-grafico", texto_modelo_descuentos()))),
+          fluidRow(box(title = "Supuestos y límites", status = "success", solidHeader = TRUE, width = 12, lista_html(SUPUESTOS_REC)))
+        )
+      ),
+
       # ------------------------------------------------------------ Conclusiones
       tabItem(tabName = "conclusiones",
         encabezado("Conclusiones", "Lo que aprendimos, qué recomendamos y qué tener en cuenta"),
@@ -419,7 +478,9 @@ ui <- dashboardPage(skin = "blue",
         ),
         fluidRow(
           box(title = "Recomendaciones para el negocio", status = "success", solidHeader = TRUE, width = 6,
-              lista_html(RECOMENDACIONES, numerada = TRUE)),
+              lista_html(recomendaciones_negocio(df), numerada = TRUE),
+              helpText("Salen de los hallazgos del EDA (Análisis exploratorio › Hallazgos y recomendaciones), donde está",
+                       "el dato que respalda cada una.")),
           box(title = "Limitaciones", status = "warning", solidHeader = TRUE, width = 6, lista_html(LIMITACIONES))
         )
       )

@@ -386,6 +386,79 @@ eda_mapa <- function(df) {
   list(fig = fig, texto = texto)
 }
 
+# ---------------------------------------------------------------- hallazgos y recomendaciones
+hallazgos_eda <- function(df) {
+  # Hallazgos del EDA convertidos en recomendaciones, calculados con los datos. Lo usan la sección
+  # Hallazgos y recomendaciones del EDA y Conclusiones. Una fila por factor.
+  total <- sum(df$Sales)
+  # Peso de cada mes en las ventas y crecimiento anual
+  mes <- df %>% group_by(m = month(Order_Date)) %>% summarise(v = sum(Sales) / total * 100, .groups = "drop")
+  anual <- df %>% group_by(a = year(Order_Date)) %>% summarise(v = sum(Sales), .groups = "drop") %>%
+    mutate(crec = (v / lag(v) - 1) * 100)
+  # Descuentos de más de 20 %: su pérdida y el margen del resto
+  alto <- df$Discount > 0.2
+  margen_bajo <- sum(df$Profit[!alto]) / sum(df$Sales[!alto]) * 100
+  # Subcategorías con pérdida y margen por categoría
+  neg <- df %>% group_by(`Sub-Category`) %>% summarise(p = sum(Profit), d = mean(Discount), .groups = "drop") %>%
+    filter(p < 0) %>% arrange(p)
+  cat <- df %>% group_by(Category) %>% summarise(v = sum(Sales), p = sum(Profit), .groups = "drop") %>%
+    mutate(m = p / v * 100, share = v / total * 100)
+  fur <- cat %>% filter(Category == "Furniture")
+  altos <- cat %>% filter(Category != "Furniture")
+  # Región con peor y mejor margen, y estados de la peor que pierden dinero
+  reg <- df %>% group_by(Region) %>% summarise(v = sum(Sales), p = sum(Profit), d = mean(Discount), .groups = "drop") %>%
+    mutate(m = p / v * 100, share = v / total * 100)
+  peor <- reg %>% slice_min(m, n = 1)
+  mejor <- reg %>% slice_max(m, n = 1)
+  est_neg <- df %>% filter(Region == peor$Region) %>% group_by(State) %>%
+    summarise(p = sum(Profit), d = mean(Discount), .groups = "drop") %>% filter(p < 0) %>% arrange(p) %>% head(2)
+  # Líneas atípicas por su valor (regla del rango intercuantil)
+  q <- quantile(df$Sales, c(.25, .75))
+  grande <- df$Sales > q[[2]] + 1.5 * (q[[2]] - q[[1]])
+  # Ventas y clientes por segmento
+  seg <- df %>% group_by(Segment) %>% summarise(v = sum(Sales), n = n_distinct(`Customer ID`), .groups = "drop") %>%
+    mutate(vxc = v / n) %>% arrange(desc(v))
+  estados <- if (nrow(est_neg)) sprintf("; %s pierden dinero con descuentos promedio de %d a %d %%.", enumerar(est_neg$State),
+                                        round(min(est_neg$d) * 100), round(max(est_neg$d) * 100)) else "."
+
+  tibble::tribble(
+    ~Factor, ~Hallazgo, ~Recomendacion,
+    "Temporada",
+    sprintf("Septiembre a diciembre concentran el %s de las ventas del año; febrero, solo el %s. Es el factor más fuerte y el que más usa el modelo.",
+            pct(sum(mes$v[mes$m >= 9]), 0), pct(mes$v[mes$m == 2])),
+    "Planificar inventario, personal y campañas para septiembre a diciembre con la proyección mensual. Usar febrero para promociones controladas o para liquidar inventario.",
+    "Tendencia",
+    sprintf("Las ventas crecieron %s en 2016 y %s en 2017.", pct(anual$crec[anual$a == 2016], 0, signo = TRUE),
+            pct(anual$crec[anual$a == 2017], 0, signo = TRUE)),
+    "Fijar las metas de 2018 con la proyección como base, que ya incluye el crecimiento, y revisarlas cada mes con las ventas reales.",
+    "Descuento",
+    sprintf("El descuento casi no se relaciona con las ventas (correlación %.2f), pero las líneas con más de 20 %% de descuento perdieron %s. Con 20 %% o menos, el margen es de %s.",
+            cor(df$Sales, df$Discount), usd(-sum(df$Profit[alto])), pct(margen_bajo, 0)),
+    "Poner un tope de 20 % al descuento y pedir aprobación por encima de ese valor: es la acción con mayor efecto en la ganancia.",
+    "Producto",
+    sprintf("%s pierden dinero. Furniture vende el %s pero deja un margen de %s, frente a cerca de %s de %s.",
+            enumerar(sprintf("%s (%d %% de descuento promedio)", neg$`Sub-Category`, round(neg$d * 100))),
+            pct(fur$share, 0), pct(fur$m), pct(mean(altos$m), 0), enumerar(altos$Category)),
+    sprintf("Revisar precios y descuentos de %s. Dar prioridad a %s en las campañas: cada venta deja más ganancia.",
+            enumerar(head(neg$`Sub-Category`, 2)), enumerar(altos$Category)),
+    "Región",
+    sprintf("West y East suman el %s de las ventas. %s tiene el peor margen (%s) y un descuento promedio de %d %% (%s: %d %%)%s",
+            pct(sum(reg$share[reg$Region %in% c("West", "East")]), 0), peor$Region, pct(peor$m, 0), round(peor$d * 100),
+            mejor$Region, round(mejor$d * 100), estados),
+    sprintf("Aplicar primero el tope de descuento en %s%s, y replicar ahí la política comercial de %s, la región con mejor margen.",
+            peor$Region, if (nrow(est_neg)) paste0(", empezando por ", enumerar(est_neg$State)) else "", mejor$Region),
+    "Pedidos grandes",
+    sprintf("El %s de las líneas de pedido (las atípicas por su valor) genera el %s de las ventas.",
+            pct(mean(grande) * 100, 0), pct(sum(df$Sales[grande]) / total * 100, 0)),
+    "Dar atención y seguimiento dedicados a los clientes de pedidos grandes: perder uno pesa más que perder muchos pequeños.",
+    "Segmento",
+    sprintf("%s genera el %s de las ventas porque tiene más clientes (%d). El gasto por cliente es parecido en los tres segmentos (%s a %s en 4 años).",
+            seg$Segment[1], pct(seg$v[1] / total * 100, 0), seg$n[1], usd(min(seg$vxc)), usd(max(seg$vxc))),
+    sprintf("Para crecer, sumar clientes en %s, que gastan lo mismo por cliente pero son menos, en lugar de buscar subir el ticket.",
+            enumerar(seg$Segment[-1]))
+  )
+}
+
 eda_mapa_mediana <- function(df) {
   # Venta mediana por línea de pedido: la mediana con pocas líneas no es estable, solo estados con 30 o más
   t <- ventas_estado(df)

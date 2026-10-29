@@ -166,3 +166,17 @@ r <- eda_burbuja(df); interactivo(r$fig)
 ```
 
 `r r$texto`
+
+## 6 · Hallazgos y recomendaciones para el negocio
+
+Cada factor del análisis, con el dato que lo respalda y la acción que sugiere. Las cifras se calculan
+con los datos (`hallazgos_eda()` en `R/eda.R`, la misma función que usa la app).
+
+```{r hallazgos}
+hallazgos_eda(df) %>% rename(`Recomendación` = Recomendacion) %>% tabla()
+```
+
+La temporada es el factor más fuerte; el descuento, el que más afecta la ganancia. Son asociaciones
+observadas en 2014–2017, no causas probadas: conviene probar cada acción en una región antes de
+aplicarla a toda la empresa. El capítulo [Recomendaciones aplicadas](#recomendaciones) simula cómo
+cambiaría la proyección 2018 con ellas.

@@ -29,7 +29,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="proyeccion.html"/>
+<link rel="prev" href="recomendaciones.html"/>
 <link rel="next" href="app-shiny.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -223,6 +223,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#contenedores-2d-descuento-y-ventas"><i class="fa fa-check"></i>Contenedores 2D: descuento y ventas</a></li>
 <li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#burbujas-volumen-y-valor-de-las-ventas-por-subcategor%C3%ADa"><i class="fa fa-check"></i>Burbujas: volumen y valor de las ventas por subcategoría</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="eda.html"><a href="eda.html#hallazgos-y-recomendaciones-para-el-negocio"><i class="fa fa-check"></i>6 · Hallazgos y recomendaciones para el negocio</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="modelos.html"><a href="modelos.html"><i class="fa fa-check"></i>Modelos y resultados</a>
 <ul>
@@ -250,6 +251,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#ventas-mensuales-real-20152017-y-proyecci%C3%B3n-2018"><i class="fa fa-check"></i>Ventas mensuales: real 2015–2017 y proyección 2018</a></li>
 <li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#proyecci%C3%B3n-por-categor%C3%ADa-y-regi%C3%B3n"><i class="fa fa-check"></i>Proyección por categoría y región</a></li>
 <li class="chapter" data-level="" data-path="proyeccion.html"><a href="proyeccion.html#lectura-para-el-negocio"><i class="fa fa-check"></i>Lectura para el negocio</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html"><i class="fa fa-check"></i>Recomendaciones aplicadas</a>
+<ul>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#c%C3%B3mo-se-estima-el-efecto-del-descuento"><i class="fa fa-check"></i>Cómo se estima el efecto del descuento</a></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#escenario-principal-tope-de-20-en-toda-la-empresa"><i class="fa fa-check"></i>Escenario principal: tope de 20 % en toda la empresa</a></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#d%C3%B3nde-conviene-poner-el-tope"><i class="fa fa-check"></i>¿Dónde conviene poner el tope?</a></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#por-regi%C3%B3n"><i class="fa fa-check"></i>Por región</a></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#las-tres-recomendaciones-juntas"><i class="fa fa-check"></i>Las tres recomendaciones juntas</a></li>
+<li class="chapter" data-level="" data-path="recomendaciones.html"><a href="recomendaciones.html#supuestos-y-l%C3%ADmites"><i class="fa fa-check"></i>Supuestos y límites</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i>Conclusiones</a>
 <ul>
@@ -302,11 +312,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="recomendaciones-para-el-negocio" class="section level2 hasAnchor">
 <h2>Recomendaciones para el negocio<a href="conclusiones.html#recomendaciones-para-el-negocio" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Salen de los hallazgos del EDA (sección 6 de ese capítulo), donde está el dato que respalda cada una.
+El capítulo <a href="recomendaciones.html#recomendaciones">Recomendaciones aplicadas</a> estima cómo cambiarían la proyección y la
+ganancia de 2018.</p>
 <ol style="list-style-type: decimal">
-<li>Planificar inventario y personal para septiembre a diciembre a partir de la proyección mensual, sobre todo en Technology y en las regiones West y East.</li>
-<li>Fijar las metas de cada región con la proyección como base y revisarlas cada mes con las ventas reales: el error es menor un mes adelante que doce.</li>
-<li>Vigilar las combinaciones de menor crecimiento proyectado (pestaña Proyección 2018) para actuar con anticipación.</li>
-<li>Reentrenar el modelo cada mes con los datos nuevos (Rscript model/train_model.R).</li>
+<li><strong>Temporada:</strong> Planificar inventario, personal y campañas para septiembre a diciembre con la proyección mensual. Usar febrero para promociones controladas o para liquidar inventario.</li>
+<li><strong>Tendencia:</strong> Fijar las metas de 2018 con la proyección como base, que ya incluye el crecimiento, y revisarlas cada mes con las ventas reales.</li>
+<li><strong>Descuento:</strong> Poner un tope de 20 % al descuento y pedir aprobación por encima de ese valor: es la acción con mayor efecto en la ganancia.</li>
+<li><strong>Producto:</strong> Revisar precios y descuentos de Tables y Bookcases. Dar prioridad a Office Supplies y Technology en las campañas: cada venta deja más ganancia.</li>
+<li><strong>Región:</strong> Aplicar primero el tope de descuento en Central, empezando por Texas y Illinois, y replicar ahí la política comercial de West, la región con mejor margen.</li>
+<li><strong>Pedidos grandes:</strong> Dar atención y seguimiento dedicados a los clientes de pedidos grandes: perder uno pesa más que perder muchos pequeños.</li>
+<li><strong>Segmento:</strong> Para crecer, sumar clientes en Corporate y Home Office, que gastan lo mismo por cliente pero son menos, en lugar de buscar subir el ticket.</li>
 </ol>
 </div>
 <div id="limitaciones" class="section level2 hasAnchor">
@@ -327,7 +343,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="proyeccion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="recomendaciones.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="app-shiny.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

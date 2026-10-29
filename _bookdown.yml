@@ -11,8 +11,9 @@ rmd_files:
   - 05-eda.Rmd
   - 06-modelos.Rmd
   - 07-proyeccion.Rmd
-  - 08-conclusiones.Rmd
-  - 09-app-shiny.Rmd
+  - 08-recomendaciones.Rmd
+  - 09-conclusiones.Rmd
+  - 10-app-shiny.Rmd
 language:
   ui:
     chapter_name: ""

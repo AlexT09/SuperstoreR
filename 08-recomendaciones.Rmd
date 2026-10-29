@@ -1,0 +1,110 @@
+# Recomendaciones aplicadas {-#recomendaciones}
+
+*Cómo cambiaría la proyección 2018 si el negocio aplica las recomendaciones del EDA*
+
+El modelo de proyección solo conoce el calendario y las ventas pasadas, así que no puede recibir una
+acción del negocio. Por eso cada recomendación se aplica como un efecto sobre la proyección base:
+
+> **Proyección con recomendaciones = proyección base 2018 (`r resumen$mejor_modelo`) × efecto de cada recomendación**
+
+| Recomendación | De dónde sale el efecto |
+|---|---|
+| Tope de descuento | Un segundo modelo de machine learning, que predice el margen de cada línea de pedido según su descuento (`model/train_descuentos.R`) |
+| Reforzar la temporada alta | Supuesto: un % más de ventas de septiembre a diciembre |
+| Impulsar una categoría | Supuesto: un % más de ventas de esa categoría |
+
+El descuento es la única acción del negocio que registran los datos, por eso es la única que se puede
+estimar con un modelo. En la [app Shiny](#app-shiny) el simulador es interactivo; aquí se muestran los
+escenarios principales.
+
+## Cómo se estima el efecto del descuento
+
+```{r rec-modelo}
+tabla(tabla_modelo_descuentos())
+```
+
+`r texto_modelo_descuentos()`
+
+Para simular una línea con descuento mayor que el tope:
+
+- **Precio:** la venta pasa a `Sales × (1 − tope) / (1 − descuento)`. Las unidades no cambian, porque en
+  los datos el descuento no se relaciona con la cantidad por línea (correlación 0,01).
+- **Margen:** el real más el cambio que predice el modelo al pasar del descuento original al tope.
+- **Pedidos perdidos:** cuántos clientes dejarían de comprar sin el descuento no se puede estimar con
+  estos datos. Es un supuesto (25 % en el escenario principal) y más abajo se ve cómo cambia el resultado.
+
+## Escenario principal: tope de 20 % en toda la empresa
+
+```{r rec-principal}
+p <- simular_rec(tope = 20, perdida = 0.25)
+interactivo(fig_rec_mensual(p, "Con tope de 20 %"))
+```
+
+```{r rec-principal-texto, results = "asis"}
+vb <- sum(p$v_base); vs <- sum(p$v3); gb <- sum(p$g_base); gs <- sum(p$g3)
+lista(c(sprintf("**Ventas 2018:** %s (base %s, %s).", usd(vs), usd(vb), pct((vs / vb - 1) * 100, signo = TRUE)),
+        sprintf("**Ganancia 2018:** %s (base %s, %s).", usd(gs), usd(gb), pct((gs / gb - 1) * 100, signo = TRUE)),
+        sprintf("**Margen:** %s (base %s).", pct(gs / vs * 100), pct(gb / vb * 100)),
+        lectura_rec(p, TRUE, 20, TODAS, FALSE, 0, FALSE, NA, 0)))
+```
+
+Con menos descuento, las líneas recortadas pagan más por las mismas unidades: aunque se pierda una
+parte de esos pedidos, las ventas casi no cambian y la ganancia sube, porque los descuentos de más de
+20 % hoy dejan pérdida.
+
+## ¿Dónde conviene poner el tope?
+
+Ganancia que habría tenido 2017 con cada tope, según cuántos de los pedidos recortados se pierdan.
+
+```{r rec-curva}
+interactivo(fig_rec_curva(TODAS, c(0, 0.25, 0.5, 1)))
+```
+
+```{r rec-curva-texto, results = "asis"}
+mejores <- curva_topes(TODAS, c(0, 0.25, 0.5, 1)) %>% group_by(perdida) %>% slice_max(ganancia, n = 1, with_ties = FALSE)
+lista(sprintf("Si se pierde el %s de los pedidos recortados, el mejor tope es %d %% (%s).",
+              pct(mejores$perdida * 100, 0), mejores$tope, usd(mejores$ganancia)))
+```
+
+Los topes bajos (0–15 %) dependen mucho del supuesto, porque recortan descuentos pequeños que hoy sí
+dejan ganancia. El tope de 20 % es la conclusión más sólida: aun si se perdieran todos los pedidos
+recortados, es el mejor tope y deja más ganancia que la real.
+
+## Por región
+
+Ganancia 2018 adicional al aplicar el tope de 20 % en una sola región, con 25 % de pedidos perdidos y
+en el peor caso (se pierden todos).
+
+```{r rec-regiones}
+tabla_rec_regiones() %>%
+  transmute(`Región` = Region, `Con 25 % de pérdida` = paste(usd(con25), "más"), `Peor caso` = paste(usd(peor), "más")) %>%
+  tabla()
+```
+
+En todas las regiones el tope mejora la ganancia incluso en el peor caso. La región donde más aporta es
+la que más descuentos altos concentra, coherente con el hallazgo del EDA.
+
+## Las tres recomendaciones juntas
+
+Tope de 20 % (25 % de pedidos perdidos), temporada alta +5 % y Technology +5 %. Los dos últimos efectos
+son supuestos ilustrativos: los datos no registran campañas, así que el modelo no puede estimarlos.
+
+```{r rec-aportes}
+p3 <- simular_rec(tope = 20, perdida = 0.25, temporada = 5, categoria = "Technology", impulso = 5)
+interactivo(fig_rec_aportes(p3, c("Tope de descuento", "Temporada alta +5 %", "Technology +5 %")), leyenda = FALSE)
+```
+
+```{r rec-aportes-texto}
+g3 <- colSums(p3[c("g_base", "g1", "g2", "g3")])
+```
+
+La ganancia de 2018 pasa de `r usd(g3[["g_base"]])` a `r usd(g3[["g3"]])`
+(`r pct((g3[["g3"]] / g3[["g_base"]] - 1) * 100, 0, signo = TRUE)`) y las ventas, de `r usd(sum(p3$v_base))`
+a `r usd(sum(p3$v3))`. El tope aporta `r usd(g3[["g1"]] - g3[["g_base"]])`: casi todo el cambio. Vender
+más con un margen de `r pct(g3[["g1"]] / sum(p3$v1) * 100, 0)` suma poco a la ganancia.
+
+## Supuestos y límites
+
+```{r rec-supuestos, results = "asis"}
+lista(SUPUESTOS_REC)
+```

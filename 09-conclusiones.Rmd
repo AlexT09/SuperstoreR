@@ -16,8 +16,12 @@ lista(conclusiones_modelo())
 
 ## Recomendaciones para el negocio
 
+Salen de los hallazgos del EDA (sección 6 de ese capítulo), donde está el dato que respalda cada una.
+El capítulo [Recomendaciones aplicadas](#recomendaciones) estima cómo cambiarían la proyección y la
+ganancia de 2018.
+
 ```{r recomendaciones, results = "asis"}
-lista(RECOMENDACIONES, numerada = TRUE)
+lista(recomendaciones_negocio(df, negrita = TRUE), numerada = TRUE)
 ```
 
 ## Limitaciones

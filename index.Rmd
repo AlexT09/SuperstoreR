@@ -14,7 +14,7 @@ description: "Análisis exploratorio y proyección de ventas 2018 del dataset Sa
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%")
 
 # Mismo código que usa la app Shiny: datos, gráficas (ggplot2 + ggplotly) y textos
-for (f in c("R/common.R", "model/features.R", "R/eda.R", "R/resultados.R", "R/contenido.R")) {
+for (f in c("R/common.R", "model/features.R", "R/eda.R", "R/resultados.R", "R/contenido.R", "R/recomendaciones.R")) {
   source(f, encoding = "UTF-8")
 }
 tabla <- function(df) knitr::kable(df, align = "l")
