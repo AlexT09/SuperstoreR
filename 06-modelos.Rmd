@@ -2,6 +2,144 @@
 
 *7 modelos de regresión evaluados en 2017, un año que no vieron al entrenar*
 
+## Entrenamiento de los modelos
+
+Aquí se entrenan los 7 modelos con el mismo procedimiento de `model/train_model.R`: los datos se
+separan en el tiempo (entrenamiento 2015–2016 y prueba 2017), cada modelo busca sus mejores
+hiperparámetros con Grid Search y validación cruzada temporal, y se evalúa una sola vez en 2017. El
+código está a la vista y comentado; tarda alrededor de 20 segundos.
+
+### 1. Datos del modelo
+
+```{r entrena-datos, echo = TRUE, comment = "", results = "hold"}
+# Funciones del entrenamiento: los 7 modelos con sus rejillas (model/modelos.R), las métricas
+# (model/evaluate.R) y la validación cruzada temporal (model/entrenamiento.R)
+for (f in c("model/modelos.R", "model/evaluate.R", "model/entrenamiento.R")) source(f, encoding = "UTF-8")
+
+# Tabla mensual del ETL: una fila por categoría × región × mes (12 series × 48 meses)
+panel <- load_mensual()
+
+# Agrega las variables del modelo (todas usan solo meses anteriores, model/features.R) y el
+# objetivo: el índice = ventas del mes ÷ promedio de los 12 meses anteriores.
+# Se descartan las filas sin 12 meses de historia (todo 2014).
+datos <- agregar_variables(panel) %>% filter(if_all(all_of(c(FEATURES, TARGET)), ~ !is.na(.x)))
+
+# División en el tiempo, nunca al azar: se entrena con el pasado y se prueba con el futuro
+train <- datos %>% filter(year(Mes) < 2017)   # 2015–2016
+test <- datos %>% filter(year(Mes) == 2017)   # 2017: se usa una sola vez, para evaluar
+
+cat("Entrenamiento:", nrow(train), "filas,", periodo(train), "\n")
+cat("Prueba:       ", nrow(test), "filas,", periodo(test), "\n")
+cat("Variables:    ", paste(FEATURES, collapse = ", "), "\n")
+cat("Objetivo:     ", TARGET, "\n")
+```
+
+### 2. Modelos, rejillas de hiperparámetros y validación cruzada
+
+```{r entrena-modelos, echo = TRUE}
+# Los 7 modelos están definidos en model/modelos.R. Cada uno tiene su rejilla (todas las
+# combinaciones de hiperparámetros que prueba Grid Search), una función para ajustarlo y otra
+# para predecir:
+#   Ridge y Lasso (glmnet): lambda controla cuánto se penalizan los coeficientes
+#   KNN (propio): k vecinos, con peso uniforme o por distancia
+#   Árbol de decisión (rpart): profundidad máxima y tamaño mínimo de hoja
+#   Random Forest (randomForest): 300 árboles; profundidad, hoja y % de variables en cada corte
+#   XGBoost (xgboost): 300 árboles en secuencia; profundidad, tasa de aprendizaje, submuestra y peso por hoja
+#   SVR (e1071): C, epsilon y gamma del kernel radial
+tabla(tibble(
+  Modelo = names(MODELOS),
+  Combinaciones = sapply(MODELOS, function(m) nrow(m$rejilla)),
+  Rejilla = sapply(MODELOS, function(m) fmt_rejilla(a_json(lapply(m$rejilla, unique))))
+))
+```
+
+```{r entrena-pliegues, echo = TRUE}
+# Validación cruzada temporal: 4 pliegues; cada uno entrena con todos los meses anteriores y valida
+# con los 3 meses siguientes (3 meses × 12 series = 36 filas). Nunca valida con meses del pasado.
+cv <- pliegues(nrow(train))
+tabla(tibble(
+  Pliegue = seq_along(cv),
+  Entrena = sapply(cv, function(f) periodo(train[f$train, ])),
+  Valida = sapply(cv, function(f) periodo(train[f$valid, ]))
+))
+```
+
+### 3. Entrenamiento con Grid Search y evaluación en 2017
+
+```{r entrena-grid, echo = TRUE}
+busquedas <- list()
+filas <- list()
+for (nombre in names(MODELOS)) {
+  rejilla <- MODELOS[[nombre]]$rejilla
+  t0 <- Sys.time()
+
+  # Grid Search: para cada combinación de la rejilla, entrena en cada pliegue y mide el MAE del
+  # índice en sus 3 meses de validación; el error de la combinación es el promedio de los 4 pliegues
+  error_cv <- sapply(seq_len(nrow(rejilla)), function(j) {
+    combinacion <- rejilla[j, , drop = FALSE]
+    mean(sapply(cv, function(f) {
+      # ajustar_modelo() ajusta el preprocesamiento (one-hot + estandarización) y el modelo solo
+      # con los meses de entrenamiento del pliegue, como un Pipeline de scikit-learn
+      modelo <- ajustar_modelo(nombre, combinacion, train[f$train, ])
+      mean(abs(train[[TARGET]][f$valid] - predecir_indice(modelo, train[f$valid, ])))
+    }))
+  })
+
+  # La combinación con menor error de validación se reentrena con todo 2015–2016
+  mejor <- which.min(error_cv)
+  final <- ajustar_modelo(nombre, rejilla[mejor, , drop = FALSE], train)
+  segundos <- as.numeric(difftime(Sys.time(), t0, units = "secs"))
+  busquedas[[nombre]] <- list(final = final, cv = error_cv[mejor], params = rejilla[mejor, , drop = FALSE])
+
+  # Evaluación en 2017, que el modelo no vio: el índice predicho se convierte a dólares
+  pred <- a_ventas(predecir_indice(final, test), test)
+  m <- metricas(test$Sales, pred)
+  filas[[nombre]] <- tibble(
+    Modelo = nombre,
+    `Error de validación (MAE del índice)` = sprintf("%.4f", error_cv[mejor]),
+    `MAE 2017` = usd(m$MAE), `RMSE 2017` = usd(m$RMSE), `R² 2017` = sprintf("%.2f", m$R2),
+    `Mejores hiperparámetros` = fmt_params(a_json(as.list(rejilla[mejor, , drop = FALSE]))),
+    Segundos = sprintf("%.1f", segundos)
+  )
+}
+
+# Referencia para comparar: vender lo mismo que el mismo mes del año anterior (lag_12)
+ref_m <- metricas(test$Sales, test$lag_12)
+filas[[REFERENCIA]] <- tibble(
+  Modelo = REFERENCIA, `Error de validación (MAE del índice)` = "—",
+  `MAE 2017` = usd(ref_m$MAE), `RMSE 2017` = usd(ref_m$RMSE), `R² 2017` = sprintf("%.2f", ref_m$R2),
+  `Mejores hiperparámetros` = "—", Segundos = "—"
+)
+tabla(bind_rows(filas))
+```
+
+### 4. Elección del mejor modelo
+
+```{r entrena-eleccion, echo = TRUE, comment = "", results = "hold"}
+# El mejor modelo es el de menor error de validación cruzada. La prueba de 2017 no interviene en la
+# elección: así sigue siendo una medida independiente del error. El árbol de decisión individual se
+# compara, pero no puede ser el modelo final porque es inestable (NO_ELEGIBLES, model/entrenamiento.R).
+elegibles <- setdiff(names(busquedas), NO_ELEGIBLES)
+ganador <- elegibles[which.min(sapply(busquedas[elegibles], `[[`, "cv"))]
+mae <- metricas(test$Sales, a_ventas(predecir_indice(busquedas[[ganador]]$final, test), test))$MAE
+cat("Mejor modelo:   ", ganador, "\n")
+cat("Hiperparámetros:", fmt_params(a_json(as.list(busquedas[[ganador]]$params))), "\n")
+cat("MAE en 2017:    ", usd(mae), "(referencia:", usd(ref_m$MAE), ")\n")
+
+# Comprobación: este entrenamiento debe llegar al mismo resultado que model/train_model.R, que es
+# el que guardó en model/artifacts/ los resultados que usan las secciones siguientes
+if (ganador == resumen$mejor_modelo && abs(mae - resumen$prueba$MAE) < 1) {
+  cat("\nCoincide con los resultados guardados en model/artifacts/.\n")
+} else {
+  cat("\nDifiere de lo guardado (", resumen$mejor_modelo, ", MAE ", usd(resumen$prueba$MAE),
+      "): revise que las versiones de los paquetes sean las mismas.\n", sep = "")
+}
+```
+
+Además de este entrenamiento, `model/train_model.R` reentrena el mejor modelo con 2015–2017, proyecta
+2018 mes a mes, calcula la importancia de variables y guarda todo en `model/artifacts/`. Las secciones
+siguientes muestran esos resultados.
+
 ```{r modelos-datos}
 p <- resumen$prueba
 rf <- resumen$referencia

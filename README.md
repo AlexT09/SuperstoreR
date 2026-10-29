@@ -8,7 +8,7 @@ Análisis y proyección de ventas del dataset **Sample Superstore** (2014–2017
 Es la versión en R del proyecto [proyecto_superstorep2](https://github.com/AlexT09/proyecto_superstorep2)
 (Python + Dash), con la misma metodología, las mismas pestañas y el mismo diseño.
 
-Libro publicado: **https://alext09.github.io/rbook/**
+Libro publicado: **https://alext09.github.io/ShinyAppSuperstore/**
 
 ## Contenido
 
@@ -26,7 +26,7 @@ tendencia) hechas con **ggplot2** y vueltas interactivas con `ggplotly`.
 | Introducción · Problema y objetivos · Marco teórico · Metodología | Planteamiento, modelos, variables y flujo |
 | ETL | Del CSV crudo a la tabla mensual que usa el modelo |
 | EDA | Distribución de las ventas, factores, estacionalidad, tendencia, atípicos, relación con el mes del año anterior, mapas por estado (sf + geom_sf), correlación, contenedores 2D y burbujas por subcategoría |
-| Modelos y resultados | 7 modelos evaluados en 2017, ranking frente a la referencia, rejillas de Grid Search, sobreajuste, importancia de variables y prueba de la proyección a 12 meses; en la app, al final, el entrenamiento del modelo: entrena el modelo elegido al presionar un botón y permite guardarlo como `.rds` |
+| Modelos y resultados | En el libro empieza entrenando los 7 modelos con el código R a la vista y comentado (Grid Search con validación cruzada temporal y evaluación en 2017), y comprueba que llega a los resultados guardados. Luego, 7 modelos evaluados en 2017, ranking frente a la referencia, rejillas de Grid Search, sobreajuste, importancia de variables y prueba de la proyección a 12 meses; en la app, al final, el entrenamiento del modelo: entrena el modelo elegido al presionar un botón y permite guardarlo como `.rds` |
 | Proyección 2018 | Proyección por categoría, región y mes, con su error típico (filtrable en la app) |
 | Predicción (solo app, al final de Proyección y predicción) | Formulario con ejemplos de temporada alta y baja: carga `model.rds` y predice las ventas de un mes |
 | Conclusiones | Hallazgos, recomendaciones y limitaciones |
