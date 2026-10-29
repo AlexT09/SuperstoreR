@@ -78,7 +78,8 @@ load_mensual <- function() {
 }
 
 # ---------------------------------------------------------------- resultados del modelo
-# La app y el libro nunca entrenan: solo leen lo que deja model/train_model.R en model/artifacts/.
+# Los resultados que muestran la app y el libro vienen de model/train_model.R (model/artifacts/).
+# La única excepción es la sección "Entrenamiento del modelo" de la app, que entrena en vivo.
 REFERENCIA <- "Referencia (año anterior)"
 
 modelo_listo <- function() file.exists(file.path(ART, "resumen.json"))

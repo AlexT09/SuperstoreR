@@ -32,7 +32,6 @@ ui <- dashboardPage(skin = "blue",
                menuSubItem("Explorador interactivo", tabName = "eda_explorador")),
       tags$li(class = "header", "MODELO"),
       menuItem("Modelos y resultados", tabName = "modelos", icon = icon("gears")),
-      menuItem("Entrenamiento del modelo", tabName = "entrenamiento", icon = icon("play")),
       menuItem("Proyección y predicción", tabName = "proyeccion", icon = icon("chart-line")),
       tags$li(class = "header", "CIERRE"),
       menuItem("Conclusiones", tabName = "conclusiones", icon = icon("flag-checkered"))
@@ -331,12 +330,9 @@ ui <- dashboardPage(skin = "blue",
             "del siguiente, sin conocer ningún dato real del año. El modelo acierta el total del año y la forma",
             "estacional; los errores están en el detalle de cada mes. La referencia subestima todo el año porque",
             "repite 2016 sin el crecimiento."), width = 12, status = "success"))
-        )
-      ),
-
-      # ------------------------------------------------------------ Entrenamiento del modelo
-      tabItem(tabName = "entrenamiento",
-        encabezado("Entrenamiento del modelo", "Entrena cualquiera de los 7 modelos con la misma metodología del proyecto"),
+        ),
+        # Entrenamiento del modelo (no depende de los resultados guardados en model/artifacts/)
+        h3(class = "titulo-seccion", "Entrenamiento del modelo: entrena cualquiera de los 7 modelos"),
         fluidRow(
           # Caja de control
           box(title = "Control de entrenamiento", status = "primary", solidHeader = TRUE, width = 4,

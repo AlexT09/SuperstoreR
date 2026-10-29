@@ -1,6 +1,6 @@
 # model/entrenamiento.R — Funciones del entrenamiento: validación cruzada temporal, búsqueda de
-# hiperparámetros (Grid Search) y proyección recursiva. Las usan model/train_model.R y la pestaña
-# "Entrenamiento del modelo" de la app Shiny.
+# hiperparámetros (Grid Search) y proyección recursiva. Las usan model/train_model.R y la
+# sección "Entrenamiento del modelo" (en Modelos y resultados) de la app Shiny.
 
 ANIO_PRUEBA <- 2017
 N_SERIES <- 12 # 3 categorías × 4 regiones: filas por mes
