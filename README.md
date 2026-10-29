@@ -113,7 +113,7 @@ Rscript build.R                   # libro -> docs/
 │   ├── entrenamiento.R        # Validación cruzada temporal, Grid Search y proyección recursiva
 │   ├── train_model.R          # Entrena, compara y proyecta 2018
 │   └── artifacts/             # model.rds, resultados, predicciones y proyección (generados)
-├── index.Rmd … 10-app-shiny.Rmd   # Capítulos del libro
+├── index.Rmd … 09-app-shiny.Rmd   # Capítulos del libro
 ├── _bookdown.yml · _output.yml    # Configuración del libro
 ├── build.R                    # Construye el libro en docs/
 ├── style.css                  # Estilo del libro
