@@ -5,10 +5,10 @@ Análisis y proyección de ventas del dataset **Sample Superstore** (2014–2017
 1. **EDA:** ¿qué factores (categoría, región, segmento, tiempo) explican el nivel de ventas?
 2. **Machine learning:** ¿cuánto venderá cada categoría en cada región, mes a mes, durante 2018?
 
-Es la versión en R del proyecto [proyecto_superstorep2](https://github.com/AlexT09/proyecto_superstorep2)
+Es la versión en R del proyecto [SuperstorePython](https://github.com/AlexT09/SuperstorePython)
 (Python + Dash), con la misma metodología, las mismas pestañas y el mismo diseño.
 
-Libro publicado: **https://alext09.github.io/ShinyAppSuperstore/**
+Libro publicado: **https://alext09.github.io/SuperstoreR/**
 
 ## Contenido
 

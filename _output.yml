@@ -6,7 +6,7 @@ bookdown::gitbook:
       before: |
         <li><a href="./">Proyección de ventas Sample Superstore</a></li>
       after: |
-        <li><a href="https://github.com/AlexT09/ShinyAppSuperstore" target="blank">Repositorio en GitHub</a></li>
+        <li><a href="https://github.com/AlexT09/SuperstoreR" target="blank">Repositorio en GitHub</a></li>
     edit: null
     download: null
     sharing: null
