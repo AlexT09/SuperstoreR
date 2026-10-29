@@ -1,7 +1,5 @@
 # App Shiny {-#app-shiny}
 
-*El mismo proyecto en un dashboard interactivo*
-
 La carpeta `app/` contiene una app hecha con **Shiny** y **shinydashboard**, con la estructura del
 capítulo *Visualización con shiny* del curso: `global.R` (librerías, datos y preprocesamiento),
 `ui.R` (interfaz) y `server.R` (lógica), más la carpeta `www/` con el logo y los estilos. Usa el
