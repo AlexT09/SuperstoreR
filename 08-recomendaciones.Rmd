@@ -35,17 +35,19 @@ Para simular una línea con descuento mayor que el tope:
 
 ## Escenario principal: tope de 20 % en toda la empresa
 
-```{r rec-principal}
-p <- simular_rec(tope = 20, perdida = 0.25)
-interactivo(fig_rec_mensual(p, "Con tope de 20 %"))
-```
+### Impacto de las recomendaciones en el negocio {-}
 
 ```{r rec-principal-texto, results = "asis"}
+p <- simular_rec(tope = 20, perdida = 0.25)
 vb <- sum(p$v_base); vs <- sum(p$v3); gb <- sum(p$g_base); gs <- sum(p$g3)
 lista(c(sprintf("**Ventas 2018:** %s (base %s, %s).", usd(vs), usd(vb), pct((vs / vb - 1) * 100, signo = TRUE)),
         sprintf("**Ganancia 2018:** %s (base %s, %s).", usd(gs), usd(gb), pct((gs / gb - 1) * 100, signo = TRUE)),
         sprintf("**Margen:** %s (base %s).", pct(gs / vs * 100), pct(gb / vb * 100)),
         lectura_rec(p, TRUE, 20, TODAS, FALSE, 0, FALSE, NA, 0)))
+```
+
+```{r rec-principal}
+interactivo(fig_rec_mensual(p, "Con tope de 20 %"))
 ```
 
 Con menos descuento, las líneas recortadas pagan más por las mismas unidades: aunque se pierda una

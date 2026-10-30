@@ -443,9 +443,11 @@ ui <- dashboardPage(skin = "blue",
             # Resultados: cifras clave y proyección
             column(8,
               fluidRow(uiOutput("rec_kpis")),
+              fluidRow(box(title = "Impacto de las recomendaciones en el negocio", status = "success",
+                           solidHeader = TRUE, width = 12,
+                           div(class = "texto-grafico", textOutput("rec_lectura", inline = TRUE)))),
               fluidRow(box(title = "Ventas mensuales: real, proyección base y con recomendaciones", status = "primary",
-                           solidHeader = TRUE, width = 12, plotlyOutput("rec_fig", height = "360px"),
-                           div(class = "texto-grafico", textOutput("rec_lectura", inline = TRUE)))))
+                           solidHeader = TRUE, width = 12, plotlyOutput("rec_fig", height = "360px"))))
           ),
           fluidRow(
             caja_grafico("Aporte de cada recomendación a la ganancia 2018", "rec_aportes",
