@@ -239,44 +239,4 @@ server <- function(input, output, session) {
     else helpText("El modelo final se entrenó con 2015–2017, así que ya conoce este mes. Para medir su error sin ventaja,",
                   "vea la prueba de 2017 en la sección Modelos y resultados.")
   })
-
-  # --- Recomendaciones aplicadas ---
-  if (!rec_listo) return(invisible())
-  # Valores de los controles; una recomendación desactivada no cambia nada (tope 80 % = sin tope)
-  rec_param <- reactive(list(
-    tope_on = isTRUE(input$rec_tope_on), tope = if (isTRUE(input$rec_tope_on)) as.numeric(input$rec_tope) else 80,
-    region = input$rec_tope_reg, perdida = input$rec_perdida / 100,
-    temp_on = isTRUE(input$rec_temp_on), temp = if (isTRUE(input$rec_temp_on)) input$rec_temp else 0,
-    cat_on = isTRUE(input$rec_cat_on), cat = input$rec_cat, impulso = if (isTRUE(input$rec_cat_on)) input$rec_cat_pct else 0
-  ))
-  # Proyección 2018 con las recomendaciones activadas (se recalcula con cada cambio)
-  rec_sim <- reactive({
-    a <- rec_param()
-    simular_rec(a$tope, a$region, a$perdida, a$temp, if (a$cat_on) a$cat else NA, a$impulso)
-  })
-
-  output$rec_kpis <- renderUI({
-    p <- rec_sim()
-    vb <- sum(p$v_base); vs <- sum(p$v3); gb <- sum(p$g_base); gs <- sum(p$g3)
-    tagList(
-      valueBox(usd(vs), sprintf("Ventas 2018 · base %s · %s", usd(vb), pct((vs / vb - 1) * 100, signo = TRUE)),
-               icon = icon("chart-line"), color = "yellow", width = 4),
-      valueBox(usd(gs), sprintf("Ganancia 2018 · base %s · %s", usd(gb), pct((gs / gb - 1) * 100, signo = TRUE)),
-               icon = icon("sack-dollar"), color = if (gs >= gb) "green" else "red", width = 4),
-      valueBox(pct(gs / vs * 100), sprintf("Margen · base %s", pct(gb / vb * 100)), icon = icon("percent"),
-               color = "blue", width = 4)
-    )
-  })
-  output$rec_fig <- renderPlotly(suppressWarnings(interactivo(fig_rec_mensual(rec_sim()))))
-  output$rec_lectura <- renderText({
-    a <- rec_param()
-    lectura_rec(rec_sim(), a$tope_on, a$tope, a$region, a$temp_on, a$temp, a$cat_on, a$cat, a$impulso)
-  })
-  output$rec_aportes <- renderPlotly(suppressWarnings(interactivo(fig_rec_aportes(rec_sim()), leyenda = FALSE)))
-  output$rec_curva <- renderPlotly({
-    a <- rec_param()
-    suppressWarnings(interactivo(fig_rec_curva(a$region, a$perdida, if (a$tope_on) a$tope else NA), leyenda = FALSE))
-  })
-  output$rec_curva_texto <- renderText(texto_curva(rec_param()$region, rec_param()$perdida))
-  output$tabla_modelo_desc <- renderDT(tabla_dt(tabla_modelo_descuentos()))
 }

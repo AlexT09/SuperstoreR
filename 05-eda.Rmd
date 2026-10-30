@@ -178,5 +178,4 @@ hallazgos_eda(df) %>% rename(`Recomendación` = Recomendacion) %>% tabla()
 
 La temporada es el factor más fuerte; el descuento, el que más afecta la ganancia. Son asociaciones
 observadas en 2014–2017, no causas probadas: conviene probar cada acción en una región antes de
-aplicarla a toda la empresa. El capítulo [Recomendaciones aplicadas](#recomendaciones) simula cómo
-cambiaría la proyección 2018 con ellas.
+aplicarla a toda la empresa.

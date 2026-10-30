@@ -10,7 +10,7 @@ library(DT) # Para tablas interactivas
 # Código compartido con el libro: datos, gráficas (ggplot2 + plotly) y modelo
 source("../R/common.R", encoding = "UTF-8")
 for (f in c("model/features.R", "model/modelos.R", "model/evaluate.R", "model/entrenamiento.R",
-            "R/eda.R", "R/resultados.R", "R/contenido.R", "R/recomendaciones.R")) {
+            "R/eda.R", "R/resultados.R", "R/contenido.R")) {
   source(file.path(ROOT, f), encoding = "UTF-8")
 }
 
@@ -25,7 +25,6 @@ if (listo) {
   resumen <- load_artifact("resumen.json")
   final <- readRDS(file.path(ART, "model.rds"))
 }
-rec_listo <- recomendaciones_listas() # escenarios del tope de descuento (model/train_descuentos.R)
 
 # ---------------------------------------------------------------- EDA (se calcula una sola vez)
 resumen_eda <- eda_resumen(df)

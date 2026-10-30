@@ -29,7 +29,6 @@ tendencia) hechas con **ggplot2** y vueltas interactivas con `ggplotly`.
 | Modelos y resultados | En el libro empieza entrenando los 7 modelos con el código R a la vista y comentado (Grid Search con validación cruzada temporal y evaluación en 2017), y comprueba que llega a los resultados guardados. Luego, 7 modelos evaluados en 2017, ranking frente a la referencia, rejillas de Grid Search, sobreajuste, importancia de variables y prueba de la proyección a 12 meses; en la app, al final, el entrenamiento del modelo: entrena el modelo elegido al presionar un botón y permite guardarlo como `.rds` |
 | Proyección 2018 | Proyección por categoría, región y mes, con su error típico (filtrable en la app) |
 | Predicción (solo app, al final de Proyección y predicción) | Formulario con ejemplos de temporada alta y baja: carga `model.rds` y predice las ventas de un mes |
-| Recomendaciones aplicadas | Cómo cambian las ventas y la ganancia proyectadas para 2018 al aplicar las recomendaciones del EDA (tope de descuento, refuerzo de la temporada alta, impulso de una categoría). En la app es un simulador interactivo; en el libro, los escenarios principales. El efecto del tope se estima con un modelo de margen por línea de pedido (`model/train_descuentos.R`); los demás efectos son supuestos |
 | Conclusiones | Hallazgos, recomendaciones y limitaciones |
 
 ## Modelo
@@ -86,7 +85,6 @@ original o el modelo, regenera en este orden:
 ```powershell
 Rscript data/generate_data.R      # CSV crudo -> superstore_transformado.csv y ventas_mensuales.csv
 Rscript model/train_model.R       # entrena y compara (~25 s) -> model/artifacts/
-Rscript model/train_descuentos.R  # modelo de margen para Recomendaciones aplicadas (~1,5 min)
 Rscript build.R                   # libro -> docs/
 ```
 
@@ -102,7 +100,6 @@ Rscript build.R                   # libro -> docs/
 │   ├── common.R               # Rutas, carga de datos y resultados, colores y estilo de las figuras
 │   ├── eda.R                  # Gráficas del EDA (ggplot2, técnicas del curso) e interpretaciones
 │   ├── resultados.R           # Gráficas y textos de modelos, comparación y proyección
-│   ├── recomendaciones.R      # Simulación de las recomendaciones sobre la proyección 2018
 │   └── contenido.R            # Textos y tablas fijas (objetivos, variables, limitaciones…)
 ├── data/
 │   ├── raw/                   # Dataset original
@@ -115,7 +112,6 @@ Rscript build.R                   # libro -> docs/
 │   ├── evaluate.R             # Métricas e importancia de variables
 │   ├── entrenamiento.R        # Validación cruzada temporal, Grid Search y proyección recursiva
 │   ├── train_model.R          # Entrena, compara y proyecta 2018
-│   ├── train_descuentos.R     # Margen según el descuento: simula cada tope para Recomendaciones aplicadas
 │   └── artifacts/             # model.rds, resultados, predicciones y proyección (generados)
 ├── index.Rmd … 10-app-shiny.Rmd   # Capítulos del libro
 ├── _bookdown.yml · _output.yml    # Configuración del libro
