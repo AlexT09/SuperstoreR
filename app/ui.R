@@ -88,13 +88,6 @@ ui <- dashboardPage(skin = "blue",
       tabItem(tabName = "introduccion",
         encabezado("Introducción", "Del análisis de las ventas de Sample Superstore a su proyección con machine learning en R"),
         fluidRow(
-          valueBox(num(nrow(df)), "Líneas de pedido (2014–2017)", icon = icon("receipt"), color = "navy", width = 3),
-          valueBox(usd(sum(df$Sales) / 1e6, 2) %>% paste("M"), "Ventas totales 2014–2017", icon = icon("dollar-sign"), color = "blue", width = 3),
-          valueBox(12, "Series: 3 categorías × 4 regiones", icon = icon("layer-group"), color = "light-blue", width = 3),
-          valueBox(if (listo) usd(resumen$proyeccion_2018 / 1e3) %>% paste0("k") else "—", "Ventas proyectadas 2018",
-                   icon = icon("chart-line"), color = "yellow", width = 3)
-        ),
-        fluidRow(
           box(title = "El proyecto", status = "primary", solidHeader = TRUE, width = 7,
               p("Sample Superstore es un conjunto de datos de muestra de una cadena minorista de Estados Unidos",
                 "(2014–2017) —una simulación con fines analíticos— con cerca de 10.000 líneas de pedido de muebles,",
