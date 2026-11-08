@@ -195,13 +195,7 @@ ui <- dashboardPage(skin = "blue",
                    icon = icon("table"), color = "blue", width = 3)
         ),
         fluidRow(
-          box(title = "Código del ETL (data/generate_data.R)", status = "primary", solidHeader = TRUE, width = 7,
-              collapsible = TRUE, tags$pre(class = "codigo", paste(readLines(file.path(ROOT, "data", "generate_data.R"),
-                                                                              encoding = "UTF-8"), collapse = "\n")),
-              div(class = "texto-grafico", "Extracción con readr, transformación con lubridate (mdy) y dplyr (mutate, rename,",
-                "arrange, group_by, summarise) y ordenación con tidyr (complete): si en un mes no hubo pedidos, la",
-                "venta queda en 0 para que cada serie tenga sus 48 meses.")),
-          box(title = "Tabla mensual (resultado del ETL)", status = "info", solidHeader = TRUE, width = 5,
+          box(title = "Tabla mensual (resultado del ETL)", status = "info", solidHeader = TRUE, width = 12,
               DTOutput("tabla_mensual"))
         ),
         fluidRow(caja_grafico("Ventas mensuales por categoría", "etl_fig",
