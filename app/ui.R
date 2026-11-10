@@ -89,7 +89,7 @@ ui <- dashboardPage(skin = "blue",
         fluidRow(
           box(title = "El proyecto", status = "primary", solidHeader = TRUE, width = 7,
               p("Sample Superstore es un conjunto de datos de muestra de una cadena minorista de Estados Unidos",
-                "(2014–2017) —una simulación con fines analíticos— con cerca de 10.000 líneas de pedido de muebles,",
+                "(2014–2017) con cerca de 10.000 líneas de pedido de muebles,",
                 "artículos de oficina y tecnología."),
               p("El proyecto tiene dos partes: un análisis exploratorio (EDA) que identifica qué explica el nivel de",
                 "ventas, y un modelo de machine learning que usa esos hallazgos para proyectar cuánto venderá la",
